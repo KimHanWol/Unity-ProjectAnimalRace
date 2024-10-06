@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     {
         Update_CameraPosition();
         Update_PlayerMove();
+        Update_CheckAnimation();
     }
 
     private void InitializeInput()
@@ -245,5 +246,23 @@ public class PlayerController : MonoBehaviour
             //Move Player
             Rigidbody2D.AddForce(new Vector2(CurrentAnimalData.InputData.Veclocity * 10, 0));
         }
+    }
+
+    private void Update_CheckAnimation()
+    {
+        Animator CurrentAnimator = GetComponent<Animator>();
+
+        bool IsRunning = Rigidbody2D.velocity.x > 0;
+        if (IsRunning == true)
+        {
+            float NewAnimationSpeed = Mathf.Clamp(Rigidbody2D.velocity.x * GameManager.Get().RunAnimationSpeedRate, 0, GameManager.Get().RunAnimationMaxSpeedRate);
+            CurrentAnimator.speed = NewAnimationSpeed;
+        }
+        else
+        {
+            CurrentAnimator.speed = 1;
+        }
+
+        CurrentAnimator.SetBool("IsRunning", IsRunning);
     }
 }

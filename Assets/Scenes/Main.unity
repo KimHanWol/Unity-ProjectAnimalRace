@@ -204,7 +204,7 @@ Transform:
   m_GameObject: {fileID: 95955076}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.12, y: -5.04, z: 0}
+  m_LocalPosition: {x: -0.12, y: -5.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -281,7 +281,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 95955076}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a23ee953f9986644e950ee584d0e8523, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -304,7 +304,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.18, y: 0.49}
+  m_Offset: {x: -0.18, y: 0.51}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -586,7 +586,7 @@ MonoBehaviour:
   AnimalDataList:
   - AnimalType: 0
     InputData:
-      InputType: 0
+      InputType: 1
       InputStackCount: 2
       Veclocity: 1
     Animator: {fileID: 9100000, guid: 2476fead89c324b40b727e1a0ba71285, type: 2}
@@ -720,6 +720,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimalDataManger: {fileID: 1361461113}
+  RunAnimationSpeedRate: 0.4
+  RunAnimationMaxSpeedRate: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
