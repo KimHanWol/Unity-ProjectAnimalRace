@@ -1,18 +1,28 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private static GameManager instance = null;
+
+    public AnimalDataManager AnimalDataManger;
+
+    void Awake()
     {
-        
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            // 다른 GameManager 가 이미 생성된 경우 삭제
+            Destroy(gameObject);
+            return;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    static public GameManager Get()
     {
-        
+        return instance;
     }
 }
