@@ -1,6 +1,8 @@
+using System;
 using UnityEditor.Animations;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum AnimalType
 {
@@ -11,7 +13,6 @@ public class PlayerController : MonoBehaviour
 {
     //GameObject
     public GameObject Camera;
-    //public AnimationController AnimationController;
 
     //Component
     private AnimalDataManager AnimalDataManager;
@@ -22,6 +23,9 @@ public class PlayerController : MonoBehaviour
     private AnimalData CurrentAnimalData;
     private int CurrentInputStackIndex = 0;
     private Vector2 CurrentMousePosition = Vector2.zero;
+
+    //Event
+    public UnityEvent<float> OnPlayerAccelerated;
 
     void Start()
     {
@@ -244,7 +248,7 @@ public class PlayerController : MonoBehaviour
         {
             CurrentInputStackIndex = 0;
             //Move Player
-            Rigidbody2D.AddForce(new Vector2(CurrentAnimalData.InputData.Veclocity * 10, 0));
+            OnPlayerAccelerated?.Invoke(CurrentAnimalData.InputData.Veclocity);
         }
     }
 
