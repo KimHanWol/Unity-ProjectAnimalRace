@@ -1,6 +1,5 @@
 using System;
 using UnityEditor.Animations;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -29,6 +28,7 @@ public class PlayerController : MonoBehaviour
     // Data
     [Header("Movement")]
     public float CurrentVelocity;
+    public Rigidbody2D MoveSpeedObject;
 
     //Event
     public UnityEvent<float> OnPlayerAccelerated;
@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     {
         Update_CameraPosition();
         Update_PlayerMove();
+        Update_CheckVelocity();
     }
 
     private void InitializeInput()
@@ -253,20 +254,26 @@ public class PlayerController : MonoBehaviour
             CurrentInputStackIndex = 0;
 
             //Move Player
+            MoveSpeedObject.AddForce(new Vector2(CurrentAnimalData.InputData.Veclocity, 0));
             OnPlayerAccelerated?.Invoke(CurrentAnimalData.InputData.Veclocity);
         }
     }
 
-    public void ChangeVelocity(float InCurrentVelocity)
+    private void Update_CheckVelocity()
     {
-        CurrentVelocity = InCurrentVelocity;
-        Animator CurrentAnimator = GetComponent<Animator>();
-        if(CurrentAnimator != null)
+        if(MoveSpeedObject == null)
         {
             return;
         }
 
-        bool IsRunning = CurrentVelocity > 0.5f;
+        CurrentVelocity = MoveSpeedObject.velocity.x;
+        Animator CurrentAnimator = GetComponent<Animator>();
+        if(CurrentAnimator == null)
+        {
+            return;
+        }
+
+        bool IsRunning = CurrentVelocity > 0.01f;
         if (IsRunning == true)
         {
             float NewAnimationSpeed = Mathf.Clamp(CurrentVelocity * RunAnimationSpeedRate, RunAnimationMinSpeedRate, RunAnimationMaxSpeedRate);
@@ -278,5 +285,10 @@ public class PlayerController : MonoBehaviour
         }
 
         CurrentAnimator.SetBool("IsRunning", IsRunning);
+    }
+
+    public float GetVelocity()
+    {
+        return CurrentVelocity;
     }
 }
