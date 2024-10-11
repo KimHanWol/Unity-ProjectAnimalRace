@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public enum AnimalType
 {
     Dog,
+    Crab,
 }
 
 public class PlayerController : MonoBehaviour
@@ -14,24 +15,27 @@ public class PlayerController : MonoBehaviour
     //GameObject
     public GameObject Camera;
 
-    //Component
-    private AnimalDataManager AnimalDataManager;
-    private Rigidbody2D Rigidbody2D;
-
     //Data
     public AnimalType CurrentAnimalType;
     private AnimalData CurrentAnimalData;
     private int CurrentInputStackIndex = 0;
     private Vector2 CurrentMousePosition = Vector2.zero;
 
+    [Header("Animation")]
+    public float RunAnimationSpeedRate = 1f;
+    public float RunAnimationMaxSpeedRate = 5f;
+    public float RunAnimationMinSpeedRate = 2f;
+
+    // Data
+    [Header("Movement")]
+    public float CurrentVelocity;
+
     //Event
     public UnityEvent<float> OnPlayerAccelerated;
+    public UnityEvent OnAnimalChanged;
 
     void Start()
     {
-        AnimalDataManager = GameManager.Get().AnimalDataManger;
-        Rigidbody2D = GetComponent<Rigidbody2D>();
-
         InitializeInput();
         ChangeAnimal(CurrentAnimalType);
     }
@@ -40,7 +44,6 @@ public class PlayerController : MonoBehaviour
     {
         Update_CameraPosition();
         Update_PlayerMove();
-        Update_CheckAnimation();
     }
 
     private void InitializeInput()
@@ -64,9 +67,10 @@ public class PlayerController : MonoBehaviour
     public void ChangeAnimal(AnimalType NewAnimalType)
     {
         CurrentAnimalType = NewAnimalType;
-        CurrentAnimalData = AnimalDataManager.GetAnimalData(CurrentAnimalType);
+        CurrentAnimalData = AnimalDataManager.Get().GetAnimalData(CurrentAnimalType);
         ChangeAnimatorController(CurrentAnimalData.Animator);
         CurrentInputStackIndex = 0;
+        OnAnimalChanged?.Invoke();
     }
 
     private void Update_PlayerMove()
@@ -237,7 +241,7 @@ public class PlayerController : MonoBehaviour
                 //¿À¸¥ÂÊ
                 else if (Input.GetKeyDown(KeyCode.RightArrow))
                 {
-                    CurrentInputStackIndex = 0;
+                    CurrentInputStackIndex++;
                 }
 
                 break;
@@ -247,24 +251,30 @@ public class PlayerController : MonoBehaviour
         if (CurrentInputStackIndex >= CurrentAnimalData.InputData.InputStackCount)
         {
             CurrentInputStackIndex = 0;
+
             //Move Player
             OnPlayerAccelerated?.Invoke(CurrentAnimalData.InputData.Veclocity);
         }
     }
 
-    private void Update_CheckAnimation()
+    public void ChangeVelocity(float InCurrentVelocity)
     {
+        CurrentVelocity = InCurrentVelocity;
         Animator CurrentAnimator = GetComponent<Animator>();
+        if(CurrentAnimator != null)
+        {
+            return;
+        }
 
-        bool IsRunning = Rigidbody2D.velocity.x > 0;
+        bool IsRunning = CurrentVelocity > 0.5f;
         if (IsRunning == true)
         {
-            float NewAnimationSpeed = Mathf.Clamp(Rigidbody2D.velocity.x * GameManager.Get().RunAnimationSpeedRate, 0, GameManager.Get().RunAnimationMaxSpeedRate);
+            float NewAnimationSpeed = Mathf.Clamp(CurrentVelocity * RunAnimationSpeedRate, RunAnimationMinSpeedRate, RunAnimationMaxSpeedRate);
             CurrentAnimator.speed = NewAnimationSpeed;
         }
         else
         {
-            CurrentAnimator.speed = 1;
+            CurrentAnimator.speed = 0.5f;
         }
 
         CurrentAnimator.SetBool("IsRunning", IsRunning);

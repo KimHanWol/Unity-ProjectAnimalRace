@@ -1,4 +1,3 @@
-using System;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -33,6 +32,29 @@ public class AnimalData
 
 public class AnimalDataManager : MonoBehaviour
 {
+    private static AnimalDataManager Instance;
+
+    static public AnimalDataManager Get()
+    {
+        return Instance;
+    }
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            // 다른 GameManager 가 이미 생성된 경우 삭제
+            Destroy(gameObject);
+            return;
+        }
+    }
+
+
+
     public AnimalData[] AnimalDataList;
 
     public AnimalData GetAnimalData(AnimalType TargetAnimalType)
@@ -45,5 +67,11 @@ public class AnimalDataManager : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public AnimalData GetRandomAnimalData()
+    {
+        int TargetAnimalDataIndex = Random.Range(0, AnimalDataList.Length);
+        return AnimalDataList[TargetAnimalDataIndex];
     }
 }

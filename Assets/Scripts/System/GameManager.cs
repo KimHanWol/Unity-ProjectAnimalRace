@@ -3,47 +3,41 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager instance = null;
-
     // GameObject
     public PlayerController Player;
-    public AnimalDataManager AnimalDataManger;
     public MapManager MapManager;
+    public Rigidbody2D MoveSpeedObject;
 
-    // Data
-    [Header("Movement")]
-    public float RunVelocityRate = 10;
-
-    [Header("Animation")]
-    public float RunAnimationSpeedRate = 1;
-    public float RunAnimationMaxSpeedRate = 5;
-
-    static public GameManager Get()
+    void Start()
     {
-        return instance;
-    }
-
-    void Awake()
-    {
-        if (instance == null)
+        if(Player != null)
         {
-            instance = this;
-        }
-        else
-        {
-            // 다른 GameManager 가 이미 생성된 경우 삭제
-            Destroy(gameObject);
-            return;
+            Player.OnPlayerAccelerated.AddListener(Call_OnPlayerAccelerated);
         }
     }
 
-    private void Start()
+    public void Update_CheckSpeed()
     {
-        Player.OnPlayerAccelerated.AddListener(Call_OnPlayerAccelerated);
+        float CurrentVelocity = MoveSpeedObject.velocity.x;
+
+        if (MoveSpeedObject != null)
+        {
+            MapManager.UpdateSpeed(CurrentVelocity);
+        }
+
+        if(Player != null)
+        {
+            Player.ChangeVelocity(CurrentVelocity);
+        }
     }
 
     private void Call_OnPlayerAccelerated(float Velocity)
     {
-        MapManager.OnPlayerAccelerated(Velocity);
+        MoveSpeedObject.AddForce(new Vector2(Velocity, 0));
+    }
+
+    void Update()
+    {
+        Update_CheckSpeed();
     }
 }
