@@ -11,9 +11,6 @@ public enum AnimalType
 
 public class PlayerController : MonoBehaviour
 {
-    //GameObject
-    public GameObject Camera;
-
     //Data
     public AnimalType CurrentAnimalType;
     private AnimalData CurrentAnimalData;
@@ -29,10 +26,11 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     public float CurrentVelocity;
     public Rigidbody2D MoveSpeedObject;
+    private bool IsMoveEnabled = true;
 
     //Event
     public UnityEvent<float> OnPlayerAccelerated;
-    public UnityEvent OnAnimalChanged;
+    public UnityEvent<bool> OnPlayerMovementEnableChanged;
 
     void Start()
     {
@@ -42,7 +40,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Update_CameraPosition();
         Update_PlayerMove();
         Update_CheckVelocity();
     }
@@ -50,13 +47,6 @@ public class PlayerController : MonoBehaviour
     private void InitializeInput()
     {
         CurrentMousePosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-    }
-
-    private void Update_CameraPosition()
-    {
-        Vector3 NewPosition = Camera.transform.localPosition;
-        NewPosition.x = transform.localPosition.x;
-        Camera.transform.localPosition = NewPosition;
     }
 
     private void ChangeAnimatorController(AnimatorController NewAnimatorController)
@@ -71,11 +61,15 @@ public class PlayerController : MonoBehaviour
         CurrentAnimalData = AnimalDataManager.Get().GetAnimalData(CurrentAnimalType);
         ChangeAnimatorController(CurrentAnimalData.Animator);
         CurrentInputStackIndex = 0;
-        OnAnimalChanged?.Invoke();
     }
 
     private void Update_PlayerMove()
     {
+        if(IsMoveEnabled == false)
+        {
+            return;
+        }
+
         if(CurrentAnimalData == null)
         {
             return;
@@ -267,6 +261,12 @@ public class PlayerController : MonoBehaviour
         }
 
         CurrentVelocity = MoveSpeedObject.velocity.x;
+
+        if(IsMoveEnabled == false)
+        {
+            CurrentVelocity = 0;
+        }
+
         Animator CurrentAnimator = GetComponent<Animator>();
         if(CurrentAnimator == null)
         {
@@ -290,5 +290,29 @@ public class PlayerController : MonoBehaviour
     public float GetVelocity()
     {
         return CurrentVelocity;
+    }
+
+    public void SetIsAnimalChanging(bool IsChanging)
+    {
+        if (IsMoveEnabled == !IsChanging)
+        {
+            return;
+        }
+        IsMoveEnabled = !IsChanging;
+
+        EnableMovement(IsMoveEnabled);
+        OnPlayerMovementEnableChanged?.Invoke(IsMoveEnabled);
+    }
+
+    public void EnableMovement(bool Enabled) 
+    {
+        if (Enabled == false)
+        {
+            CurrentVelocity = 0;
+            if(MoveSpeedObject != null)
+            {
+                MoveSpeedObject.velocity = Vector2.zero;
+            }
+        }
     }
 }

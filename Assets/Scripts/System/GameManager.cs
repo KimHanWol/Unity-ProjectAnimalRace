@@ -7,8 +7,11 @@ public class GameManager : MonoBehaviour
     public PlayerController Player;
     public MapManager MapManager;
 
+    public RuningObject[] SpawnedObjectList;
+
     void Start()
     {
+        Player.OnPlayerMovementEnableChanged.AddListener(OnAnimalChangeEffectStateChanged);
     }
 
     public void Update_CheckSpeed()
@@ -19,7 +22,6 @@ public class GameManager : MonoBehaviour
         }
 
         float CurrentVelocity = Player.GetVelocity();
-
         if (MapManager != null)
         {
             MapManager.UpdateSpeed(CurrentVelocity);
@@ -29,5 +31,20 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         Update_CheckSpeed();
+    }
+
+    private void OnAnimalChangeEffectStateChanged(bool Enabled)
+    {
+        // Object Spawner
+        foreach(RuningObject SpawnedObject in SpawnedObjectList)
+        {
+            SpawnedObject.EnableMovement(Enabled);
+        }
+
+        // Map Manager
+        if(MapManager != null)
+        {
+            MapManager.EnableMovement(Enabled);
+        }
     }
 }
