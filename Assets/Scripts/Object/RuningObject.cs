@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 
 public class RuningObject : MonoBehaviour
 {
     public float MovementSpeed;
-    protected bool IsActivated = false;
+    public bool IsActivated = false;
     protected bool IsNeedToStopWhenActivated = true;
     protected bool IsNeedToStopMove = false;
 

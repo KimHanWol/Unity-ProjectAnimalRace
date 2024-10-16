@@ -1,12 +1,16 @@
 using System;
+using System.IO.Pipes;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Events;
 
 public enum AnimalType
 {
-    Dog,
+    Bat,
     Crab,
+    Dog,
+    Duck,
+    Frog,
 }
 
 public class PlayerController : MonoBehaviour
@@ -52,7 +56,11 @@ public class PlayerController : MonoBehaviour
     private void ChangeAnimatorController(AnimatorController NewAnimatorController)
     {
         Animator CurrentAnimator = GetComponent<Animator>();
-        CurrentAnimator.runtimeAnimatorController = NewAnimatorController;
+        if(CurrentAnimator != null)
+        {
+            CurrentAnimator.SetBool("IsRunning", false);
+            CurrentAnimator.runtimeAnimatorController = NewAnimatorController;
+        }
     }
 
     public void ChangeAnimal(AnimalType NewAnimalType)
@@ -133,29 +141,26 @@ public class PlayerController : MonoBehaviour
             case InputType.MouseVerticalHorizonal:
             {
                 Vector2 PastMousePosition = CurrentMousePosition;
-                CurrentMousePosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-                if (CurrentInputStackIndex == 0)
+                CurrentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+                // 왼쪽
+                if (PastMousePosition.x > CurrentMousePosition.x && CurrentInputStackIndex == 0)
                 {
-                    // 왼쪽
-                    if (PastMousePosition.x > CurrentMousePosition.x && CurrentInputStackIndex == 0)
-                    {
-                        CurrentInputStackIndex++;
-                    }
-                    // 오른쪽
-                    else if (PastMousePosition.x > CurrentMousePosition.x && CurrentInputStackIndex == 1)
-                    {
-                        CurrentInputStackIndex++;
-                    }
-                    // 위
-                    else if (PastMousePosition.y < CurrentMousePosition.y && CurrentInputStackIndex == 2)
-                    {
-                        CurrentInputStackIndex++;
-                    }
-                    // 아래
-                    else if (PastMousePosition.y > CurrentMousePosition.y && CurrentInputStackIndex == 3)
-                    {
-                        CurrentInputStackIndex++;
-                    }
+                    CurrentInputStackIndex++;
+                }
+                // 오른쪽
+                else if (PastMousePosition.x < CurrentMousePosition.x && CurrentInputStackIndex == 1)
+                {
+                    CurrentInputStackIndex++;
+                }
+                // 위
+                else if (PastMousePosition.y < CurrentMousePosition.y && CurrentInputStackIndex == 2)
+                {
+                    CurrentInputStackIndex++;
+                }
+                // 아래
+                else if (PastMousePosition.y > CurrentMousePosition.y && CurrentInputStackIndex == 3)
+                {
+                    CurrentInputStackIndex++;
                 }
 
                 break;

@@ -11,7 +11,7 @@ public class LayerData
 
 public class MapManager : MonoBehaviour
 {
-    public float MapSpeedRate = 100;
+    public float MapSpeedRate = 0.01f;
     public LayerData[] LayerDataList;
 
     private bool NeedToStopMove = false;
@@ -25,7 +25,7 @@ public class MapManager : MonoBehaviour
 
         foreach(LayerData InLayerData in LayerDataList)
         {
-            InLayerData.Renderer.material.mainTextureOffset += new Vector2(Velocity, 0) / MapSpeedRate * InLayerData.LayerSpeed;
+            InLayerData.Renderer.material.mainTextureOffset += new Vector2(Velocity, 0) * MapSpeedRate * InLayerData.LayerSpeed;
         }
     }
 

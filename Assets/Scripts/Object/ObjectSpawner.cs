@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 [System.Serializable]
@@ -11,9 +12,10 @@ public class SpawnData
 
 public class ObjectSpawner : MonoBehaviour
 {
-    public float FirstDelayTime;
-    public float SpawnMinTime;
-    public float SpawnMaxTime;
+    public float FirstDelayTime = 1f;
+    public float SpawnMinTime = 5f;
+    public float SpawnMaxTime = 10f;
+    public bool SpawnOneByOne = true; //한번에 하나씩 소환하는 지
 
     public SpawnData[] SpawnDataList;
 
@@ -22,8 +24,8 @@ public class ObjectSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(StartFirstDelay());
         SpawnedObjectList = new List<GameObject>();
+        StartCoroutine(StartFirstDelay());
     }
 
     IEnumerator StartFirstDelay() 
@@ -43,7 +45,14 @@ public class ObjectSpawner : MonoBehaviour
 
     private void TrySpawn()
     {
-        GameObject SpawnObject = null;
+        CheckSpawnedObjectList();
+
+        if (SpawnOneByOne == true && SpawnedObjectList.Count > 0)
+        {
+            return;
+        }
+
+        GameObject SpawnedObject = null;
 
         float TotalPercentage = SpawnDataList.Length;
         float RandomValue = Random.Range(0, TotalPercentage);
@@ -54,15 +63,40 @@ public class ObjectSpawner : MonoBehaviour
             CurrentPercentage += InSpawnData.Probability;
             if(RandomValue < CurrentPercentage)
             {
-                SpawnObject = InSpawnData.TargetObject;
+                SpawnedObject = Instantiate(InSpawnData.TargetObject);
                 break;
             }
         }
 
-        if(SpawnObject != null)
+        if(SpawnedObject != null)
         {
-            Instantiate(SpawnObject);
-            SpawnedObjectList.Add(SpawnObject);
+            SpawnedObjectList.Add(SpawnedObject);
+        }
+    }
+
+    private void CheckSpawnedObjectList()
+    {
+        for(int i = 0; i < SpawnedObjectList.Count; i++)
+        {
+            GameObject SpawnedObject = SpawnedObjectList[i];
+
+            bool IsNeedToRemove = false;
+            if (SpawnedObject == null)
+            {
+                IsNeedToRemove = true;
+            }
+
+            SpawnableObject SpawnableObject = SpawnedObject.GetComponent<SpawnableObject>();
+            if (SpawnableObject != null && SpawnableObject.IsDestroying == true)
+            {
+                IsNeedToRemove = true;
+            }
+
+            if(IsNeedToRemove == true)
+            {
+                SpawnedObjectList.RemoveSwapBack(SpawnedObject);
+                Destroy(SpawnedObject);
+            }
         }
     }
 }

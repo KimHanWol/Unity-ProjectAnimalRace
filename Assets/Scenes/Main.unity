@@ -231,7 +231,7 @@ MonoBehaviour:
   OnPlayerAccelerated:
     m_PersistentCalls:
       m_Calls: []
-  OnAnimalChangeEffectStateChanged:
+  OnPlayerMovementEnableChanged:
     m_PersistentCalls:
       m_Calls: []
 --- !u!95 &95955084
@@ -606,7 +606,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bc41abe23282c044b364bae0079ba53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapSpeedRate: 200
+  MapSpeedRate: 0.007
   LayerDataList:
   - Renderer: {fileID: 1884286039}
     LayerSpeed: 0.3
@@ -657,7 +657,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimalDataList:
-  - AnimalType: 0
+  - AnimalType: 2
     InputData:
       InputType: 1
       InputStackCount: 4
@@ -669,6 +669,24 @@ MonoBehaviour:
       InputStackCount: 2
       Veclocity: 4
     Animator: {fileID: 9100000, guid: 0d4cceb64904d4c4a9ebc3222ffb9b5e, type: 2}
+  - AnimalType: 0
+    InputData:
+      InputType: 5
+      InputStackCount: 2
+      Veclocity: 4
+    Animator: {fileID: 9100000, guid: 2362cbdcc8e810244b71948e7ee805d9, type: 2}
+  - AnimalType: 3
+    InputData:
+      InputType: 0
+      InputStackCount: 2
+      Veclocity: 4
+    Animator: {fileID: 9100000, guid: c508574cd6847ac46ae0c840afec4bd5, type: 2}
+  - AnimalType: 4
+    InputData:
+      InputType: 2
+      InputStackCount: 1
+      Veclocity: 1
+    Animator: {fileID: 9100000, guid: 8bff81e7975fad845a251c704b4cd0de, type: 2}
 --- !u!1 &1363013145
 GameObject:
   m_ObjectHideFlags: 0
@@ -788,6 +806,7 @@ MonoBehaviour:
   FirstDelayTime: 1
   SpawnMinTime: 0
   SpawnMaxTime: 0
+  SpawnOneByOne: 1
   SpawnDataList:
   - TargetObject: {fileID: 6599046169947675177, guid: 1cad7bb55297bc6498864a8c75c3757c, type: 3}
     Probability: 0.2
@@ -839,6 +858,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 95955082}
   MapManager: {fileID: 1323614122}
+  SpawnedObjectList: []
 --- !u!1 &1849383073
 GameObject:
   m_ObjectHideFlags: 0

@@ -71,6 +71,11 @@ public class AnimalChanger : RuningObject
         IsNeedToStopMove = true;
 
         ColliderPlayer.SetIsAnimalChanging(true);
+        Animator CurrentAnimator = GetComponent<Animator>();
+        if (CurrentAnimator != null)
+        {
+            CurrentAnimator.SetBool("IsRunning", false);
+        }
 
         Rigidbody2D PlayerRigidbody = ColliderPlayer.GetComponent<Rigidbody2D>();
         Rigidbody2D AnimalChangerRigidbody = gameObject.GetComponent<Rigidbody2D>();
@@ -126,7 +131,7 @@ public class AnimalChanger : RuningObject
         NewPostion.x = 0;
         ColliderPlayer.transform.position = NewPostion;
 
-        Destroy(gameObject);
+        SelfDestroy();
     }
 
     IEnumerator DisableAnimalChanger()
@@ -152,6 +157,15 @@ public class AnimalChanger : RuningObject
 
             Color NewColor = new Color(OriginColor.r, OriginColor.g, OriginColor.b, 1 - FadingTime / Duration);
             Renderder.material.color = NewColor;
+        }
+    }
+
+    private void SelfDestroy()
+    {
+        SpawnableObject SpawnableObject = GetComponent<SpawnableObject>();
+        if(SpawnableObject != null)
+        {
+            SpawnableObject.IsDestroying = true;
         }
     }
 }

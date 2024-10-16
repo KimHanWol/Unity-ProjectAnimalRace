@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 793504633935352201}
   - component: {fileID: 6237698349033814576}
+  - component: {fileID: 317293718313731889}
   - component: {fileID: 1576721374589612816}
   - component: {fileID: 5972185172825502803}
   - component: {fileID: 1739999832823961728}
@@ -49,9 +50,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MovementSpeed: 0.01
+  IsActivated: 0
   OverlapBoundary: {x: 2, y: 1}
   MoveCenterSpeed: 1
   ChangeEffectForce: 200
+--- !u!114 &317293718313731889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6599046169947675177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b2ca8861fc2845459d77f61764b47a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsDestroying: 0
 --- !u!95 &1576721374589612816
 Animator:
   serializedVersion: 5
