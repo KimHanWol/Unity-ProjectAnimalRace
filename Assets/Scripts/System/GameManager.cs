@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public class GameManager : MonoBehaviour
 {
     // GameObject
     public PlayerController Player;
+    public HunterController Hunter;
     public MapManager MapManager;
 
     public RuningObject[] SpawnedObjectList;
@@ -12,6 +14,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Player.OnPlayerMovementEnableChanged.AddListener(OnAnimalChangeEffectStateChanged);
+        Player.OnPlayerAccelerated.AddListener(OnPlayerAccelerated);
     }
 
     public void Update_CheckSpeed()
@@ -45,6 +48,14 @@ public class GameManager : MonoBehaviour
         if(MapManager != null)
         {
             MapManager.EnableMovement(Enabled);
+        }
+    }
+
+    private void OnPlayerAccelerated(float MoveForce)
+    {
+        if(Hunter != null)
+        {
+            Hunter.OnPlayerAccelerated(MoveForce);
         }
     }
 }

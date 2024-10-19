@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
     private void ChangeAnimatorController(AnimatorController NewAnimatorController)
     {
         Animator CurrentAnimator = GetComponent<Animator>();
-        if(CurrentAnimator != null)
+        if(CurrentAnimator != null && gameObject.activeInHierarchy == true)
         {
             CurrentAnimator.SetBool("IsRunning", false);
             CurrentAnimator.runtimeAnimatorController = NewAnimatorController;
@@ -279,8 +279,9 @@ public class PlayerController : MonoBehaviour
             CurrentInputStackIndex = 0;
 
             //Move Player
-            MoveSpeedObject.AddForce(new Vector2(CurrentAnimalData.InputData.Veclocity, 0));
-            OnPlayerAccelerated?.Invoke(CurrentAnimalData.InputData.Veclocity);
+            Vector2 MoveForce = new Vector2(CurrentAnimalData.InputData.Veclocity, 0);
+            MoveSpeedObject.AddForce(MoveForce);
+            OnPlayerAccelerated?.Invoke(MoveForce.x);
         }
     }
 
