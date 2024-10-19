@@ -47,13 +47,11 @@ public class AnimalDataManager : MonoBehaviour
         }
         else
         {
-            // 다른 GameManager 가 이미 생성된 경우 삭제
+            // 다른 인스턴스 가 이미 생성된 경우 삭제
             Destroy(gameObject);
             return;
         }
     }
-
-
 
     public AnimalData[] AnimalDataList;
 
@@ -69,9 +67,29 @@ public class AnimalDataManager : MonoBehaviour
         return null;
     }
 
-    public AnimalData GetRandomAnimalData()
+    public AnimalData GetRandomAnimalData(AnimalType CurrentAnimalType)
     {
-        int TargetAnimalDataIndex = Random.Range(0, AnimalDataList.Length);
+        int TargetAnimalDataIndex = 0;
+        do
+        {
+            TargetAnimalDataIndex = Random.Range(0, AnimalDataList.Length);
+        }
+        while (TargetAnimalDataIndex == GetAnimalIndex(CurrentAnimalType));
+
         return AnimalDataList[TargetAnimalDataIndex];
+    }
+
+    private int GetAnimalIndex(AnimalType TargetAnimalType)
+    {
+        for(int i = 0; i < AnimalDataList.Length; i++)
+        {
+            AnimalData InAnimalData = AnimalDataList[i];
+            if (InAnimalData.AnimalType == TargetAnimalType)
+            {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }

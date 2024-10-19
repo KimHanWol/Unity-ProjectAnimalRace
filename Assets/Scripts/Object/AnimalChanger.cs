@@ -20,12 +20,17 @@ public class AnimalChanger : RuningObject
     void Start()
     {
         AnimalDataManager = AnimalDataManager.Get();
-        CurrentAnimalData = AnimalDataManager.GetRandomAnimalData();
+        CurrentAnimalData = AnimalDataManager.GetRandomAnimalData(PlayerController.Get().GetCurrentAnimalType());
         Animator = GetComponent<Animator>();
         if (Animator != null)
         {
             Animator.runtimeAnimatorController = CurrentAnimalData.Animator;
         }
+    }
+    
+    public void InitializeAnimalChanger()
+    {
+
     }
 
     // Update is called once per frame

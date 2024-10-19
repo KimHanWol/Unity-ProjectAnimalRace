@@ -15,6 +15,27 @@ public enum AnimalType
 
 public class PlayerController : MonoBehaviour
 {
+    private static PlayerController Instance;
+
+    static public PlayerController Get()
+    {
+        return Instance;
+    }
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            // 다른 인스턴스 가 이미 생성된 경우 삭제
+            Destroy(gameObject);
+            return;
+        }
+    }
+
     //Data
     public AnimalType CurrentAnimalType;
     private AnimalData CurrentAnimalData;
@@ -51,6 +72,11 @@ public class PlayerController : MonoBehaviour
     private void InitializeInput()
     {
         CurrentMousePosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+    }
+
+    public AnimalType GetCurrentAnimalType()
+    {
+        return CurrentAnimalData.AnimalType;
     }
 
     private void ChangeAnimatorController(AnimatorController NewAnimatorController)

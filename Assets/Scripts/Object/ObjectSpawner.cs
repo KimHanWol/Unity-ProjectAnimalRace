@@ -12,14 +12,14 @@ public class SpawnData
 
 public class ObjectSpawner : MonoBehaviour
 {
+    private List<GameObject> SpawnedObjectList;
+
     public float FirstDelayTime = 1f;
     public float SpawnMinTime = 5f;
     public float SpawnMaxTime = 10f;
     public bool SpawnOneByOne = true; //한번에 하나씩 소환하는 지
 
     public SpawnData[] SpawnDataList;
-
-    private List<GameObject> SpawnedObjectList;
 
     // Start is called before the first frame update
     void Start()
