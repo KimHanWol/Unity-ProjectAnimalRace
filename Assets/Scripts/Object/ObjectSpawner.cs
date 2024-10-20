@@ -64,6 +64,7 @@ public class ObjectSpawner : MonoBehaviour
             if(RandomValue < CurrentPercentage)
             {
                 SpawnedObject = Instantiate(InSpawnData.TargetObject);
+                SpawnedObject.transform.position = transform.position;
                 break;
             }
         }
