@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
+using static UnityEngine.GraphicsBuffer;
 
 public class HunterController : MonoBehaviour
 {
@@ -22,13 +24,20 @@ public class HunterController : MonoBehaviour
     private float CurrentDurationRate = 1f;
 
     private Rigidbody2D RigidBody2D;
+    private Animator Animator;
 
-    // Start is called before the first frame update
+    public UnityEvent OnHunterCatched;
+
     void Start()
     {
         RigidBody2D = GetComponent<Rigidbody2D>();
+        Animator = GetComponent<Animator>();
 
         StartMovement();
+    }
+
+    void Update()
+    {
     }
 
     private void StartMovement()
@@ -68,5 +77,25 @@ public class HunterController : MonoBehaviour
     public void OnPlayerAccelerated(float MoveForce)
     {
         RigidBody2D.AddForce(new Vector2(-MoveForce * HunterMovementRate, 0));
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag != "Player")
+        {
+            return;
+        }
+
+        Animator.SetBool("CanHit", true);
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag != "Player")
+        {
+            return;
+        }
+
+        Animator.SetBool("CanHit", false);
     }
 }
