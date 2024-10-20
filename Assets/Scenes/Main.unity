@@ -272,7 +272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HunterMovementRate: 20
-  ForceInitial: 300
+  ForceInitial: 250
   ForceIncreaseRate: 0.02
   FirstDelay: 0
   DelayInitial: 1
@@ -426,7 +426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 896172b2e52c5e84694208d8f333076f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentAnimalType: 3
+  CurrentAnimalType: 4
   RunAnimationSpeedRate: 1
   RunAnimationMaxSpeedRate: 4
   RunAnimationMinSpeedRate: 1
@@ -1188,7 +1188,7 @@ MonoBehaviour:
     InputData:
       InputType: 5
       InputStackCount: 2
-      Veclocity: 4
+      Veclocity: 6
     Animator: {fileID: 9100000, guid: 2362cbdcc8e810244b71948e7ee805d9, type: 2}
   - AnimalType: 3
     InputData:
@@ -1200,7 +1200,7 @@ MonoBehaviour:
     InputData:
       InputType: 2
       InputStackCount: 1
-      Veclocity: 1
+      Veclocity: 3
     Animator: {fileID: 9100000, guid: 8bff81e7975fad845a251c704b4cd0de, type: 2}
 --- !u!1 &1363013145
 GameObject:
