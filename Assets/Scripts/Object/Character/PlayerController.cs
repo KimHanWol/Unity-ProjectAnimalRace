@@ -3,6 +3,7 @@ using System.IO.Pipes;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public enum AnimalType
 {
@@ -52,6 +53,7 @@ public class PlayerController : MonoBehaviour
     public float CurrentVelocity;
     public Rigidbody2D MoveSpeedObject;
     private bool IsMoveEnabled = true;
+    private Vector2 StartPosition = Vector2.zero;
 
     //Event
     public UnityEvent<float> OnPlayerAccelerated;
@@ -61,12 +63,32 @@ public class PlayerController : MonoBehaviour
     {
         InitializeInput();
         ChangeAnimal(CurrentAnimalType);
+
+        IsMoveEnabled = false;
+        StartPosition = transform.position;
     }
 
     void Update()
     {
         Update_PlayerMove();
         Update_CheckVelocity();
+    }
+
+    public void ResetPlayer()
+    {
+        CurrentVelocity = 0f;
+        Rigidbody2D PlayerRigidbody = GetComponent<Rigidbody2D>();
+        if(PlayerRigidbody != null)
+        {
+            PlayerRigidbody.velocity = Vector2.zero;
+        }
+
+        if(MoveSpeedObject != null )
+        {
+            MoveSpeedObject.velocity = Vector2.zero;
+        }
+
+        transform.position = StartPosition;
     }
 
     private void InitializeInput()
@@ -77,6 +99,11 @@ public class PlayerController : MonoBehaviour
     public AnimalType GetCurrentAnimalType()
     {
         return CurrentAnimalData.AnimalType;
+    }
+
+    public void SetMoveEnabled(bool Enabled)
+    {
+        IsMoveEnabled = Enabled;
     }
 
     private void ChangeAnimatorController(AnimatorController NewAnimatorController)

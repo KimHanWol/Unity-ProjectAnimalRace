@@ -22,25 +22,36 @@ public class HunterController : MonoBehaviour
 
     private float CurrentForceRate = 1f;
     private float CurrentDurationRate = 1f;
+    private Vector2 StartPosition = Vector2.zero;
 
     private Rigidbody2D RigidBody2D;
     private Animator Animator;
 
-    public UnityEvent OnHunterCatched;
-
     void Start()
     {
+        StartPosition = transform.position;
+
         RigidBody2D = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
-
-        StartMovement();
     }
 
-    void Update()
+    public void ResetHunter()
     {
+        Rigidbody2D PlayerRigidbody = GetComponent<Rigidbody2D>();
+        if (PlayerRigidbody != null)
+        {
+            PlayerRigidbody.velocity = Vector2.zero;
+        }
+
+        CurrentForceRate = 1f;
+        CurrentDurationRate = 1f;
+
+        transform.position = StartPosition;
+
+        StopAllCoroutines();
     }
 
-    private void StartMovement()
+    public void StartMovement()
     {
         StartCoroutine(WaitFirstDelay());
     }

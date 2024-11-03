@@ -14,6 +14,8 @@ public class ObjectSpawner : MonoBehaviour
 {
     private List<GameObject> SpawnedObjectList;
 
+    private bool IsStarted = false;
+
     public float FirstDelayTime = 1f;
     public float SpawnMinTime = 5f;
     public float SpawnMaxTime = 10f;
@@ -25,7 +27,28 @@ public class ObjectSpawner : MonoBehaviour
     void Start()
     {
         SpawnedObjectList = new List<GameObject>();
+
         StartCoroutine(StartFirstDelay());
+    }
+
+    public void EnableSpawn(bool Enabled)
+    {
+        IsStarted = Enabled;
+
+        if(IsStarted == true)
+        {
+            StartCoroutine(StartFirstDelay());
+        }
+        else
+        {
+            StopAllCoroutines();
+            for (int i = 0; i < SpawnedObjectList.Count; i++)
+            {
+                GameObject SpawnedObject = SpawnedObjectList[i];
+                SpawnedObjectList.RemoveSwapBack(SpawnedObject);
+                Destroy(SpawnedObject);
+            }
+        }
     }
 
     IEnumerator StartFirstDelay() 
