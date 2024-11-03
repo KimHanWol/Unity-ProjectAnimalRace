@@ -27,8 +27,6 @@ public class ObjectSpawner : MonoBehaviour
     void Start()
     {
         SpawnedObjectList = new List<GameObject>();
-
-        StartCoroutine(StartFirstDelay());
     }
 
     public void EnableSpawn(bool Enabled)
