@@ -48,11 +48,21 @@ public class HunterController : MonoBehaviour
 
         transform.position = StartPosition;
 
+        if(Animator != null)
+        {
+            Animator.SetBool("IsRunning", false);
+        }
+
         StopAllCoroutines();
     }
 
     public void StartMovement()
     {
+        if (Animator != null)
+        {
+            Animator.SetBool("IsRunning", true);
+        }
+
         StartCoroutine(WaitFirstDelay());
     }
 

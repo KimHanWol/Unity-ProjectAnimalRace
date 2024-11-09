@@ -8,6 +8,7 @@ public class AnimalChanger : RuningObject
 {
     private AnimalDataManager AnimalDataManager;
     private Animator Animator;
+    private BoxCollider2D BoxCollider2D;
 
     //Data
     private AnimalData CurrentAnimalData;
@@ -20,8 +21,10 @@ public class AnimalChanger : RuningObject
     void Start()
     {
         AnimalDataManager = AnimalDataManager.Get();
-        CurrentAnimalData = AnimalDataManager.GetRandomAnimalData(PlayerController.Get().GetCurrentAnimalType());
+        BoxCollider2D = GetComponent<BoxCollider2D>();
         Animator = GetComponent<Animator>();
+
+        CurrentAnimalData = AnimalDataManager.GetRandomAnimalData(PlayerController.Get().GetCurrentAnimalType());
         if (Animator != null)
         {
             Animator.runtimeAnimatorController = CurrentAnimalData.Animator;
@@ -152,6 +155,13 @@ public class AnimalChanger : RuningObject
         {
             yield return null;
         }
+
+        if(BoxCollider2D == null)
+        {
+            yield return null;
+        }
+
+        BoxCollider2D.enabled = false;
 
         float FadingTime = 0f;
         float Duration = 1.0f;
