@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
@@ -10,17 +12,32 @@ public class GameManager : MonoBehaviour
     public ObjectSpawner ObjectSpawner;
     public MapManager MapManager;
     public UIManager UIManager;
-    
+    public SoundManager SoundManager;
+
     public RuningObject[] SpawnedObjectList;
     public GameOverObject GameOverObject;
+    
+    // 타이틀이 나오고 입력을 받지 않는 시간
+    public float TitleNoInputDuration = 2f;
 
-    private bool IsPlaying = false;
+    enum EGameState
+    { 
+        State_Title_NoInput,
+        State_Title_Input,
+        State_Starting,
+        State_Playing,
+    }
+
+    private EGameState GameState;
 
     void Start()
     {
         Player.OnPlayerMovementEnableChanged.AddListener(OnAnimalChangeEffectStateChanged);
         Player.OnPlayerAccelerated.AddListener(OnPlayerAccelerated);
         GameOverObject.OnGameOver.AddListener(OnGameOver);
+        SoundManager.PlayBGM(SoundManager.EBGM.BGM_START, true);
+
+        OnGameStart();
     }
 
     void Update()
@@ -45,15 +62,29 @@ public class GameManager : MonoBehaviour
 
     private void Update_WaitForAnyButtonPressed()
     {
-        if(IsPlaying == true)
+        if(GameState != EGameState.State_Title_Input)
         { 
             return;
         }
 
         if(Input.anyKeyDown == true)
         {
-            OnStart();
+            GameState = EGameState.State_Starting;
+            SoundManager.PlayBGM(SoundManager.EBGM.BGM_PLAYING, false);
+            SoundManager.OnBGMChanged.AddListener(OnBGMChanged);
+            UIManager.OnStarting();
         }
+    }
+
+    private void OnBGMChanged(SoundManager.EBGM NewBGM)
+    {
+        if(NewBGM != SoundManager.EBGM.BGM_PLAYING)
+        {
+            return;
+        }
+
+        SoundManager.OnBGMChanged.RemoveListener(OnBGMChanged);
+        OnPlay();
     }
 
     private void OnAnimalChangeEffectStateChanged(bool Enabled)
@@ -79,13 +110,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void OnStart()
+    private void OnGameStart()
     {
-        IsPlaying = true;
+        GameState = EGameState.State_Title_NoInput;
+        StartCoroutine(WaitTitleReady());
+    }
+
+    private void OnPlay()
+    {
+        GameState = EGameState.State_Playing;
 
         if (UIManager != null)
         {
             UIManager.OnAnyButtonPressed();
+            UIManager.OnPlaying();
         }
 
         if (Player != null)
@@ -106,9 +144,10 @@ public class GameManager : MonoBehaviour
 
     private void OnGameOver()
     {
-        IsPlaying = false;
+        //Restart Game
+        OnGameStart();
 
-        if(Player != null)
+        if (Player != null)
         {
             Player.ResetPlayer();
         }
@@ -121,11 +160,20 @@ public class GameManager : MonoBehaviour
         if(UIManager != null)
         {
             UIManager.PlayTitleFadeAnimation(true);
+            UIManager.OnGameStart(false);
         }
 
         if (ObjectSpawner != null)
         {
             ObjectSpawner.EnableSpawn(false);
         }
+    }
+
+    IEnumerator WaitTitleReady()
+    {
+        yield return new WaitForSeconds(2f);
+
+        GameState = EGameState.State_Title_Input;
+        UIManager.OnGameStart(true);
     }
 }

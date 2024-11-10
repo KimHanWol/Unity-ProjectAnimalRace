@@ -9,8 +9,12 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public GameObject TitleUI;
+    public GameObject StartingUI;
+    public GameObject StartPlayUI;
     public GameObject PressAnyButtonUI;
     public GameObject SettingButtonUI;
+
+    private bool IsStarted = false;
 
     public float PressAnyButtonBlinkingDuration = 1f;
     private float PressAnyButtonCurrentTime;
@@ -18,6 +22,11 @@ public class UIManager : MonoBehaviour
     private float CurrentTitleFadeDuration;
     private bool IsAnyButtonPressed = false;
     private float TitleAlpha = 1f;
+
+    void Start()
+    {
+        OnGameStart(false);
+    }
 
     void Update()
     {
@@ -27,6 +36,11 @@ public class UIManager : MonoBehaviour
     private void Update_PressAnyButtonBlinking()
     {
         if(IsAnyButtonPressed == true)
+        {
+            return;
+        }
+
+        if(IsStarted == true)
         {
             return;
         }
@@ -47,7 +61,7 @@ public class UIManager : MonoBehaviour
     public void OnAnyButtonPressed()
     {
         IsAnyButtonPressed = true;
-        PlayTitleFadeAnimation(false);
+        //PlayTitleFadeAnimation(false);
     }
 
     public void PlayTitleFadeAnimation(bool IsFadeIn)
@@ -124,5 +138,40 @@ public class UIManager : MonoBehaviour
 
             yield return new WaitForFixedUpdate();
         }
+    }
+
+    public void OnGameStart(bool InputEnabled)
+    {
+        TitleUI.SetActive(true);
+        PressAnyButtonUI.SetActive(InputEnabled);
+        SettingButtonUI.SetActive(true);
+    }
+
+    public void OnStarting()
+    {
+        IsStarted = true;
+
+        TitleUI.SetActive(false);
+        PressAnyButtonUI.SetActive(false);
+        SettingButtonUI.SetActive(false);
+
+        StartingUI.SetActive(true);
+        StartPlayUI.SetActive(false);
+    }
+
+    public void OnPlaying()
+    {
+        StartingUI.SetActive(false);
+        StartPlayUI.SetActive(true);
+
+        StartCoroutine(WaitStartPlayUITimer(1f));
+    }
+
+    IEnumerator WaitStartPlayUITimer(float ShowDuration)
+    {
+        yield return new WaitForSeconds(ShowDuration);
+
+        StopCoroutine(WaitStartPlayUITimer(ShowDuration));
+        StartPlayUI.SetActive(false);
     }
 }
