@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     public GameObject PressAnyButtonUI;
     public GameObject SettingButtonUI;
 
+    private bool IsWaitingInput = false;
     private bool IsStarted = false;
 
     public float PressAnyButtonBlinkingDuration = 1f;
@@ -35,13 +36,21 @@ public class UIManager : MonoBehaviour
 
     private void Update_PressAnyButtonBlinking()
     {
-        if(IsAnyButtonPressed == true)
+        if (IsWaitingInput == false)
         {
+            PressAnyButtonCurrentTime = 0f;
+            return;
+        }
+
+        if (IsAnyButtonPressed == true)
+        {
+            PressAnyButtonCurrentTime = 0f;
             return;
         }
 
         if(IsStarted == true)
         {
+            PressAnyButtonCurrentTime = 0f;
             return;
         }
 
@@ -143,8 +152,10 @@ public class UIManager : MonoBehaviour
     public void OnGameStart(bool InputEnabled)
     {
         TitleUI.SetActive(true);
-        PressAnyButtonUI.SetActive(InputEnabled);
         SettingButtonUI.SetActive(true);
+
+        IsWaitingInput = InputEnabled;
+        PressAnyButtonUI.SetActive(InputEnabled);
     }
 
     public void OnStarting()
