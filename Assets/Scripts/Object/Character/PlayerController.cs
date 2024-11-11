@@ -1,9 +1,5 @@
-using System;
-using System.IO.Pipes;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
 
 public enum AnimalType
 {
@@ -15,9 +11,10 @@ public enum AnimalType
     Dog,
     Duck,
     Frog,
+    Pig,
     Scorpion,
     Spider,
-    Tortoise,
+    Tortoise, 
 }
 
 public class PlayerController : MonoBehaviour
@@ -48,6 +45,7 @@ public class PlayerController : MonoBehaviour
     private AnimalData CurrentAnimalData;
     private int CurrentInputStackIndex = 0;
     private Vector2 CurrentMousePosition = Vector2.zero;
+    private Vector2 CurrentMouseScrollDelta = Vector2.zero;
 
     [Header("Animation")]
     public float RunAnimationSpeedRate = 1f;
@@ -112,7 +110,7 @@ public class PlayerController : MonoBehaviour
         IsMoveEnabled = Enabled;
     }
 
-    private void ChangeAnimatorController(AnimatorController NewAnimatorController)
+    private void ChangeAnimatorController(RuntimeAnimatorController NewAnimatorController)
     {
         Animator CurrentAnimator = GetComponent<Animator>();
         if(CurrentAnimator != null && gameObject.activeInHierarchy == true)
@@ -142,8 +140,8 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        InputData CurrentInputData = CurrentAnimalData.InputData;
-        switch(CurrentInputData.InputType)
+        float PrevInputStackIndex = CurrentInputStackIndex;
+        switch(CurrentAnimalData.InputType)
         {
             case InputType.AD_TakeTurn:
             {
@@ -160,12 +158,22 @@ public class PlayerController : MonoBehaviour
             }
             case InputType.MouseScrollDown:
             {
-
+                Vector2 PrevMouseScrollDelta = CurrentMouseScrollDelta;
+                CurrentMouseScrollDelta = Input.mouseScrollDelta;
+                if (PrevMouseScrollDelta.y > CurrentMouseScrollDelta.y)
+                {
+                    CurrentInputStackIndex++;
+                }
                 break;
             }
             case InputType.MouseScrollUp:
             {
-
+                Vector2 PrevMouseScrollDelta = CurrentMouseScrollDelta;
+                CurrentMouseScrollDelta = Input.mouseScrollDelta;
+                if (PrevMouseScrollDelta.y < CurrentMouseScrollDelta.y)
+                {
+                    CurrentInputStackIndex++;
+                }
                 break;
             }
             case InputType.QWER_TakeTurn:
@@ -290,12 +298,13 @@ public class PlayerController : MonoBehaviour
 
                 break;
             }
-            case InputType.ArrowRightLeft:
+            case InputType.ArrowRightLeft_TakeTurn:
             {
                 //왼쪽
                 if (Input.GetKeyDown(KeyCode.LeftArrow))
                 {
                     CurrentInputStackIndex++;
+                    MovePlayer();
                 }
                 //오른쪽
                 else if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -305,17 +314,84 @@ public class PlayerController : MonoBehaviour
 
                 break;
             }
+            case InputType.QWERASDF:
+            {
+                if(Input.GetKeyDown(KeyCode.Q) ||
+                   Input.GetKeyDown(KeyCode.W) ||
+                   Input.GetKeyDown(KeyCode.E) ||
+                   Input.GetKeyDown(KeyCode.R) ||
+                   Input.GetKeyDown(KeyCode.A) ||
+                   Input.GetKeyDown(KeyCode.S) ||
+                   Input.GetKeyDown(KeyCode.D) ||
+                   Input.GetKeyDown(KeyCode.F))
+                {
+                    CurrentInputStackIndex++;
+                }
+            }
+                break;
+
+            case InputType.ZXDotSlash:
+            {
+                if (Input.GetKeyDown(KeyCode.Z) ||
+                    Input.GetKeyDown(KeyCode.X) ||
+                    Input.GetKeyDown(KeyCode.Period) ||
+                    Input.GetKeyDown(KeyCode.Comma))
+                {
+                    CurrentInputStackIndex++;
+                }
+            }
+                break;
+            case InputType.QWAS_IOKL_TakeTurn:
+            {
+                if(Input.GetKey(KeyCode.Q) &&
+                   Input.GetKey(KeyCode.W) &&
+                   Input.GetKey(KeyCode.A) &&
+                   Input.GetKey(KeyCode.S) &&
+                   CurrentInputStackIndex == 0)
+                {
+                    CurrentInputStackIndex++;
+                }
+                else if(Input.GetKey(KeyCode.I) &&
+                        Input.GetKey(KeyCode.O) &&
+                        Input.GetKey(KeyCode.K) &&
+                        Input.GetKey(KeyCode.L) &&
+                        CurrentInputStackIndex == 1)
+                {
+                    CurrentInputStackIndex++;
+                }
+            }
+                break;
+            case InputType.MouseLeftRight_TakeTurn:
+            {
+                if(Input.GetKeyDown(KeyCode.Mouse0) && CurrentInputStackIndex == 0)
+                {
+                    CurrentInputStackIndex++;
+                }
+                else if(Input.GetKeyDown(KeyCode.Mouse1) && CurrentInputStackIndex == 1)
+                {
+                    CurrentInputStackIndex++;
+                }
+            }
+                break;
         }
 
-        if (CurrentInputStackIndex >= CurrentAnimalData.InputData.InputStackCount)
+        // 동작을 진행했을 때 마다
+        if(PrevInputStackIndex != CurrentInputStackIndex)
+        {
+            MovePlayer();
+        }
+
+        if (CurrentInputStackIndex >= AnimalDataManager.Get().GetInputStackCount(CurrentAnimalData.InputType))
         {
             CurrentInputStackIndex = 0;
-
-            //Move Player
-            Vector2 MoveForce = new Vector2(CurrentAnimalData.InputData.Veclocity, 0);
-            MoveSpeedObject.AddForce(MoveForce);
-            OnPlayerAccelerated?.Invoke(MoveForce.x);
         }
+    }
+
+    private void MovePlayer()
+    {
+        Vector2 MoveForce = new Vector2(AnimalDataManager.Get().GetVelocity(CurrentAnimalData.InputType), 0);
+        MoveSpeedObject.AddForce(MoveForce);
+        OnPlayerAccelerated?.Invoke(MoveForce.x);
     }
 
     private void Update_CheckVelocity()

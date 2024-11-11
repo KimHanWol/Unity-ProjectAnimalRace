@@ -1,17 +1,23 @@
-using UnityEditor.Animations;
 using UnityEngine;
 
 public enum InputType
 {
     AD_TakeTurn, // AD 번갈아서 누르기
     QWER_TakeTurn, // QWER 번갈아서 누르기
+    ArrowRightLeft_TakeTurn, // 화살표 좌우 번갈아서 누르기
+    QWAS_IOKL_TakeTurn, // QWAS 동시입력, IOKL 동시입력 번갈아서 누르기
+    MouseLeftRight_TakeTurn, // 마우스 좌우 번갈아서 누르기 
+
+    QWERASDF, // QWERASDF 막 누르기
+    ZXDotSlash, // ZX>? 막 누르기
     SpaceBar, // 스페이스바
+
     MouseScrollUp, // 마우스 스크롤 올리기
     MouseScrollDown, // 마우스 스크롤 내리기
     MouseVerticalHorizonal, // 마우스 수직 수평
     Mouse8, // 마우스 8자로 그리기
+
     SpaceBarToCrash, // 타이밍 맞춰서 스페이스 바
-    ArrowRightLeft, // 화살표 좌우
 }
 
 [System.Serializable]
@@ -26,8 +32,8 @@ public class InputData
 public class AnimalData
 {
     public AnimalType AnimalType;
-    public InputData InputData;
-    public AnimatorController Animator;
+    public InputType InputType;
+    public RuntimeAnimatorController Animator;
 }
 
 public class AnimalDataManager : MonoBehaviour
@@ -53,6 +59,7 @@ public class AnimalDataManager : MonoBehaviour
         }
     }
 
+    public InputData[] InputDataList;
     public AnimalData[] AnimalDataList;
 
     public AnimalData GetAnimalData(AnimalType TargetAnimalType)
@@ -91,5 +98,29 @@ public class AnimalDataManager : MonoBehaviour
         }
 
         return -1;
+    }
+
+    public int GetInputStackCount(InputType InInputType)
+    {
+        foreach (InputData InInputData in InputDataList)
+        {
+            if (InInputData.InputType == InInputType)
+            {
+                return InInputData.InputStackCount;
+            }
+        }
+        return -1;
+    }
+
+    public int GetVelocity(InputType InInputType)
+    {
+        foreach (InputData InInputData in InputDataList)
+        {
+            if (InInputData.InputType == InInputType)
+            {
+                return InInputData.Veclocity;
+            }
+        }
+        return 0;
     }
 }

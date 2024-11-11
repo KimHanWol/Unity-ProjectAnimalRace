@@ -723,7 +723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 896172b2e52c5e84694208d8f333076f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentAnimalType: 9
+  CurrentAnimalType: 10
   RunAnimationSpeedRate: 1
   RunAnimationMaxSpeedRate: 4
   RunAnimationMinSpeedRate: 1
@@ -5691,67 +5691,74 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd864de0e0c30c24ba8f14754757e69e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InputDataList:
+  - InputType: 0
+    InputStackCount: 2
+    Veclocity: 2
+  - InputType: 1
+    InputStackCount: 4
+    Veclocity: 2
+  - InputType: 2
+    InputStackCount: 2
+    Veclocity: 2
+  - InputType: 3
+    InputStackCount: 2
+    Veclocity: 4
+  - InputType: 4
+    InputStackCount: 2
+    Veclocity: 4
+  - InputType: 5
+    InputStackCount: 1
+    Veclocity: 1
+  - InputType: 6
+    InputStackCount: 1
+    Veclocity: 2
+  - InputType: 7
+    InputStackCount: 1
+    Veclocity: 4
+  - InputType: 8
+    InputStackCount: 1
+    Veclocity: 1
+  - InputType: 9
+    InputStackCount: 1
+    Veclocity: 1
+  - InputType: 10
+    InputStackCount: 4
+    Veclocity: 4
+  - InputType: 11
+    InputStackCount: 6
+    Veclocity: 1
   AnimalDataList:
   - AnimalType: 4
-    InputData:
-      InputType: 8
-      InputStackCount: 2
-      Veclocity: 4
+    InputType: 2
     Animator: {fileID: 9100000, guid: 0d4cceb64904d4c4a9ebc3222ffb9b5e, type: 2}
   - AnimalType: 0
-    InputData:
-      InputType: 5
-      InputStackCount: 2
-      Veclocity: 6
+    InputType: 10
     Animator: {fileID: 9100000, guid: 2362cbdcc8e810244b71948e7ee805d9, type: 2}
   - AnimalType: 6
-    InputData:
-      InputType: 0
-      InputStackCount: 2
-      Veclocity: 4
+    InputType: 0
     Animator: {fileID: 9100000, guid: c508574cd6847ac46ae0c840afec4bd5, type: 2}
   - AnimalType: 7
-    InputData:
-      InputType: 2
-      InputStackCount: 1
-      Veclocity: 3
+    InputType: 7
     Animator: {fileID: 9100000, guid: 8bff81e7975fad845a251c704b4cd0de, type: 2}
   - AnimalType: 1
-    InputData:
-      InputType: 2
-      InputStackCount: 1
-      Veclocity: 3
+    InputType: 6
     Animator: {fileID: 9100000, guid: cd03d9d246c0be541a47e0341ea1ee19, type: 2}
   - AnimalType: 8
-    InputData:
-      InputType: 2
-      InputStackCount: 1
-      Veclocity: 3
-    Animator: {fileID: 9100000, guid: c293f6ca94cddb84a84d97d26b77e567, type: 2}
+    InputType: 3
+    Animator: {fileID: 9100000, guid: 68c1b4f516d020c4e8cff102c72b4552, type: 2}
   - AnimalType: 9
-    InputData:
-      InputType: 2
-      InputStackCount: 1
-      Veclocity: 3
-    Animator: {fileID: 9100000, guid: a6d0d3f10d2d78249b51401c3747160c, type: 2}
+    InputType: 4
+    Animator: {fileID: 9100000, guid: c293f6ca94cddb84a84d97d26b77e567, type: 2}
   - AnimalType: 10
-    InputData:
-      InputType: 2
-      InputStackCount: 1
-      Veclocity: 3
-    Animator: {fileID: 9100000, guid: 776c8c51fe35f044b834db7c4ecb489f, type: 2}
+    InputType: 5
+    Animator: {fileID: 9100000, guid: a6d0d3f10d2d78249b51401c3747160c, type: 2}
   - AnimalType: 2
-    InputData:
-      InputType: 3
-      InputStackCount: 1
-      Veclocity: 3
+    InputType: 11
     Animator: {fileID: 9100000, guid: 0125434c9347e7445a5581fa587971ff, type: 2}
-  - AnimalType: 3
-    InputData:
-      InputType: 2
-      InputStackCount: 1
-      Veclocity: 3
-    Animator: {fileID: 9100000, guid: c19be67381ddd2047a83cc226f756ffe, type: 2}
+  - AnimalType: 5
+    InputType: 1
+    Animator: {fileID: 9100000, guid: 2476fead89c324b40b727e1a0ba71285, type: 2}
 --- !u!1 &1363013145
 GameObject:
   m_ObjectHideFlags: 0
@@ -5795,7 +5802,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 2
+  m_LinearDrag: 4
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
