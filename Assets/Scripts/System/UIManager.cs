@@ -13,6 +13,8 @@ public class UIManager : MonoBehaviour
     public GameObject StartPlayUI;
     public GameObject PressAnyButtonUI;
     public GameObject SettingButtonUI;
+    public GameObject ScoreBoardUI;
+    public GameObject ScoreInGameUI;
 
     private bool IsWaitingInput = false;
     private bool IsStarted = false;
@@ -153,6 +155,8 @@ public class UIManager : MonoBehaviour
     {
         TitleUI.SetActive(true);
         SettingButtonUI.SetActive(true);
+        ScoreBoardUI.SetActive(false);
+        ScoreInGameUI.SetActive(false);
 
         IsWaitingInput = InputEnabled;
         PressAnyButtonUI.SetActive(InputEnabled);
@@ -174,8 +178,21 @@ public class UIManager : MonoBehaviour
     {
         StartingUI.SetActive(false);
         StartPlayUI.SetActive(true);
+        ScoreInGameUI.SetActive(true);
 
         StartCoroutine(WaitStartPlayUITimer(1f));
+    }
+
+    public void OnGameOver(int NewScore)
+    {
+        ScoreBoardUI.SetActive(true);
+        Text[] ScoreboardUITexts = ScoreBoardUI.GetComponentsInChildren<Text>();
+        if(ScoreboardUITexts.Length > 1)
+        {
+            ScoreboardUITexts[1].text = NewScore.ToString() + "m";
+        }
+
+        ScoreInGameUI.SetActive(false);
     }
 
     IEnumerator WaitStartPlayUITimer(float ShowDuration)
@@ -184,5 +201,11 @@ public class UIManager : MonoBehaviour
 
         StopCoroutine(WaitStartPlayUITimer(ShowDuration));
         StartPlayUI.SetActive(false);
+    }
+
+    public void UpdateScoreData(int NewScore)
+    {
+        Text ScoreInGameUIText = ScoreInGameUI.GetComponentInChildren<Text>();
+        ScoreInGameUIText.text = NewScore.ToString() + "m";
     }
 }

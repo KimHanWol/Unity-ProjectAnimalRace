@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     // 타이틀이 나오고 입력을 받지 않는 시간
     public float TitleNoInputDuration = 2f;
 
+    private float GameScore = 0;
+
     enum EGameState
     { 
         State_Title_NoInput,
@@ -44,6 +46,7 @@ public class GameManager : MonoBehaviour
     {
         Update_CheckSpeed();
         Update_WaitForAnyButtonPressed();
+        Update_GameScore();
     }
 
     public void Update_CheckSpeed()
@@ -74,6 +77,20 @@ public class GameManager : MonoBehaviour
             SoundManager.OnBGMChanged.AddListener(OnBGMChanged);
             UIManager.OnStarting();
         }
+    }
+
+    private void Update_GameScore()
+    {
+        if(GameState != EGameState.State_Playing)
+        {
+            return;
+        }
+
+        float CurrentVelocity = Player.GetVelocity();
+
+        GameScore += CurrentVelocity * Time.deltaTime * 100f;
+
+        UIManager.UpdateScoreData((int)GameScore);
     }
 
     private void OnBGMChanged(SoundManager.EBGM NewBGM)
@@ -110,10 +127,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void OnGameStart()
+    public void OnGameStart()
     {
+        GameScore = 0;
+        UIManager.UpdateScoreData((int)GameScore);
+        UIManager.OnGameStart(false);
+
         GameState = EGameState.State_Title_NoInput;
         StartCoroutine(WaitTitleReady());
+
+        SoundManager.PlayBGM(SoundManager.EBGM.BGM_START, true);
     }
 
     private void OnPlay()
@@ -144,12 +167,10 @@ public class GameManager : MonoBehaviour
 
     private void OnGameOver()
     {
-        //Restart Game
-        OnGameStart();
-
         if (Player != null)
         {
             Player.ResetPlayer();
+            Player.SetMoveEnabled(false);
         }
 
         if(Hunter != null)
@@ -159,14 +180,15 @@ public class GameManager : MonoBehaviour
 
         if(UIManager != null)
         {
-            UIManager.PlayTitleFadeAnimation(true);
-            UIManager.OnGameStart(false);
+            UIManager.OnGameOver((int)GameScore);
         }
 
         if (ObjectSpawner != null)
         {
             ObjectSpawner.EnableSpawn(false);
         }
+
+        SoundManager.PlayBGM(SoundManager.EBGM.BGM_GAMEOVER, true);
     }
 
     IEnumerator WaitTitleReady()

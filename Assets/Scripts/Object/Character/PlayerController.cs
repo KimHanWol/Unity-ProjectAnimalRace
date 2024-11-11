@@ -8,10 +8,16 @@ using UnityEngine.UIElements;
 public enum AnimalType
 {
     Bat,
+    Bear,
+    Bee,
+    Boar,
     Crab,
     Dog,
     Duck,
     Frog,
+    Scorpion,
+    Spider,
+    Tortoise,
 }
 
 public class PlayerController : MonoBehaviour

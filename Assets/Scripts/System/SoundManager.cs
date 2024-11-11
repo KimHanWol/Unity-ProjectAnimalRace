@@ -22,6 +22,7 @@ public class SoundManager : MonoBehaviour
     {
         BGM_START,
         BGM_PLAYING,
+        BGM_GAMEOVER,
     }
 
     public enum ESFX
