@@ -1,22 +1,27 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using static SoundManager;
+
+[Serializable]
+public struct BGMAudioData
+{
+    public EBGM BGMType;
+    public AudioClip AudioClip;
+}
+
+[Serializable]
+public struct SFXAudioData
+{
+    public ESFX SFXType;
+    public AudioClip AudioClip;
+}
 
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
-
-    [SerializeField] AudioClip[] BGMList;
-    [SerializeField] AudioClip[] SFXList;
-
-    public AudioSource BGMAudioSource;
-    public AudioSource SFXAudioSource;
-
-    private AudioClip LastBGM;
-    private List<AudioClip> BGMQueue;
-
-    public UnityEvent<EBGM> OnBGMChanged;
 
     public enum EBGM
     {
@@ -27,8 +32,21 @@ public class SoundManager : MonoBehaviour
 
     public enum ESFX
     {
+        SFX_START,
         SFX_BUTTON,
     }
+
+    [SerializeField] BGMAudioData[] BGMDataList;
+    [SerializeField] SFXAudioData[] SFXDataList;
+
+    public AudioSource BGMAudioSource;
+    public AudioSource SFXAudioSource;
+
+    private AudioClip LastBGM;
+    private List<AudioClip> BGMQueue;
+
+    public UnityEvent<EBGM> OnBGMChanged;
+    public UnityEvent<ESFX> OnSFXChanged;
 
     private void Awake()
     {
@@ -52,7 +70,13 @@ public class SoundManager : MonoBehaviour
 
     public void PlayBGM(EBGM BGMIndex, bool PlayNow)
     {
-        PlayBGM(BGMList[(int)BGMIndex], PlayNow);
+        PlayBGM(BGMDataList[(int)BGMIndex].AudioClip, PlayNow);
+
+        //Ready to play
+        if(BGMIndex == EBGM.BGM_PLAYING)
+        {
+            StartCoroutine(ReadyToStart());
+        }
     }
 
     public void PlayBGM(AudioClip AudioClip, bool PlayNow)
@@ -63,8 +87,14 @@ public class SoundManager : MonoBehaviour
             BGMAudioSource.Play();
             LastBGM = AudioClip;
 
-            int BGMIndex = System.Array.IndexOf(BGMList, AudioClip);
-            OnBGMChanged.Invoke((EBGM)BGMIndex);
+            foreach (BGMAudioData BGMData in BGMDataList)
+            {
+                if (BGMData.AudioClip == AudioClip)
+                {
+                    OnBGMChanged.Invoke(BGMData.BGMType);
+                    break;
+                }
+            }
         }
         else
         {
@@ -103,7 +133,7 @@ public class SoundManager : MonoBehaviour
 
     public bool IsBGMPlaying(EBGM BGMIndex)
     {
-        if(BGMAudioSource.clip == BGMList[(int)BGMIndex])
+        if(BGMAudioSource.clip == BGMDataList[(int)BGMIndex].AudioClip)
         {
             return true;
         }
@@ -113,6 +143,29 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySFX(ESFX SFXIndex)
     {
-        SFXAudioSource.PlayOneShot(SFXList[(int)SFXIndex]);
+        SFXAudioSource.PlayOneShot(SFXDataList[(int)SFXIndex].AudioClip);
+    }
+
+    IEnumerator ReadyToStart()
+    {
+        float SFXAudioLength = 0f;
+        foreach(SFXAudioData SFXAudioData in SFXDataList)
+        {
+            if(SFXAudioData.SFXType == ESFX.SFX_START)
+            {
+                SFXAudioLength = SFXAudioData.AudioClip.length;
+            }
+        }
+
+        while (true)
+        {
+            yield return new WaitForSeconds(0.01f);
+
+            if(BGMAudioSource.time + SFXAudioLength >= BGMAudioSource.clip.length)
+            {
+                PlaySFX(ESFX.SFX_START);
+                break;
+            }
+        }
     }
 }

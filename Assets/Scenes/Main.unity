@@ -7914,11 +7914,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09e5ef8f55347f040a1f5f999f0bad4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BGMList:
-  - {fileID: 8300000, guid: 58cf90752cc49594b907c2514765cc23, type: 3}
-  - {fileID: 8300000, guid: b5ace0422db5ba140baa1d22d07e0cf5, type: 3}
-  - {fileID: 8300000, guid: 29ba4b1dfa651364c9472a11ad8f8872, type: 3}
-  SFXList: []
+  BGMDataList:
+  - BGMType: 0
+    AudioClip: {fileID: 8300000, guid: f5ab015a49e77694a91a27333215f6ae, type: 3}
+  - BGMType: 1
+    AudioClip: {fileID: 8300000, guid: 31b3cb97e0e55ca4eb53d28d01946a30, type: 3}
+  - BGMType: 2
+    AudioClip: {fileID: 0}
+  SFXDataList:
+  - SFXType: 0
+    AudioClip: {fileID: 8300000, guid: bc8e29b0263dd124d8f71f737154d35f, type: 3}
   BGMAudioSource: {fileID: 2106088590}
   SFXAudioSource: {fileID: 1009771592}
   OnBGMChanged:
