@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     public GameObject SettingButtonUI;
     public GameObject ScoreBoardUI;
     public GameObject ScoreInGameUI;
+    public GameObject SettingUI;
 
     private bool IsWaitingInput = false;
     private bool IsStarted = false;
@@ -207,5 +208,10 @@ public class UIManager : MonoBehaviour
     {
         Text ScoreInGameUIText = ScoreInGameUI.GetComponentInChildren<Text>();
         ScoreInGameUIText.text = NewScore.ToString() + "m";
+    }
+
+    public void EnableSettingsPanel(bool Eanbled)
+    {
+        SettingUI.SetActive(Eanbled);
     }
 }

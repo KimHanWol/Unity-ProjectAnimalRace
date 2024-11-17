@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics.Tracing;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -14,7 +15,7 @@ public class GameManager : MonoBehaviour
     public RuningObject[] SpawnedObjectList;
     public GameOverObject GameOverObject;
     
-    // Å¸ÀÌÆ²ÀÌ ³ª¿À°í ÀÔ·ÂÀ» ¹ŞÁö ¾Ê´Â ½Ã°£
+    // íƒ€ì´í‹€ì´ ë‚˜ì˜¤ê³  ì…ë ¥ì„ ë°›ì§€ ì•ŠëŠ” ì‹œê°„
     public float TitleNoInputDuration = 2f;
 
     private float GameScore = 0;
@@ -67,7 +68,8 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if(Input.anyKeyDown == true)
+        //ì™¼ìª½ ë§ˆìš°ìŠ¤ í´ë¦­ì€ ë¬´ì‹œ
+        if(Input.anyKeyDown == true && Input.GetKey(KeyCode.Mouse0) == false)
         {
             GameState = EGameState.State_Starting;
             SoundManager.PlayBGM(SoundManager.EBGM.BGM_PLAYING, false);

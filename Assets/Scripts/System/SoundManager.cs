@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using static SoundManager;
 
 [Serializable]
@@ -167,5 +168,15 @@ public class SoundManager : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void OnBGMVolumeChanged(Slider BGMSlider)
+    {
+        BGMAudioSource.volume = BGMSlider.value;
+    }
+
+    public void OnSFXVolumeChanged(Slider SFXSlider)
+    {
+        SFXAudioSource.volume = SFXSlider.value;
     }
 }
