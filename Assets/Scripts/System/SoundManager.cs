@@ -22,6 +22,9 @@ public struct SFXAudioData
 
 public class SoundManager : MonoBehaviour
 {
+    //준비 브금이 끝나기 전에 미리 틀어야 하는 시간
+    public float StartSFXOffset = 0.25f;
+
     public static SoundManager instance;
 
     public enum EBGM
@@ -162,7 +165,7 @@ public class SoundManager : MonoBehaviour
         {
             yield return new WaitForSeconds(0.01f);
 
-            if (BGMAudioSource.time + SFXAudioLength >= BGMAudioSource.clip.length)
+            if (BGMAudioSource.time + SFXAudioLength + StartSFXOffset >= BGMAudioSource.clip.length)
             {
                 PlaySFX(ESFX.SFX_START);
 
