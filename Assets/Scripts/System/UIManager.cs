@@ -56,11 +56,7 @@ public class UIManager : SingletonObject<UIManager>
 
         if (PressAnyButtonBlinkingDuration < PressAnyButtonCurrentTime)
         {
-            if (PressAnyButtonUI != null)
-            {
-                PressAnyButtonUI.SetActive(!PressAnyButtonUI.activeInHierarchy);
-            }
-
+            PressAnyButtonUI.SetActive(!PressAnyButtonUI.activeInHierarchy);
             PressAnyButtonCurrentTime = 0f;
         }
 
@@ -77,15 +73,9 @@ public class UIManager : SingletonObject<UIManager>
     {
         IsAnyButtonPressed = true;
 
-        if (PressAnyButtonUI != null)
-        {
-            PressAnyButtonUI.SetActive(IsFadeIn);
-        }
+        PressAnyButtonUI.SetActive(IsFadeIn);
 
-        if (SettingButtonUI != null)
-        {
-            SettingButtonUI.SetActive(IsFadeIn);
-        }
+        SettingButtonUI.SetActive(IsFadeIn);
 
         StopCoroutine(Loop_TitleFadeAnimation(IsFadeIn));
         StopCoroutine(Loop_TitleFadeAnimation(!IsFadeIn));
@@ -109,34 +99,31 @@ public class UIManager : SingletonObject<UIManager>
 
             CurrentTitleFadeDuration = Mathf.Clamp(CurrentTitleFadeDuration, 0f, TitleFadeDuration);
 
-            if (TitleUI != null)
+            Text[] TextArray = TitleUI.GetComponentsInChildren<Text>();
+            Image[] ImageArray = TitleUI.GetComponentsInChildren<Image>();
+
+            TitleAlpha = CurrentTitleFadeDuration / TitleFadeDuration;
+            TitleAlpha = Mathf.Clamp(TitleAlpha, 0f, 1f);
+
+            foreach (Text Text in TextArray)
             {
-                Text[] TextArray = TitleUI.GetComponentsInChildren<Text>();
-                Image[] ImageArray = TitleUI.GetComponentsInChildren<Image>();
-
-                TitleAlpha = CurrentTitleFadeDuration / TitleFadeDuration;
-                TitleAlpha = Mathf.Clamp(TitleAlpha, 0f, 1f);
-
-                foreach (Text Text in TextArray)
+                Color NewColor = new Color(Text.color.r, Text.color.g, Text.color.b, TitleAlpha);
+                Text.color = NewColor;
+            }
+            foreach (Image Image in ImageArray)
+            {
+                float InTitleAlpha = TitleAlpha;
+                if (IsFadeIn == true)
                 {
-                    Color NewColor = new Color(Text.color.r, Text.color.g, Text.color.b, TitleAlpha);
-                    Text.color = NewColor;
+                    InTitleAlpha = TitleAlpha > 0.5f ? TitleAlpha : 0f;
                 }
-                foreach (Image Image in ImageArray)
+                else
                 {
-                    float InTitleAlpha = TitleAlpha;
-                    if (IsFadeIn == true)
-                    {
-                        InTitleAlpha = TitleAlpha > 0.5f ? TitleAlpha : 0f;
-                    }
-                    else
-                    {
-                        InTitleAlpha = TitleAlpha - 0.5f;
-                    }
-
-                    Color NewColor = new Color(Image.color.r, Image.color.g, Image.color.b, InTitleAlpha);
-                    Image.color = NewColor;
+                    InTitleAlpha = TitleAlpha - 0.5f;
                 }
+
+                Color NewColor = new Color(Image.color.r, Image.color.g, Image.color.b, InTitleAlpha);
+                Image.color = NewColor;
             }
 
             if (IsFadeIn == true && TitleAlpha == 1f ||

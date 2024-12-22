@@ -42,20 +42,14 @@ public class HunterController : MonoBehaviour
     public void ResetHunter()
     {
         Rigidbody2D PlayerRigidbody = GetComponent<Rigidbody2D>();
-        if (PlayerRigidbody != null)
-        {
-            PlayerRigidbody.velocity = Vector2.zero;
-        }
+        PlayerRigidbody.velocity = Vector2.zero;
 
         CurrentForceRate = 1f;
         CurrentDurationRate = 1f;
 
         transform.position = StartPosition;
 
-        if (Animator != null)
-        {
-            Animator.SetBool("IsRunning", false);
-        }
+        Animator.SetBool("IsRunning", false);
 
         StopAllCoroutines();
     }
@@ -97,11 +91,7 @@ public class HunterController : MonoBehaviour
     private void Internal_MoveHunter()
     {
         float CurrentForce = ForceInitial * CurrentForceRate;
-
-        if (RigidBody2D != null)
-        {
-            RigidBody2D.AddForce(new Vector2(CurrentForce, 0));
-        }
+        RigidBody2D.AddForce(new Vector2(CurrentForce, 0));
     }
 
     public void OnPlayerAccelerated(float MoveForce)

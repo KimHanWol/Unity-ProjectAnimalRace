@@ -90,10 +90,7 @@ public class ObjectSpawner : MonoBehaviour
             }
         }
 
-        if (SpawnedObject != null)
-        {
-            SpawnedObjectList.Add(SpawnedObject);
-        }
+        SpawnedObjectList.Add(SpawnedObject);
     }
 
     private void CheckSpawnedObjectList()
@@ -107,11 +104,13 @@ public class ObjectSpawner : MonoBehaviour
             {
                 IsNeedToRemove = true;
             }
-
-            SpawnableObject SpawnableObject = SpawnedObject.GetComponent<SpawnableObject>();
-            if (SpawnableObject != null && SpawnableObject.IsDestroying == true)
+            else
             {
-                IsNeedToRemove = true;
+                SpawnableObject SpawnableObject = SpawnedObject.GetComponent<SpawnableObject>();
+                if (SpawnableObject == null || SpawnableObject.IsDestroying == true)
+                {
+                    IsNeedToRemove = true;
+                }
             }
 
             if (IsNeedToRemove == true)

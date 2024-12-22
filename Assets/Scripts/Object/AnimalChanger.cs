@@ -22,10 +22,7 @@ public class AnimalChanger : RuningObject
         Animator = GetComponent<Animator>();
 
         CurrentAnimalData = AnimalDataManager.GetRandomAnimalData(PlayerController.Get().GetCurrentAnimalType());
-        if (Animator != null)
-        {
-            Animator.runtimeAnimatorController = CurrentAnimalData.Animator;
-        }
+        Animator.runtimeAnimatorController = CurrentAnimalData.Animator;
     }
 
     public void InitializeAnimalChanger()
@@ -53,10 +50,10 @@ public class AnimalChanger : RuningObject
         foreach (Collider2D collider in collider2Ds)
         {
             PlayerController ColliderPlayer = collider.GetComponent<PlayerController>();
-            if (ColliderPlayer != null)
+            // TODO: AnimalChanger 에서 하지 말고 Player 의 컴포넌트에서
+            // 전면의 장애물을 인식해서 동작하도록 하자
+            if(ColliderPlayer != null)
             {
-                // TODO: AnimalChanger 에서 하지 말고 Player 의 컴포넌트에서
-                // 전면의 장애물을 인식해서 동작하도록 하자
                 ColliderPlayer.OnAnimalTryingToChangeEvent?.Invoke();
                 StartCoroutine(SwitchAnimal(ColliderPlayer));
                 bIsChanged = true;
@@ -118,11 +115,8 @@ public class AnimalChanger : RuningObject
         transform.position = PlayerPosition;
 
         AnimalData PlayerAnimalData = AnimalDataManager.Get().GetAnimalData(PlayerAnimalType);
-        if (PlayerAnimalData != null)
-        {
-            Animator.runtimeAnimatorController = PlayerAnimalData.Animator;
-        }
-
+        Animator.runtimeAnimatorController = PlayerAnimalData.Animator;
+        
         StartCoroutine(DisableAnimalChanger());
 
         // Move to zero
@@ -178,9 +172,6 @@ public class AnimalChanger : RuningObject
     private void SelfDestroy()
     {
         SpawnableObject SpawnableObject = GetComponent<SpawnableObject>();
-        if (SpawnableObject != null)
-        {
-            SpawnableObject.IsDestroying = true;
-        }
+        SpawnableObject.IsDestroying = true;
     }
 }

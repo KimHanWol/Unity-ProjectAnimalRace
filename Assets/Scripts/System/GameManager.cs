@@ -54,10 +54,7 @@ public class GameManager : SingletonObject<GameManager>
         }
 
         float CurrentVelocity = Player.GetVelocity();
-        if (MapManager != null)
-        {
-            MapManager.UpdateSpeed(CurrentVelocity);
-        }
+        MapManager.UpdateSpeed(CurrentVelocity);
     }
 
     private void Update_WaitForAnyButtonPressed()
@@ -111,18 +108,12 @@ public class GameManager : SingletonObject<GameManager>
         }
 
         // Map Manager
-        if (MapManager != null)
-        {
-            MapManager.EnableMovement(Enabled);
-        }
+        MapManager.EnableMovement(Enabled);
     }
 
     private void OnPlayerAccelerated(float MoveForce)
     {
-        if (Hunter != null)
-        {
-            Hunter.OnPlayerAccelerated(MoveForce);
-        }
+        Hunter.OnPlayerAccelerated(MoveForce);
     }
 
     public void OnGameStart()
@@ -141,51 +132,26 @@ public class GameManager : SingletonObject<GameManager>
     {
         GameState = EGameState.State_Playing;
 
-        if (UIManager != null)
-        {
-            UIManager.OnAnyButtonPressed();
-            UIManager.OnPlaying();
-        }
+        UIManager.OnAnyButtonPressed();
+        UIManager.OnPlaying();
 
-        if (Player != null)
-        {
-            Player.OnGameStart();
-        }
+        Player.OnGameStart();
 
-        if (Hunter != null)
-        {
-            Hunter.OnGameStart();
-        }
+        Hunter.OnGameStart();
 
-        if (ObjectSpawner != null)
-        {
-            ObjectSpawner.EnableSpawn(true);
-        }
+        ObjectSpawner.EnableSpawn(true);
     }
 
     private void OnGameOver()
     {
-        //TODO: null 체크 제거하기
-        if (Player != null)
-        {
-            //TODO: EventManager 만들어서 글로벌 이벤트로 변경
-            Player.OnGameOver();
-        }
+        //TODO: EventManager 만들어서 글로벌 이벤트로 변경
+        Player.OnGameOver();
 
-        if (Hunter != null)
-        {
-            Hunter.ResetHunter();
-        }
+        Hunter.ResetHunter();
 
-        if (UIManager != null)
-        {
-            UIManager.OnGameOver((int)GameScore);
-        }
+        UIManager.OnGameOver((int)GameScore);
 
-        if (ObjectSpawner != null)
-        {
-            ObjectSpawner.EnableSpawn(false);
-        }
+        ObjectSpawner.EnableSpawn(false);
 
         SoundManager.PlayBGM(SoundManager.EBGM.BGM_GAMEOVER, true);
     }

@@ -101,15 +101,9 @@ public class PlayerController : MonoBehaviour
     {
         CurrentVelocity = 0f;
         Rigidbody2D PlayerRigidbody = GetComponent<Rigidbody2D>();
-        if (PlayerRigidbody != null)
-        {
-            PlayerRigidbody.velocity = Vector2.zero;
-        }
+        PlayerRigidbody.velocity = Vector2.zero;
 
-        if (MoveSpeedObject != null)
-        {
-            MoveSpeedObject.velocity = Vector2.zero;
-        }
+        MoveSpeedObject.velocity = Vector2.zero;
 
         transform.position = StartPosition;
     }
@@ -137,7 +131,7 @@ public class PlayerController : MonoBehaviour
     private void ChangeAnimatorController(RuntimeAnimatorController NewAnimatorController)
     {
         Animator CurrentAnimator = GetComponent<Animator>();
-        if (CurrentAnimator != null && gameObject.activeInHierarchy == true)
+        if (gameObject.activeInHierarchy == true)
         {
             CurrentAnimator.SetBool("IsRunning", false);
             CurrentAnimator.runtimeAnimatorController = NewAnimatorController;
@@ -473,10 +467,7 @@ public class PlayerController : MonoBehaviour
         if (Enabled == false)
         {
             CurrentVelocity = 0;
-            if (MoveSpeedObject != null)
-            {
-                MoveSpeedObject.velocity = Vector2.zero;
-            }
+            MoveSpeedObject.velocity = Vector2.zero;
         }
     }
 }
