@@ -79,32 +79,32 @@ public class AnimalChanger : RuningObject
         IsNeedToStopMove = true;
 
         ColliderPlayer.SetIsAnimalChanging(true);
-        Animator CurrentAnimator = GetComponent<Animator>();
-        if (CurrentAnimator != null)
-        {
-            CurrentAnimator.SetBool("IsRunning", false);
-        }
+        Animator CurrentAnimator = ColliderPlayer.GetComponent<Animator>();
+        CurrentAnimator.SetBool("IsRunning", false);
+
+        HunterController Hunter = GameManager.Instance.Hunter.gameObject.GetComponent<HunterController>();
+        Hunter.SetIsAnimalChanging(true);
 
         Rigidbody2D PlayerRigidbody = ColliderPlayer.GetComponent<Rigidbody2D>();
+        PlayerRigidbody.velocity = Vector2.zero;
+        PlayerRigidbody.AddForce(new Vector2(0, ChangeEffectForce));
+
         Rigidbody2D AnimalChangerRigidbody = gameObject.GetComponent<Rigidbody2D>();
+        AnimalChangerRigidbody.velocity = Vector2.zero;
+        AnimalChangerRigidbody.AddForce(new Vector2(0, ChangeEffectForce));
 
-        if (PlayerRigidbody != null)
-        {
-            PlayerRigidbody.velocity = Vector2.zero;
-            PlayerRigidbody.AddForce(new Vector2(0, ChangeEffectForce));
-        }
-
-        if (AnimalChangerRigidbody != null)
-        {
-            AnimalChangerRigidbody.velocity = Vector2.zero;
-            AnimalChangerRigidbody.AddForce(new Vector2(0, ChangeEffectForce));
-        }
+        Rigidbody2D HunterRigidbody = Hunter.gameObject.GetComponent<Rigidbody2D>();
+        HunterRigidbody.velocity = Vector2.zero;
+        HunterRigidbody.AddForce(new Vector2(0, ChangeEffectForce));
     }
 
     private void EndAnnimalChangeEffect(PlayerController ColliderPlayer)
     {
         IsNeedToStopMove = false;
         ColliderPlayer.SetIsAnimalChanging(false);
+
+        HunterController Hunter = GameManager.Instance.Hunter.gameObject.GetComponent<HunterController>();
+        Hunter.SetIsAnimalChanging(false);
     }
 
     IEnumerator MoveAnimal(PlayerController ColliderPlayer)

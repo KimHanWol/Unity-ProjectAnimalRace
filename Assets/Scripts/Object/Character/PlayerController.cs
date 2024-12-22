@@ -435,12 +435,8 @@ public class PlayerController : MonoBehaviour
         }
 
         Animator CurrentAnimator = GetComponent<Animator>();
-        if (CurrentAnimator == null)
-        {
-            return;
-        }
 
-        bool IsRunning = CurrentVelocity > 0.01f;
+        bool IsRunning = IsMoveEnabled == true && CurrentVelocity > 0.01f;
         if (IsRunning == true)
         {
             float NewAnimationSpeed = Mathf.Clamp(CurrentVelocity * RunAnimationSpeedRate, RunAnimationMinSpeedRate, RunAnimationMaxSpeedRate);
@@ -452,8 +448,6 @@ public class PlayerController : MonoBehaviour
         }
 
         CurrentAnimator.SetBool("IsRunning", IsRunning);
-
-
     }
 
     public float GetVelocity()
@@ -467,6 +461,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+
         IsMoveEnabled = !IsChanging;
 
         EnableMovement(IsMoveEnabled);

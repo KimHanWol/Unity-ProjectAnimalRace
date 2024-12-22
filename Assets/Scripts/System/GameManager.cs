@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : SingletonObject<GameManager>
 {
     // GameObject
     public PlayerController Player;
@@ -154,7 +154,7 @@ public class GameManager : MonoBehaviour
 
         if (Hunter != null)
         {
-            Hunter.StartMovement();
+            Hunter.OnGameStart();
         }
 
         if (ObjectSpawner != null)

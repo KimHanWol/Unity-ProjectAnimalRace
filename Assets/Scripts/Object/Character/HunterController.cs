@@ -18,16 +18,22 @@ public class HunterController : MonoBehaviour
     private float CurrentForceRate = 1f;
     private float CurrentDurationRate = 1f;
     private Vector2 StartPosition = Vector2.zero;
+    private bool IsMoveEnabled = false;
 
     private Rigidbody2D RigidBody2D;
     private Animator Animator;
 
     void Start()
     {
-        StartPosition = transform.position;
-
         RigidBody2D = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
+
+        StartPosition = transform.position;
+    }
+
+    public void OnGameStart()
+    {
+        EnableMovement(true);
     }
 
     public void ResetHunter()
@@ -51,14 +57,17 @@ public class HunterController : MonoBehaviour
         StopAllCoroutines();
     }
 
-    public void StartMovement()
+    public void EnableMovement(bool Enabled)
     {
-        if (Animator != null)
+        IsMoveEnabled = Enabled;
+        if(Enabled == true)
         {
-            Animator.SetBool("IsRunning", true);
+            StartCoroutine(WaitFirstDelay());
         }
-
-        StartCoroutine(WaitFirstDelay());
+        else
+        {
+            Animator.SetBool("IsRunning", false);
+        }
     }
 
     private IEnumerator WaitFirstDelay()
@@ -70,14 +79,16 @@ public class HunterController : MonoBehaviour
     private IEnumerator MoveHunter()
     {
         float CurrentDuration = Mathf.Clamp(DelayInitial * CurrentDurationRate, DelayMin, DelayInitial);
+        Animator.SetBool("IsRunning", true);
 
-        Internal_MoveHunter();
-        yield return new WaitForSeconds(CurrentDuration);
+        while (IsMoveEnabled == true)
+        {
+            Internal_MoveHunter();
+            yield return new WaitForSeconds(CurrentDuration);
 
-        CurrentDurationRate -= DelayDecreaseRate;
-        CurrentForceRate += ForceIncreaseRate;
-
-        StartCoroutine(MoveHunter());
+            CurrentDurationRate -= DelayDecreaseRate;
+            CurrentForceRate += ForceIncreaseRate;
+        }
     }
 
     private void Internal_MoveHunter()
@@ -113,5 +124,16 @@ public class HunterController : MonoBehaviour
         }
 
         Animator.SetBool("CanHit", false);
+    }
+
+    public void SetIsAnimalChanging(bool IsChanging)
+    {
+        if (IsMoveEnabled == !IsChanging)
+        {
+            return;
+        }
+        IsMoveEnabled = !IsChanging;
+
+        EnableMovement(IsMoveEnabled);
     }
 }
