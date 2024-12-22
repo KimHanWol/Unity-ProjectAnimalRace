@@ -19,7 +19,7 @@ public class ObjectSpawner : MonoBehaviour
     public float FirstDelayTime = 1f;
     public float SpawnMinTime = 5f;
     public float SpawnMaxTime = 10f;
-    public bool SpawnOneByOne = true; //ÇÑ¹ø¿¡ ÇÏ³ª¾¿ ¼ÒÈ¯ÇÏ´Â Áö
+    public bool SpawnOneByOne = true; //í•œë²ˆì— í•˜ë‚˜ì”© ì†Œí™˜í•˜ëŠ” ì§€
 
     public SpawnData[] SpawnDataList;
 

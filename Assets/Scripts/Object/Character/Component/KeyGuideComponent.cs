@@ -16,7 +16,7 @@ public class KeyGuideComponent : MonoBehaviour
     private float CurrentSpeed;
 
     private bool IsReadyState = true;
-    private bool IsKeyGuideOnDuration = false; //Áö¼Ó½Ã°£ ÀÌ³»ÀÏ ¶§
+    private bool IsKeyGuideOnDuration = false; //ì§€ì†ì‹œê°„ ì´ë‚´ì¼ ë•Œ
     private bool IsKeyGuideActivated = false;
     private bool IsSpeedFasterThanShowSpeed = false;
     private bool IsAnimalTryingToChange = false;
@@ -67,25 +67,25 @@ public class KeyGuideComponent : MonoBehaviour
 
     bool IsKeyGuideNeedToBeEnabled()
     {
-        // ÇöÀç Duration ÀÌ³»ÀÌ¸é Á¶°Ç È®ÀÎÇÏÁö ¾Ê°í Ç×»ó true
+        // í˜„ì¬ Duration ì´ë‚´ì´ë©´ ì¡°ê±´ í™•ì¸í•˜ì§€ ì•Šê³  í•­ìƒ true
         if (IsKeyGuideOnDuration == true)
         {
             return true;
         }
 
-        // º¯ÇÏ´Â ¿ÍÁß¿¡´Â º¸¿©ÁÖÁö ¾ÊÀ½
+        // ë³€í•˜ëŠ” ì™€ì¤‘ì—ëŠ” ë³´ì—¬ì£¼ì§€ ì•ŠìŒ
         if (IsAnimalTryingToChange == true)
         {
             return false;
         }
 
-        // ÁØºñÁßÀÎ »óÅÂ¿¡¼­µµ º¸¿©ÁÖÁö ¾ÊÀ½
+        // ì¤€ë¹„ì¤‘ì¸ ìƒíƒœì—ì„œë„ ë³´ì—¬ì£¼ì§€ ì•ŠìŒ
         if (IsReadyState == true)
         {
             return false;
         }
 
-        // ¼Óµµ°¡ ÃæºĞÈ÷ ºü¸£¸é º¸¿©ÁÖÁö ¾ÊÀ½
+        // ì†ë„ê°€ ì¶©ë¶„íˆ ë¹ ë¥´ë©´ ë³´ì—¬ì£¼ì§€ ì•ŠìŒ
         if(IsSpeedFasterThanShowSpeed == true)
         {
             return false;
@@ -133,7 +133,7 @@ public class KeyGuideComponent : MonoBehaviour
     {
         if (Enabled == true)
         {
-            //ÀÌ¹Ì ÄÑÁø »óÅÂ¸é ÀçÈ°¼ºÈ­ ÇÏÁö ¾ÊÀ½
+            //ì´ë¯¸ ì¼œì§„ ìƒíƒœë©´ ì¬í™œì„±í™” í•˜ì§€ ì•ŠìŒ
             if(IsKeyGuideActivated == true)
             {
                 return;

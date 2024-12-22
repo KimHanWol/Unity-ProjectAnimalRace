@@ -55,8 +55,8 @@ public class AnimalChanger : RuningObject
             PlayerController ColliderPlayer = collider.GetComponent<PlayerController>();
             if (ColliderPlayer != null)
             {
-                // TODO: AnimalChanger ¿¡¼­ ÇÏÁö ¸»°í Player ÀÇ ÄÄÆ÷³ÍÆ®¿¡¼­
-                // Àü¸éÀÇ Àå¾Ö¹°À» ÀÎ½ÄÇØ¼­ µ¿ÀÛÇÏµµ·Ï ÇÏÀÚ
+                // TODO: AnimalChanger ì—ì„œ í•˜ì§€ ë§ê³  Player ì˜ ì»´í¬ë„ŒíŠ¸ì—ì„œ
+                // ì „ë©´ì˜ ì¥ì• ë¬¼ì„ ì¸ì‹í•´ì„œ ë™ì‘í•˜ë„ë¡ í•˜ì
                 ColliderPlayer.OnAnimalTryingToChangeEvent?.Invoke();
                 StartCoroutine(SwitchAnimal(ColliderPlayer));
                 bIsChanged = true;

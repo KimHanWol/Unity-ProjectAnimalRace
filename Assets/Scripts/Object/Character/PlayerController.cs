@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            // ´Ù¸¥ ÀÎ½ºÅÏ½º °¡ ÀÌ¹Ì »ý¼ºµÈ °æ¿ì »èÁ¦
+            // ë‹¤ë¥¸ ì¸ìŠ¤í„´ìŠ¤ ê°€ ì´ë¯¸ ìƒì„±ëœ ê²½ìš° ì‚­ì œ
             Destroy(gameObject);
             return;
         }
@@ -235,22 +235,22 @@ public class PlayerController : MonoBehaviour
                 {
                     Vector2 PastMousePosition = CurrentMousePosition;
                     CurrentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-                    // ¿ÞÂÊ
+                    // ì™¼ìª½
                     if (PastMousePosition.x > CurrentMousePosition.x && CurrentInputStackIndex == 0)
                     {
                         CurrentInputStackIndex++;
                     }
-                    // ¿À¸¥ÂÊ
+                    // ì˜¤ë¥¸ìª½
                     else if (PastMousePosition.x < CurrentMousePosition.x && CurrentInputStackIndex == 1)
                     {
                         CurrentInputStackIndex++;
                     }
-                    // À§
+                    // ìœ„
                     else if (PastMousePosition.y < CurrentMousePosition.y && CurrentInputStackIndex == 2)
                     {
                         CurrentInputStackIndex++;
                     }
-                    // ¾Æ·¡
+                    // ì•„ëž˜
                     else if (PastMousePosition.y > CurrentMousePosition.y && CurrentInputStackIndex == 3)
                     {
                         CurrentInputStackIndex++;
@@ -264,7 +264,7 @@ public class PlayerController : MonoBehaviour
                     CurrentMousePosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
                     if (CurrentInputStackIndex == 0)
                     {
-                        // ¿ÞÂÊ À§
+                        // ì™¼ìª½ ìœ„
                         if (PastMousePosition.x > CurrentMousePosition.x &&
                            PastMousePosition.y < CurrentMousePosition.y)
                         {
@@ -273,7 +273,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else if (CurrentInputStackIndex == 1)
                     {
-                        // ¿À¸¥ÂÊ À§
+                        // ì˜¤ë¥¸ìª½ ìœ„
                         if (PastMousePosition.x < CurrentMousePosition.x &&
                            PastMousePosition.y < CurrentMousePosition.y)
                         {
@@ -282,7 +282,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else if (CurrentInputStackIndex == 2)
                     {
-                        // ¿ÞÂÊ ¾Æ·¡
+                        // ì™¼ìª½ ì•„ëž˜
                         if (PastMousePosition.x > CurrentMousePosition.x &&
                            PastMousePosition.y > CurrentMousePosition.y)
                         {
@@ -291,7 +291,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else if (CurrentInputStackIndex == 3)
                     {
-                        // ¿À¸¥ÂÊ ¾Æ·¡
+                        // ì˜¤ë¥¸ìª½ ì•„ëž˜
                         if (PastMousePosition.x < CurrentMousePosition.x &&
                            PastMousePosition.y > CurrentMousePosition.y)
                         {
@@ -300,7 +300,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else if (CurrentInputStackIndex == 4)
                     {
-                        // ¿À¸¥ÂÊ À§
+                        // ì˜¤ë¥¸ìª½ ìœ„
                         if (PastMousePosition.x < CurrentMousePosition.x &&
                            PastMousePosition.y < CurrentMousePosition.y)
                         {
@@ -309,7 +309,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else if (CurrentInputStackIndex == 5)
                     {
-                        // ¿ÞÂÊ À§
+                        // ì™¼ìª½ ìœ„
                         if (PastMousePosition.x > CurrentMousePosition.x &&
                            PastMousePosition.y < CurrentMousePosition.y)
                         {
@@ -326,13 +326,13 @@ public class PlayerController : MonoBehaviour
                 }
             case InputType.ArrowRightLeft_TakeTurn:
                 {
-                    //¿ÞÂÊ
+                    //ì™¼ìª½
                     if (Input.GetKeyDown(KeyCode.LeftArrow))
                     {
                         CurrentInputStackIndex++;
                         MovePlayer();
                     }
-                    //¿À¸¥ÂÊ
+                    //ì˜¤ë¥¸ìª½
                     else if (Input.GetKeyDown(KeyCode.RightArrow))
                     {
                         CurrentInputStackIndex++;
@@ -401,7 +401,7 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
-        // µ¿ÀÛÀ» ÁøÇàÇßÀ» ¶§ ¸¶´Ù
+        // ë™ìž‘ì„ ì§„í–‰í–ˆì„ ë•Œ ë§ˆë‹¤
         if (PrevInputStackIndex != CurrentInputStackIndex)
         {
             MovePlayer();

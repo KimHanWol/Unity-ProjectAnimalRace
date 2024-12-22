@@ -13,14 +13,14 @@ public class SingletonObject<T> : MonoBehaviour where T : MonoBehaviour
         {
             if (instance == null)
             {
-                // ÇØ´ç ÄÄÆ÷³ÍÆ®¸¦ °¡Áö°í ÀÖ´Â °ÔÀÓ ¿ÀºêÁ§Æ®¸¦ Ã£¾Æ¼­ ¹İÈ¯ÇÑ´Ù.
+                // í•´ë‹¹ ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì§€ê³  ìˆëŠ” ê²Œì„ ì˜¤ë¸Œì íŠ¸ë¥¼ ì°¾ì•„ì„œ ë°˜í™˜í•œë‹¤.
                 instance = (T)FindAnyObjectByType(typeof(T));
 
-                if (instance == null) // ÀÎ½ºÅÏ½º¸¦ Ã£Áö ¸øÇÑ °æ¿ì
+                if (instance == null) // ì¸ìŠ¤í„´ìŠ¤ë¥¼ ì°¾ì§€ ëª»í•œ ê²½ìš°
                 {
-                    // »õ·Î¿î °ÔÀÓ ¿ÀºêÁ§Æ®¸¦ »ı¼ºÇÏ¿© ÇØ´ç ÄÄÆ÷³ÍÆ®¸¦ Ãß°¡ÇÑ´Ù.
+                    // ìƒˆë¡œìš´ ê²Œì„ ì˜¤ë¸Œì íŠ¸ë¥¼ ìƒì„±í•˜ì—¬ í•´ë‹¹ ì»´í¬ë„ŒíŠ¸ë¥¼ ì¶”ê°€í•œë‹¤.
                     GameObject obj = new GameObject(typeof(T).Name, typeof(T));
-                    // »ı¼ºµÈ °ÔÀÓ ¿ÀºêÁ§Æ®¿¡¼­ ÇØ´ç ÄÄÆ÷³ÍÆ®¸¦ instance¿¡ ÀúÀåÇÑ´Ù.
+                    // ìƒì„±ëœ ê²Œì„ ì˜¤ë¸Œì íŠ¸ì—ì„œ í•´ë‹¹ ì»´í¬ë„ŒíŠ¸ë¥¼ instanceì— ì €ì¥í•œë‹¤.
                     instance = obj.GetComponent<T>();
                 }
             }
@@ -31,13 +31,13 @@ public class SingletonObject<T> : MonoBehaviour where T : MonoBehaviour
 
     private void Awake()
     {
-        if (transform.parent != null && transform.root != null) // ÇØ´ç ¿ÀºêÁ§Æ®°¡ ÀÚ½Ä ¿ÀºêÁ§Æ®¶ó¸é
+        if (transform.parent != null && transform.root != null) // í•´ë‹¹ ì˜¤ë¸Œì íŠ¸ê°€ ìì‹ ì˜¤ë¸Œì íŠ¸ë¼ë©´
         {
-            DontDestroyOnLoad(this.transform.root.gameObject); // ºÎ¸ğ ¿ÀºêÁ§Æ®¸¦ DontDestroyOnLoad Ã³¸®
+            DontDestroyOnLoad(this.transform.root.gameObject); // ë¶€ëª¨ ì˜¤ë¸Œì íŠ¸ë¥¼ DontDestroyOnLoad ì²˜ë¦¬
         }
         else
         {
-            DontDestroyOnLoad(this.gameObject); // ÇØ´ç ¿ÀºêÁ§Æ®°¡ ÃÖ »óÀ§ ¿ÀºêÁ§Æ®¶ó¸é ÀÚ½ÅÀ» DontDestroyOnLoad Ã³¸®
+            DontDestroyOnLoad(this.gameObject); // í•´ë‹¹ ì˜¤ë¸Œì íŠ¸ê°€ ìµœ ìƒìœ„ ì˜¤ë¸Œì íŠ¸ë¼ë©´ ìì‹ ì„ DontDestroyOnLoad ì²˜ë¦¬
         }
     }
 }

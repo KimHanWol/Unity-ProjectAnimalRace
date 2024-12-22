@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class DebugSystem : MonoBehaviour
 {
-    // ÀÎÇ²À» È­¸é¿¡ ³ªÅ¸³¾ °ÍÀÎÁö
+    // ì¸í’‹ì„ í™”ë©´ì— ë‚˜íƒ€ë‚¼ ê²ƒì¸ì§€
     public bool EnableInputPrint;
 
     public Text DebugUI;
