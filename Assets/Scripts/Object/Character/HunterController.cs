@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class HunterController : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class HunterController : MonoBehaviour
 
     private Rigidbody2D RigidBody2D;
     private Animator Animator;
+
+    public UnityEvent OnAnimalTryingToChangeEvent;
 
     void Start()
     {
@@ -135,5 +138,10 @@ public class HunterController : MonoBehaviour
         IsMoveEnabled = !IsChanging;
 
         EnableMovement(IsMoveEnabled);
+
+        if(IsChanging == true)
+        {
+            OnAnimalTryingToChangeEvent?.Invoke();
+        }
     }
 }

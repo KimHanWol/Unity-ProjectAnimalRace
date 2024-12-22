@@ -11,9 +11,21 @@ public class EmojiComponent : MonoBehaviour
     void Start()
     {
         Animator = GetComponent<Animator>();
+
+        PlayerController PlayerController = GetComponentInParent<PlayerController>();
+        if (PlayerController != null)
+        {
+            PlayerController.OnAnimalTryingToChangeEvent.AddListener(StartEmojiAnimation);
+        }
+
+        HunterController HunterController = GetComponentInParent<HunterController>();
+        if (HunterController != null)
+        {
+            HunterController.OnAnimalTryingToChangeEvent.AddListener(StartEmojiAnimation);
+        }
     }
 
-    public void StartEmojiAnimation()
+    private void StartEmojiAnimation()
     {
         Animator.Play(EmojiAnimation.name, 0, 0f);
     }
