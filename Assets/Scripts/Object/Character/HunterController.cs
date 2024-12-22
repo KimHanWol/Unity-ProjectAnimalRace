@@ -43,7 +43,7 @@ public class HunterController : MonoBehaviour
 
         transform.position = StartPosition;
 
-        if(Animator != null)
+        if (Animator != null)
         {
             Animator.SetBool("IsRunning", false);
         }
@@ -83,8 +83,8 @@ public class HunterController : MonoBehaviour
     private void Internal_MoveHunter()
     {
         float CurrentForce = ForceInitial * CurrentForceRate;
-        
-        if(RigidBody2D != null)
+
+        if (RigidBody2D != null)
         {
             RigidBody2D.AddForce(new Vector2(CurrentForce, 0));
         }
@@ -97,7 +97,7 @@ public class HunterController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag != "Player")
+        if (collision.tag != "Player")
         {
             return;
         }

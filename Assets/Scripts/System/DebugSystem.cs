@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,7 +23,7 @@ public class DebugSystem : MonoBehaviour
         {
             NewText += KeyCode.Q.ToString();
         }
-        else if(Input.GetKeyDown(KeyCode.W)) 
+        else if (Input.GetKeyDown(KeyCode.W))
         {
             NewText += KeyCode.W.ToString();
         }
@@ -57,7 +56,7 @@ public class DebugSystem : MonoBehaviour
             NewText += KeyCode.Space.ToString();
         }
 
-        if(NewText.Length > 0)
+        if (NewText.Length > 0)
         {
             DebugUI.text = NewText;
         }

@@ -14,7 +14,7 @@ public enum AnimalType
     Pig,
     Scorpion,
     Spider,
-    Tortoise, 
+    Tortoise,
 }
 
 public class PlayerController : MonoBehaviour
@@ -60,8 +60,12 @@ public class PlayerController : MonoBehaviour
     private Vector2 StartPosition = Vector2.zero;
 
     //Event
-    public UnityEvent<float> OnPlayerAccelerated;
-    public UnityEvent<bool> OnPlayerMovementEnableChanged;
+    public UnityEvent<float> OnPlayerAcceleratedEvent;
+    public UnityEvent<bool> OnPlayerMovementEnableChangedEvent;
+    public UnityEvent OnGameStartEvent;
+    public UnityEvent OnGameOverEvent;
+    public UnityEvent OnAnimalTryingToChangeEvent;
+    public UnityEvent<AnimalType> OnAnimalTypeChangedEvent;
 
     void Start()
     {
@@ -78,16 +82,31 @@ public class PlayerController : MonoBehaviour
         Update_CheckVelocity();
     }
 
-    public void ResetPlayer()
+    public void OnGameStart()
+    {
+        SetMoveEnabled(true);
+
+        OnGameStartEvent.Invoke();
+    }
+
+    public void OnGameOver()
+    {
+        ResetPlayer();
+        SetMoveEnabled(false);
+
+        OnGameOverEvent.Invoke();
+    }
+
+    private void ResetPlayer()
     {
         CurrentVelocity = 0f;
         Rigidbody2D PlayerRigidbody = GetComponent<Rigidbody2D>();
-        if(PlayerRigidbody != null)
+        if (PlayerRigidbody != null)
         {
             PlayerRigidbody.velocity = Vector2.zero;
         }
 
-        if(MoveSpeedObject != null )
+        if (MoveSpeedObject != null)
         {
             MoveSpeedObject.velocity = Vector2.zero;
         }
@@ -100,12 +119,17 @@ public class PlayerController : MonoBehaviour
         CurrentMousePosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
     }
 
+    public InputType GetCurrentAnimalInputType()
+    {
+        return CurrentAnimalData.InputType;
+    }
+
     public AnimalType GetCurrentAnimalType()
     {
         return CurrentAnimalData.AnimalType;
     }
 
-    public void SetMoveEnabled(bool Enabled)
+    private void SetMoveEnabled(bool Enabled)
     {
         IsMoveEnabled = Enabled;
     }
@@ -113,7 +137,7 @@ public class PlayerController : MonoBehaviour
     private void ChangeAnimatorController(RuntimeAnimatorController NewAnimatorController)
     {
         Animator CurrentAnimator = GetComponent<Animator>();
-        if(CurrentAnimator != null && gameObject.activeInHierarchy == true)
+        if (CurrentAnimator != null && gameObject.activeInHierarchy == true)
         {
             CurrentAnimator.SetBool("IsRunning", false);
             CurrentAnimator.runtimeAnimatorController = NewAnimatorController;
@@ -126,257 +150,259 @@ public class PlayerController : MonoBehaviour
         CurrentAnimalData = AnimalDataManager.Get().GetAnimalData(CurrentAnimalType);
         ChangeAnimatorController(CurrentAnimalData.Animator);
         CurrentInputStackIndex = 0;
+
+        OnAnimalTypeChangedEvent.Invoke(CurrentAnimalType);
     }
 
     private void Update_PlayerMove()
     {
-        if(IsMoveEnabled == false)
+        if (IsMoveEnabled == false)
         {
             return;
         }
 
-        if(CurrentAnimalData == null)
+        if (CurrentAnimalData == null)
         {
             return;
         }
 
         float PrevInputStackIndex = CurrentInputStackIndex;
-        switch(CurrentAnimalData.InputType)
+        switch (CurrentAnimalData.InputType)
         {
             case InputType.AD_TakeTurn:
-            {
-                if(Input.GetKeyDown(KeyCode.A) && CurrentInputStackIndex == 0)
                 {
-                    CurrentInputStackIndex++;
+                    if (Input.GetKeyDown(KeyCode.A) && CurrentInputStackIndex == 0)
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                    if (Input.GetKeyDown(KeyCode.D) && CurrentInputStackIndex == 1)
+                    {
+                        CurrentInputStackIndex++;
+                    }
+
+                    break;
                 }
-                if(Input.GetKeyDown(KeyCode.D) && CurrentInputStackIndex == 1)
-                {
-                    CurrentInputStackIndex++;
-                }
-                
-                break;
-            }
             case InputType.MouseScrollDown:
-            {
-                Vector2 PrevMouseScrollDelta = CurrentMouseScrollDelta;
-                CurrentMouseScrollDelta = Input.mouseScrollDelta;
-                if (PrevMouseScrollDelta.y > CurrentMouseScrollDelta.y)
                 {
-                    CurrentInputStackIndex++;
+                    Vector2 PrevMouseScrollDelta = CurrentMouseScrollDelta;
+                    CurrentMouseScrollDelta = Input.mouseScrollDelta;
+                    if (PrevMouseScrollDelta.y > CurrentMouseScrollDelta.y)
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                    break;
                 }
-                break;
-            }
             case InputType.MouseScrollUp:
-            {
-                Vector2 PrevMouseScrollDelta = CurrentMouseScrollDelta;
-                CurrentMouseScrollDelta = Input.mouseScrollDelta;
-                if (PrevMouseScrollDelta.y < CurrentMouseScrollDelta.y)
                 {
-                    CurrentInputStackIndex++;
+                    Vector2 PrevMouseScrollDelta = CurrentMouseScrollDelta;
+                    CurrentMouseScrollDelta = Input.mouseScrollDelta;
+                    if (PrevMouseScrollDelta.y < CurrentMouseScrollDelta.y)
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                    break;
                 }
-                break;
-            }
             case InputType.QWER_TakeTurn:
-            {
-                if (Input.GetKeyDown(KeyCode.Q) && CurrentInputStackIndex == 0)
                 {
-                    CurrentInputStackIndex++;
-                }
-                else if (Input.GetKeyDown(KeyCode.W) && CurrentInputStackIndex == 1)
-                {
-                    CurrentInputStackIndex++;
-                }
-                else if (Input.GetKeyDown(KeyCode.E) && CurrentInputStackIndex == 2)
-                {
-                    CurrentInputStackIndex++;
-                }
-                else if (Input.GetKeyDown(KeyCode.R) && CurrentInputStackIndex == 3)
-                {
-                    CurrentInputStackIndex++;
-                }
+                    if (Input.GetKeyDown(KeyCode.Q) && CurrentInputStackIndex == 0)
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                    else if (Input.GetKeyDown(KeyCode.W) && CurrentInputStackIndex == 1)
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                    else if (Input.GetKeyDown(KeyCode.E) && CurrentInputStackIndex == 2)
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                    else if (Input.GetKeyDown(KeyCode.R) && CurrentInputStackIndex == 3)
+                    {
+                        CurrentInputStackIndex++;
+                    }
 
-                break;
-            }
+                    break;
+                }
             case InputType.SpaceBar:
-            {
-                if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    CurrentInputStackIndex++;
+                    if (Input.GetKeyDown(KeyCode.Space))
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                    break;
                 }
-                break;
-            }
             case InputType.MouseVerticalHorizonal:
-            {
-                Vector2 PastMousePosition = CurrentMousePosition;
-                CurrentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-                // 왼쪽
-                if (PastMousePosition.x > CurrentMousePosition.x && CurrentInputStackIndex == 0)
                 {
-                    CurrentInputStackIndex++;
-                }
-                // 오른쪽
-                else if (PastMousePosition.x < CurrentMousePosition.x && CurrentInputStackIndex == 1)
-                {
-                    CurrentInputStackIndex++;
-                }
-                // 위
-                else if (PastMousePosition.y < CurrentMousePosition.y && CurrentInputStackIndex == 2)
-                {
-                    CurrentInputStackIndex++;
-                }
-                // 아래
-                else if (PastMousePosition.y > CurrentMousePosition.y && CurrentInputStackIndex == 3)
-                {
-                    CurrentInputStackIndex++;
-                }
+                    Vector2 PastMousePosition = CurrentMousePosition;
+                    CurrentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+                    // 왼쪽
+                    if (PastMousePosition.x > CurrentMousePosition.x && CurrentInputStackIndex == 0)
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                    // 오른쪽
+                    else if (PastMousePosition.x < CurrentMousePosition.x && CurrentInputStackIndex == 1)
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                    // 위
+                    else if (PastMousePosition.y < CurrentMousePosition.y && CurrentInputStackIndex == 2)
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                    // 아래
+                    else if (PastMousePosition.y > CurrentMousePosition.y && CurrentInputStackIndex == 3)
+                    {
+                        CurrentInputStackIndex++;
+                    }
 
-                break;
-            }
+                    break;
+                }
             case InputType.Mouse8:
-            {
-                Vector2 PastMousePosition = CurrentMousePosition;
-                CurrentMousePosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-                if (CurrentInputStackIndex == 0)
                 {
-                    // 왼쪽 위
-                    if(PastMousePosition.x > CurrentMousePosition.x &&
-                       PastMousePosition.y < CurrentMousePosition.y)
+                    Vector2 PastMousePosition = CurrentMousePosition;
+                    CurrentMousePosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+                    if (CurrentInputStackIndex == 0)
                     {
-                        CurrentInputStackIndex++;
+                        // 왼쪽 위
+                        if (PastMousePosition.x > CurrentMousePosition.x &&
+                           PastMousePosition.y < CurrentMousePosition.y)
+                        {
+                            CurrentInputStackIndex++;
+                        }
                     }
-                }
-                else if(CurrentInputStackIndex == 1)
-                {
-                    // 오른쪽 위
-                    if (PastMousePosition.x < CurrentMousePosition.x &&
-                       PastMousePosition.y < CurrentMousePosition.y)
+                    else if (CurrentInputStackIndex == 1)
                     {
-                        CurrentInputStackIndex++;
+                        // 오른쪽 위
+                        if (PastMousePosition.x < CurrentMousePosition.x &&
+                           PastMousePosition.y < CurrentMousePosition.y)
+                        {
+                            CurrentInputStackIndex++;
+                        }
                     }
-                }
-                else if(CurrentInputStackIndex == 2)
-                {
-                    // 왼쪽 아래
-                    if (PastMousePosition.x > CurrentMousePosition.x &&
-                       PastMousePosition.y > CurrentMousePosition.y)
+                    else if (CurrentInputStackIndex == 2)
                     {
-                        CurrentInputStackIndex++;
+                        // 왼쪽 아래
+                        if (PastMousePosition.x > CurrentMousePosition.x &&
+                           PastMousePosition.y > CurrentMousePosition.y)
+                        {
+                            CurrentInputStackIndex++;
+                        }
                     }
-                }
-                else if (CurrentInputStackIndex == 3)
-                {
-                    // 오른쪽 아래
-                    if (PastMousePosition.x < CurrentMousePosition.x &&
-                       PastMousePosition.y > CurrentMousePosition.y)
+                    else if (CurrentInputStackIndex == 3)
                     {
-                        CurrentInputStackIndex++;
+                        // 오른쪽 아래
+                        if (PastMousePosition.x < CurrentMousePosition.x &&
+                           PastMousePosition.y > CurrentMousePosition.y)
+                        {
+                            CurrentInputStackIndex++;
+                        }
                     }
-                }
-                else if (CurrentInputStackIndex == 4)
-                {
-                    // 오른쪽 위
-                    if (PastMousePosition.x < CurrentMousePosition.x &&
-                       PastMousePosition.y < CurrentMousePosition.y)
+                    else if (CurrentInputStackIndex == 4)
                     {
-                        CurrentInputStackIndex++;
+                        // 오른쪽 위
+                        if (PastMousePosition.x < CurrentMousePosition.x &&
+                           PastMousePosition.y < CurrentMousePosition.y)
+                        {
+                            CurrentInputStackIndex++;
+                        }
                     }
-                }
-                else if (CurrentInputStackIndex == 5)
-                {
-                    // 왼쪽 위
-                    if (PastMousePosition.x > CurrentMousePosition.x &&
-                       PastMousePosition.y < CurrentMousePosition.y)
+                    else if (CurrentInputStackIndex == 5)
                     {
-                        CurrentInputStackIndex++;
+                        // 왼쪽 위
+                        if (PastMousePosition.x > CurrentMousePosition.x &&
+                           PastMousePosition.y < CurrentMousePosition.y)
+                        {
+                            CurrentInputStackIndex++;
+                        }
                     }
-                }
 
-                break;
-            }
+                    break;
+                }
             case InputType.SpaceBarToCrash:
-            {
+                {
 
-                break;
-            }
+                    break;
+                }
             case InputType.ArrowRightLeft_TakeTurn:
-            {
-                //왼쪽
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
                 {
-                    CurrentInputStackIndex++;
-                    MovePlayer();
-                }
-                //오른쪽
-                else if (Input.GetKeyDown(KeyCode.RightArrow))
-                {
-                    CurrentInputStackIndex++;
-                }
+                    //왼쪽
+                    if (Input.GetKeyDown(KeyCode.LeftArrow))
+                    {
+                        CurrentInputStackIndex++;
+                        MovePlayer();
+                    }
+                    //오른쪽
+                    else if (Input.GetKeyDown(KeyCode.RightArrow))
+                    {
+                        CurrentInputStackIndex++;
+                    }
 
-                break;
-            }
-            case InputType.QWERASDF:
-            {
-                if(Input.GetKeyDown(KeyCode.Q) ||
-                   Input.GetKeyDown(KeyCode.W) ||
-                   Input.GetKeyDown(KeyCode.E) ||
-                   Input.GetKeyDown(KeyCode.R) ||
-                   Input.GetKeyDown(KeyCode.A) ||
-                   Input.GetKeyDown(KeyCode.S) ||
-                   Input.GetKeyDown(KeyCode.D) ||
-                   Input.GetKeyDown(KeyCode.F))
-                {
-                    CurrentInputStackIndex++;
+                    break;
                 }
-            }
+            case InputType.QWERASDF:
+                {
+                    if (Input.GetKeyDown(KeyCode.Q) ||
+                       Input.GetKeyDown(KeyCode.W) ||
+                       Input.GetKeyDown(KeyCode.E) ||
+                       Input.GetKeyDown(KeyCode.R) ||
+                       Input.GetKeyDown(KeyCode.A) ||
+                       Input.GetKeyDown(KeyCode.S) ||
+                       Input.GetKeyDown(KeyCode.D) ||
+                       Input.GetKeyDown(KeyCode.F))
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                }
                 break;
 
             case InputType.ZXDotSlash:
-            {
-                if (Input.GetKeyDown(KeyCode.Z) ||
-                    Input.GetKeyDown(KeyCode.X) ||
-                    Input.GetKeyDown(KeyCode.Period) ||
-                    Input.GetKeyDown(KeyCode.Comma))
                 {
-                    CurrentInputStackIndex++;
+                    if (Input.GetKeyDown(KeyCode.Z) ||
+                        Input.GetKeyDown(KeyCode.X) ||
+                        Input.GetKeyDown(KeyCode.Period) ||
+                        Input.GetKeyDown(KeyCode.Comma))
+                    {
+                        CurrentInputStackIndex++;
+                    }
                 }
-            }
                 break;
             case InputType.QWAS_IOKL_TakeTurn:
-            {
-                if(Input.GetKey(KeyCode.Q) &&
-                   Input.GetKey(KeyCode.W) &&
-                   Input.GetKey(KeyCode.A) &&
-                   Input.GetKey(KeyCode.S) &&
-                   CurrentInputStackIndex == 0)
                 {
-                    CurrentInputStackIndex++;
+                    if (Input.GetKey(KeyCode.Q) &&
+                       Input.GetKey(KeyCode.W) &&
+                       Input.GetKey(KeyCode.A) &&
+                       Input.GetKey(KeyCode.S) &&
+                       CurrentInputStackIndex == 0)
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                    else if (Input.GetKey(KeyCode.I) &&
+                            Input.GetKey(KeyCode.O) &&
+                            Input.GetKey(KeyCode.K) &&
+                            Input.GetKey(KeyCode.L) &&
+                            CurrentInputStackIndex == 1)
+                    {
+                        CurrentInputStackIndex++;
+                    }
                 }
-                else if(Input.GetKey(KeyCode.I) &&
-                        Input.GetKey(KeyCode.O) &&
-                        Input.GetKey(KeyCode.K) &&
-                        Input.GetKey(KeyCode.L) &&
-                        CurrentInputStackIndex == 1)
-                {
-                    CurrentInputStackIndex++;
-                }
-            }
                 break;
             case InputType.MouseLeftRight_TakeTurn:
-            {
-                if(Input.GetKeyDown(KeyCode.Mouse0) && CurrentInputStackIndex == 0)
                 {
-                    CurrentInputStackIndex++;
+                    if (Input.GetKeyDown(KeyCode.Mouse0) && CurrentInputStackIndex == 0)
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                    else if (Input.GetKeyDown(KeyCode.Mouse1) && CurrentInputStackIndex == 1)
+                    {
+                        CurrentInputStackIndex++;
+                    }
                 }
-                else if(Input.GetKeyDown(KeyCode.Mouse1) && CurrentInputStackIndex == 1)
-                {
-                    CurrentInputStackIndex++;
-                }
-            }
                 break;
         }
 
         // 동작을 진행했을 때 마다
-        if(PrevInputStackIndex != CurrentInputStackIndex)
+        if (PrevInputStackIndex != CurrentInputStackIndex)
         {
             MovePlayer();
         }
@@ -391,25 +417,25 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 MoveForce = new Vector2(AnimalDataManager.Get().GetVelocity(CurrentAnimalData.InputType), 0);
         MoveSpeedObject.AddForce(MoveForce);
-        OnPlayerAccelerated?.Invoke(MoveForce.x);
+        OnPlayerAcceleratedEvent?.Invoke(MoveForce.x);
     }
 
     private void Update_CheckVelocity()
     {
-        if(MoveSpeedObject == null)
+        if (MoveSpeedObject == null)
         {
             return;
         }
 
         CurrentVelocity = MoveSpeedObject.velocity.x;
 
-        if(IsMoveEnabled == false)
+        if (IsMoveEnabled == false)
         {
             CurrentVelocity = 0;
         }
 
         Animator CurrentAnimator = GetComponent<Animator>();
-        if(CurrentAnimator == null)
+        if (CurrentAnimator == null)
         {
             return;
         }
@@ -426,6 +452,8 @@ public class PlayerController : MonoBehaviour
         }
 
         CurrentAnimator.SetBool("IsRunning", IsRunning);
+
+
     }
 
     public float GetVelocity()
@@ -442,15 +470,15 @@ public class PlayerController : MonoBehaviour
         IsMoveEnabled = !IsChanging;
 
         EnableMovement(IsMoveEnabled);
-        OnPlayerMovementEnableChanged?.Invoke(IsMoveEnabled);
+        OnPlayerMovementEnableChangedEvent?.Invoke(IsMoveEnabled);
     }
 
-    public void EnableMovement(bool Enabled) 
+    public void EnableMovement(bool Enabled)
     {
         if (Enabled == false)
         {
             CurrentVelocity = 0;
-            if(MoveSpeedObject != null)
+            if (MoveSpeedObject != null)
             {
                 MoveSpeedObject.velocity = Vector2.zero;
             }

@@ -26,6 +26,7 @@ public class InputData
     public InputType InputType;
     public int InputStackCount; //몇 번 눌러야 한 사이클인지 (AD 번갈아 누를 땐 2, QWER 번갈아 누를 땐 4)
     public int Veclocity;
+    public AnimationClip KeyGuideAnimation;
 }
 
 [System.Serializable]
@@ -64,9 +65,9 @@ public class AnimalDataManager : MonoBehaviour
 
     public AnimalData GetAnimalData(AnimalType TargetAnimalType)
     {
-        foreach(AnimalData InAnimalData in AnimalDataList)
+        foreach (AnimalData InAnimalData in AnimalDataList)
         {
-            if(InAnimalData.AnimalType == TargetAnimalType)
+            if (InAnimalData.AnimalType == TargetAnimalType)
             {
                 return InAnimalData;
             }
@@ -88,7 +89,7 @@ public class AnimalDataManager : MonoBehaviour
 
     private int GetAnimalIndex(AnimalType TargetAnimalType)
     {
-        for(int i = 0; i < AnimalDataList.Length; i++)
+        for (int i = 0; i < AnimalDataList.Length; i++)
         {
             AnimalData InAnimalData = AnimalDataList[i];
             if (InAnimalData.AnimalType == TargetAnimalType)
@@ -122,5 +123,17 @@ public class AnimalDataManager : MonoBehaviour
             }
         }
         return 0;
+    }
+
+    public AnimationClip GetInputTypeAnimationClip(InputType InInputType)
+    {
+        foreach (InputData InInputData in InputDataList)
+        {
+            if (InInputData.InputType == InInputType)
+            {
+                return InInputData.KeyGuideAnimation;
+            }
+        }
+        return null;
     }
 }

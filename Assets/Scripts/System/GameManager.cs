@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Diagnostics.Tracing;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -14,14 +13,14 @@ public class GameManager : MonoBehaviour
 
     public RuningObject[] SpawnedObjectList;
     public GameOverObject GameOverObject;
-    
+
     // 타이틀이 나오고 입력을 받지 않는 시간
     public float TitleNoInputDuration = 2f;
 
     private float GameScore = 0;
 
     enum EGameState
-    { 
+    {
         State_Title_NoInput,
         State_Title_Input,
         State_Starting,
@@ -32,9 +31,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        Player.OnPlayerMovementEnableChanged.AddListener(OnAnimalChangeEffectStateChanged);
-        Player.OnPlayerAccelerated.AddListener(OnPlayerAccelerated);
-        GameOverObject.OnGameOver.AddListener(OnGameOver);
+        Player.OnPlayerMovementEnableChangedEvent.AddListener(OnAnimalChangeEffectStateChanged);
+        Player.OnPlayerAcceleratedEvent.AddListener(OnPlayerAccelerated);
+        GameOverObject.OnGameOverEvent.AddListener(OnGameOver);
         SoundManager.PlayBGM(SoundManager.EBGM.BGM_START, true);
 
         OnGameStart();
@@ -63,13 +62,13 @@ public class GameManager : MonoBehaviour
 
     private void Update_WaitForAnyButtonPressed()
     {
-        if(GameState != EGameState.State_Title_Input)
-        { 
+        if (GameState != EGameState.State_Title_Input)
+        {
             return;
         }
 
         //왼쪽 마우스 클릭은 무시
-        if(Input.anyKeyDown == true && Input.GetKey(KeyCode.Mouse0) == false)
+        if (Input.anyKeyDown == true && Input.GetKey(KeyCode.Mouse0) == false)
         {
             GameState = EGameState.State_Starting;
             SoundManager.PlayBGM(SoundManager.EBGM.BGM_PLAYING, false);
@@ -80,7 +79,7 @@ public class GameManager : MonoBehaviour
 
     private void Update_GameScore()
     {
-        if(GameState != EGameState.State_Playing)
+        if (GameState != EGameState.State_Playing)
         {
             return;
         }
@@ -94,7 +93,7 @@ public class GameManager : MonoBehaviour
 
     private void OnBGMChanged(SoundManager.EBGM NewBGM)
     {
-        if(NewBGM != SoundManager.EBGM.BGM_PLAYING)
+        if (NewBGM != SoundManager.EBGM.BGM_PLAYING)
         {
             return;
         }
@@ -106,13 +105,13 @@ public class GameManager : MonoBehaviour
     private void OnAnimalChangeEffectStateChanged(bool Enabled)
     {
         // Object Spawner
-        foreach(RuningObject SpawnedObject in SpawnedObjectList)
+        foreach (RuningObject SpawnedObject in SpawnedObjectList)
         {
             SpawnedObject.EnableMovement(Enabled);
         }
 
         // Map Manager
-        if(MapManager != null)
+        if (MapManager != null)
         {
             MapManager.EnableMovement(Enabled);
         }
@@ -120,7 +119,7 @@ public class GameManager : MonoBehaviour
 
     private void OnPlayerAccelerated(float MoveForce)
     {
-        if(Hunter != null)
+        if (Hunter != null)
         {
             Hunter.OnPlayerAccelerated(MoveForce);
         }
@@ -150,7 +149,7 @@ public class GameManager : MonoBehaviour
 
         if (Player != null)
         {
-            Player.SetMoveEnabled(true);
+            Player.OnGameStart();
         }
 
         if (Hunter != null)
@@ -158,7 +157,7 @@ public class GameManager : MonoBehaviour
             Hunter.StartMovement();
         }
 
-        if(ObjectSpawner != null)
+        if (ObjectSpawner != null)
         {
             ObjectSpawner.EnableSpawn(true);
         }
@@ -166,18 +165,19 @@ public class GameManager : MonoBehaviour
 
     private void OnGameOver()
     {
+        //TODO: null 체크 제거하기
         if (Player != null)
         {
-            Player.ResetPlayer();
-            Player.SetMoveEnabled(false);
+            //TODO: EventManager 만들어서 글로벌 이벤트로 변경
+            Player.OnGameOver();
         }
 
-        if(Hunter != null)
+        if (Hunter != null)
         {
             Hunter.ResetHunter();
         }
 
-        if(UIManager != null)
+        if (UIManager != null)
         {
             UIManager.OnGameOver((int)GameScore);
         }

@@ -74,7 +74,7 @@ public class SoundManager : MonoBehaviour
         PlayBGM(BGMDataList[(int)BGMIndex].AudioClip, PlayNow);
 
         //Ready to play
-        if(BGMIndex == EBGM.BGM_PLAYING)
+        if (BGMIndex == EBGM.BGM_PLAYING)
         {
             StartCoroutine(ReadyToStart());
         }
@@ -105,7 +105,7 @@ public class SoundManager : MonoBehaviour
 
     IEnumerator WaitNextBGMLoop()
     {
-        while(true)
+        while (true)
         {
             if (BGMAudioSource.isPlaying == true)
             {
@@ -134,7 +134,7 @@ public class SoundManager : MonoBehaviour
 
     public bool IsBGMPlaying(EBGM BGMIndex)
     {
-        if(BGMAudioSource.clip == BGMDataList[(int)BGMIndex].AudioClip)
+        if (BGMAudioSource.clip == BGMDataList[(int)BGMIndex].AudioClip)
         {
             return true;
         }
@@ -150,9 +150,9 @@ public class SoundManager : MonoBehaviour
     IEnumerator ReadyToStart()
     {
         float SFXAudioLength = 0f;
-        foreach(SFXAudioData SFXAudioData in SFXDataList)
+        foreach (SFXAudioData SFXAudioData in SFXDataList)
         {
-            if(SFXAudioData.SFXType == ESFX.SFX_START)
+            if (SFXAudioData.SFXType == ESFX.SFX_START)
             {
                 SFXAudioLength = SFXAudioData.AudioClip.length;
             }
@@ -162,9 +162,10 @@ public class SoundManager : MonoBehaviour
         {
             yield return new WaitForSeconds(0.01f);
 
-            if(BGMAudioSource.time + SFXAudioLength >= BGMAudioSource.clip.length)
+            if (BGMAudioSource.time + SFXAudioLength >= BGMAudioSource.clip.length)
             {
                 PlaySFX(ESFX.SFX_START);
+
                 break;
             }
         }

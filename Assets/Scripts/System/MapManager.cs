@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -18,12 +16,12 @@ public class MapManager : MonoBehaviour
 
     public void UpdateSpeed(float Velocity)
     {
-        if(NeedToStopMove == true)
+        if (NeedToStopMove == true)
         {
             return;
         }
 
-        foreach(LayerData InLayerData in LayerDataList)
+        foreach (LayerData InLayerData in LayerDataList)
         {
             InLayerData.Renderer.material.mainTextureOffset += new Vector2(Velocity, 0) * MapSpeedRate * InLayerData.LayerSpeed;
         }
@@ -31,7 +29,7 @@ public class MapManager : MonoBehaviour
 
     public void EnableMovement(bool Enabled)
     {
-        if(NeedToStopMove == Enabled)
+        if (NeedToStopMove == Enabled)
         {
             return;
         }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveSpeedObject : MonoBehaviour
@@ -15,7 +13,7 @@ public class MoveSpeedObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(transform.position.x < -100)
+        if (transform.position.x < -100)
         {
             transform.position = Vector2.zero;
         }

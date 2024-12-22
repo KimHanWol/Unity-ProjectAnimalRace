@@ -1,8 +1,5 @@
 using System.Collections;
-using System.IO;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using static Unity.VisualScripting.StickyNote;
 
 public class AnimalChanger : RuningObject
 {
@@ -30,7 +27,7 @@ public class AnimalChanger : RuningObject
             Animator.runtimeAnimatorController = CurrentAnimalData.Animator;
         }
     }
-    
+
     public void InitializeAnimalChanger()
     {
 
@@ -45,7 +42,7 @@ public class AnimalChanger : RuningObject
 
     private void Update_CheckOverlap()
     {
-        if(bIsChanged == true)
+        if (bIsChanged == true)
         {
             return;
         }
@@ -58,6 +55,9 @@ public class AnimalChanger : RuningObject
             PlayerController ColliderPlayer = collider.GetComponent<PlayerController>();
             if (ColliderPlayer != null)
             {
+                // TODO: AnimalChanger 에서 하지 말고 Player 의 컴포넌트에서
+                // 전면의 장애물을 인식해서 동작하도록 하자
+                ColliderPlayer.OnAnimalTryingToChangeEvent?.Invoke();
                 StartCoroutine(SwitchAnimal(ColliderPlayer));
                 bIsChanged = true;
                 break;
@@ -90,7 +90,7 @@ public class AnimalChanger : RuningObject
 
         if (PlayerRigidbody != null)
         {
-            PlayerRigidbody.velocity = Vector2.zero; 
+            PlayerRigidbody.velocity = Vector2.zero;
             PlayerRigidbody.AddForce(new Vector2(0, ChangeEffectForce));
         }
 
@@ -145,7 +145,7 @@ public class AnimalChanger : RuningObject
     IEnumerator DisableAnimalChanger()
     {
         SpriteRenderer Renderder = GetComponent<SpriteRenderer>();
-        if(Renderder == null)
+        if (Renderder == null)
         {
             yield return null;
         }
@@ -156,7 +156,7 @@ public class AnimalChanger : RuningObject
             yield return null;
         }
 
-        if(BoxCollider2D == null)
+        if (BoxCollider2D == null)
         {
             yield return null;
         }
@@ -178,7 +178,7 @@ public class AnimalChanger : RuningObject
     private void SelfDestroy()
     {
         SpawnableObject SpawnableObject = GetComponent<SpawnableObject>();
-        if(SpawnableObject != null)
+        if (SpawnableObject != null)
         {
             SpawnableObject.IsDestroying = true;
         }

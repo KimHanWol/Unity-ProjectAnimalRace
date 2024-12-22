@@ -1,12 +1,8 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Xml.Schema;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class UIManager : SingletonObject<UIManager>
 {
     public GameObject TitleUI;
     public GameObject StartingUI;
@@ -16,6 +12,7 @@ public class UIManager : MonoBehaviour
     public GameObject ScoreBoardUI;
     public GameObject ScoreInGameUI;
     public GameObject SettingUI;
+    public GameObject KeyGuideUI;
 
     private bool IsWaitingInput = false;
     private bool IsStarted = false;
@@ -51,13 +48,13 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        if(IsStarted == true)
+        if (IsStarted == true)
         {
             PressAnyButtonCurrentTime = 0f;
             return;
         }
 
-        if(PressAnyButtonBlinkingDuration < PressAnyButtonCurrentTime)
+        if (PressAnyButtonBlinkingDuration < PressAnyButtonCurrentTime)
         {
             if (PressAnyButtonUI != null)
             {
@@ -125,10 +122,10 @@ public class UIManager : MonoBehaviour
                     Color NewColor = new Color(Text.color.r, Text.color.g, Text.color.b, TitleAlpha);
                     Text.color = NewColor;
                 }
-                foreach(Image Image in ImageArray)
+                foreach (Image Image in ImageArray)
                 {
                     float InTitleAlpha = TitleAlpha;
-                    if(IsFadeIn == true)
+                    if (IsFadeIn == true)
                     {
                         InTitleAlpha = TitleAlpha > 0.5f ? TitleAlpha : 0f;
                     }
@@ -188,7 +185,7 @@ public class UIManager : MonoBehaviour
     {
         ScoreBoardUI.SetActive(true);
         Text[] ScoreboardUITexts = ScoreBoardUI.GetComponentsInChildren<Text>();
-        if(ScoreboardUITexts.Length > 1)
+        if (ScoreboardUITexts.Length > 1)
         {
             ScoreboardUITexts[1].text = NewScore.ToString() + "m";
         }
@@ -213,5 +210,10 @@ public class UIManager : MonoBehaviour
     public void EnableSettingsPanel(bool Eanbled)
     {
         SettingUI.SetActive(Eanbled);
+    }
+
+    public void EnableKeyGuidePanel(bool Eanbled)
+    {
+        KeyGuideUI.SetActive(Eanbled);
     }
 }

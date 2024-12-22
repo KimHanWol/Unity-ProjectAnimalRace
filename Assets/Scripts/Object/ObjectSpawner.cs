@@ -33,7 +33,7 @@ public class ObjectSpawner : MonoBehaviour
     {
         IsStarted = Enabled;
 
-        if(IsStarted == true)
+        if (IsStarted == true)
         {
             StartCoroutine(StartFirstDelay());
         }
@@ -49,7 +49,7 @@ public class ObjectSpawner : MonoBehaviour
         }
     }
 
-    IEnumerator StartFirstDelay() 
+    IEnumerator StartFirstDelay()
     {
         yield return new WaitForSeconds(FirstDelayTime);
         StartCoroutine(StartSpawnLoop());
@@ -57,7 +57,7 @@ public class ObjectSpawner : MonoBehaviour
 
     IEnumerator StartSpawnLoop()
     {
-        while(true)
+        while (true)
         {
             TrySpawn();
             yield return new WaitForSeconds(1);
@@ -79,10 +79,10 @@ public class ObjectSpawner : MonoBehaviour
         float RandomValue = Random.Range(0, TotalPercentage);
 
         float CurrentPercentage = 0;
-        foreach(SpawnData InSpawnData in SpawnDataList)
+        foreach (SpawnData InSpawnData in SpawnDataList)
         {
             CurrentPercentage += InSpawnData.Probability;
-            if(RandomValue < CurrentPercentage)
+            if (RandomValue < CurrentPercentage)
             {
                 SpawnedObject = Instantiate(InSpawnData.TargetObject);
                 SpawnedObject.transform.position = transform.position;
@@ -90,7 +90,7 @@ public class ObjectSpawner : MonoBehaviour
             }
         }
 
-        if(SpawnedObject != null)
+        if (SpawnedObject != null)
         {
             SpawnedObjectList.Add(SpawnedObject);
         }
@@ -98,7 +98,7 @@ public class ObjectSpawner : MonoBehaviour
 
     private void CheckSpawnedObjectList()
     {
-        for(int i = 0; i < SpawnedObjectList.Count; i++)
+        for (int i = 0; i < SpawnedObjectList.Count; i++)
         {
             GameObject SpawnedObject = SpawnedObjectList[i];
 
@@ -114,7 +114,7 @@ public class ObjectSpawner : MonoBehaviour
                 IsNeedToRemove = true;
             }
 
-            if(IsNeedToRemove == true)
+            if (IsNeedToRemove == true)
             {
                 SpawnedObjectList.RemoveSwapBack(SpawnedObject);
                 Destroy(SpawnedObject);

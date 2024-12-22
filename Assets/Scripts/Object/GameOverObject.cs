@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class GameOverObject : MonoBehaviour
 {
-    public UnityEvent OnGameOver;
+    public UnityEvent OnGameOverEvent;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -14,6 +12,6 @@ public class GameOverObject : MonoBehaviour
             return;
         }
 
-        OnGameOver.Invoke();
+        OnGameOverEvent.Invoke();
     }
 }
