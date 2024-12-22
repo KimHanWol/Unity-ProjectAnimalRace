@@ -96,6 +96,12 @@ public class AnimalChanger : RuningObject
         Rigidbody2D HunterRigidbody = Hunter.gameObject.GetComponent<Rigidbody2D>();
         HunterRigidbody.velocity = Vector2.zero;
         HunterRigidbody.AddForce(new Vector2(0, ChangeEffectForce));
+
+        EmojiComponent PlayerEmojiComponent = ColliderPlayer.GetComponentInChildren<EmojiComponent>();
+        PlayerEmojiComponent.StartEmojiAnimation();
+
+        EmojiComponent HunterEmojiComponent = Hunter.GetComponentInChildren<EmojiComponent>();
+        HunterEmojiComponent.StartEmojiAnimation();
     }
 
     private void EndAnnimalChangeEffect(PlayerController ColliderPlayer)
