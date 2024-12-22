@@ -59,21 +59,13 @@ public class PlayerController : MonoBehaviour
     private bool IsMoveEnabled = true;
     private Vector2 StartPosition = Vector2.zero;
 
-    //Event
-    public UnityEvent<float> OnPlayerAcceleratedEvent;
-    public UnityEvent<bool> OnPlayerMovementEnableChangedEvent;
-    public UnityEvent OnGameStartEvent;
-    public UnityEvent OnGameOverEvent;
-    public UnityEvent OnAnimalTryingToChangeEvent;
-    public UnityEvent<AnimalType> OnAnimalTypeChangedEvent;
-
     void Start()
     {
-        InitializeInput();
-        ChangeAnimal(CurrentAnimalType);
-
         IsMoveEnabled = false;
         StartPosition = transform.position;
+
+        InitializeInput();
+        ChangeAnimal(CurrentAnimalType);
     }
 
     void Update()
@@ -86,7 +78,7 @@ public class PlayerController : MonoBehaviour
     {
         SetMoveEnabled(true);
 
-        OnGameStartEvent.Invoke();
+        EventManager.Instance.OnGameStartEvent.Invoke();
     }
 
     public void OnGameOver()
@@ -94,7 +86,7 @@ public class PlayerController : MonoBehaviour
         ResetPlayer();
         SetMoveEnabled(false);
 
-        OnGameOverEvent.Invoke();
+        EventManager.Instance.OnGameOverEvent.Invoke();
     }
 
     private void ResetPlayer()
@@ -145,7 +137,7 @@ public class PlayerController : MonoBehaviour
         ChangeAnimatorController(CurrentAnimalData.Animator);
         CurrentInputStackIndex = 0;
 
-        OnAnimalTypeChangedEvent.Invoke(CurrentAnimalType);
+        EventManager.Instance.OnAnimalTypeChangedEvent?.Invoke(CurrentAnimalType);
     }
 
     private void Update_PlayerMove()
@@ -411,7 +403,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 MoveForce = new Vector2(AnimalDataManager.Get().GetVelocity(CurrentAnimalData.InputType), 0);
         MoveSpeedObject.AddForce(MoveForce);
-        OnPlayerAcceleratedEvent?.Invoke(MoveForce.x);
+        EventManager.Instance.OnPlayerAcceleratedEvent?.Invoke(MoveForce.x);
     }
 
     private void Update_CheckVelocity()
@@ -459,7 +451,7 @@ public class PlayerController : MonoBehaviour
         IsMoveEnabled = !IsChanging;
 
         EnableMovement(IsMoveEnabled);
-        OnPlayerMovementEnableChangedEvent?.Invoke(IsMoveEnabled);
+        EventManager.Instance.OnPlayerMovementEnableChangedEvent?.Invoke(IsMoveEnabled);
     }
 
     public void EnableMovement(bool Enabled)

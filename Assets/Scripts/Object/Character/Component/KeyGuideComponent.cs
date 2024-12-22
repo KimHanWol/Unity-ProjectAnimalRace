@@ -28,10 +28,11 @@ public class KeyGuideComponent : MonoBehaviour
         KeyGuideAnimator = KeyGuideUI.GetComponentInChildren<Animator>();
         KeyGuideAnimator.speed = 2;
 
-        PlayerController.OnGameStartEvent.AddListener(OnGameStart);
-        PlayerController.OnGameOverEvent.AddListener(OnGameOver);
-        PlayerController.OnAnimalTryingToChangeEvent.AddListener(OnAnimalTryingToChange);
-        PlayerController.OnAnimalTypeChangedEvent.AddListener(OnAnimalTypeChanged);
+        EventManager EventManager = EventManager.Instance;
+        EventManager.OnGameStartEvent.AddListener(OnGameStart);
+        EventManager.OnGameOverEvent.AddListener(OnGameOver);
+        EventManager.OnAnimalTryingToChangeEvent.AddListener(OnAnimalTryingToChange);
+        EventManager.OnAnimalTypeChangedEvent.AddListener(OnAnimalTypeChanged);
     }
 
     void OnGameStart()

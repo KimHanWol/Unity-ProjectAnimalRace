@@ -54,7 +54,7 @@ public class AnimalChanger : RuningObject
             // 전면의 장애물을 인식해서 동작하도록 하자
             if(ColliderPlayer != null)
             {
-                ColliderPlayer.OnAnimalTryingToChangeEvent?.Invoke();
+                EventManager.Instance.OnAnimalTryingToChangeEvent?.Invoke();
                 StartCoroutine(SwitchAnimal(ColliderPlayer));
                 bIsChanged = true;
                 break;

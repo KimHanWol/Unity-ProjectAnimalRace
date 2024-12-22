@@ -24,8 +24,6 @@ public class HunterController : MonoBehaviour
     private Rigidbody2D RigidBody2D;
     private Animator Animator;
 
-    public UnityEvent OnAnimalTryingToChangeEvent;
-
     void Start()
     {
         RigidBody2D = GetComponent<Rigidbody2D>();
@@ -131,7 +129,7 @@ public class HunterController : MonoBehaviour
 
         if(IsChanging == true)
         {
-            OnAnimalTryingToChangeEvent?.Invoke();
+            EventManager.Instance.OnAnimalTryingToChangeEvent?.Invoke();
         }
     }
 }

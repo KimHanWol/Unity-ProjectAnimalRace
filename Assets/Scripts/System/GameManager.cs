@@ -31,9 +31,10 @@ public class GameManager : SingletonObject<GameManager>
 
     void Start()
     {
-        Player.OnPlayerMovementEnableChangedEvent.AddListener(OnAnimalChangeEffectStateChanged);
-        Player.OnPlayerAcceleratedEvent.AddListener(OnPlayerAccelerated);
-        GameOverObject.OnGameOverEvent.AddListener(OnGameOver);
+        EventManager EventManager = EventManager.Instance;
+        EventManager.OnPlayerMovementEnableChangedEvent.AddListener(OnAnimalChangeEffectStateChanged);
+        EventManager.OnPlayerAcceleratedEvent.AddListener(OnPlayerAccelerated);
+        EventManager.OnGameOverEvent.AddListener(OnGameOver);
         SoundManager.PlayBGM(SoundManager.EBGM.BGM_START, true);
 
         OnGameStart();

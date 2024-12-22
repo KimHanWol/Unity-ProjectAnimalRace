@@ -807,24 +807,6 @@ MonoBehaviour:
   RunAnimationMinSpeedRate: 1
   CurrentVelocity: 0
   MoveSpeedObject: {fileID: 1363013147}
-  OnPlayerAcceleratedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPlayerMovementEnableChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnGameStartEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnGameOverEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnAnimalTryingToChangeEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnAnimalTypeChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!95 &95955084
 Animator:
   serializedVersion: 5
@@ -7000,6 +6982,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1311617947}
   m_CullTransparentMesh: 1
+--- !u!1 &1314395383
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1314395384}
+  - component: {fileID: 1314395385}
+  m_Layer: 0
+  m_Name: EventManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1314395384
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314395383}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1563884628}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1314395385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314395383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da9002a7353a9044aaea0cbc08496d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnGameStartEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnGameOverEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAnimalTryingToChangeEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAnimalTypeChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayerAcceleratedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayerMovementEnableChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1321490407
 GameObject:
   m_ObjectHideFlags: 0
@@ -7867,9 +7911,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed21fed1d2919494c80444898dd30abc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnGameOverEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1460382066
 GameObject:
   m_ObjectHideFlags: 0
@@ -8643,6 +8684,7 @@ Transform:
   - {fileID: 1625302398}
   - {fileID: 1981609021}
   - {fileID: 1801995441}
+  - {fileID: 1314395384}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1563884629
@@ -9975,6 +10017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09e5ef8f55347f040a1f5f999f0bad4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StartSFXOffset: 0.25
   BGMDataList:
   - BGMType: 0
     AudioClip: {fileID: 8300000, guid: f5ab015a49e77694a91a27333215f6ae, type: 3}
