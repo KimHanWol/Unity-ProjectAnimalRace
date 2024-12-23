@@ -12,7 +12,6 @@ public class GameManager : SingletonObject<GameManager>
     public SoundManager SoundManager;
 
     public RuningObject[] SpawnedObjectList;
-    public GameOverObject GameOverObject;
 
     // 타이틀이 나오고 입력을 받지 않는 시간
     public float TitleNoInputDuration = 2f;

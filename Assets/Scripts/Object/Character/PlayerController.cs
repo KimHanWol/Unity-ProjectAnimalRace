@@ -58,6 +58,8 @@ public class PlayerController : GameObjectController
     public Rigidbody2D MoveSpeedObject;
     private Vector2 StartPosition = Vector2.zero;
 
+    public TriggerCollisionComponent InteractCollisionComponent;
+
     new void Start()
     {
         base.Start();
@@ -66,6 +68,8 @@ public class PlayerController : GameObjectController
 
         UpdateAnimator();
         EventManager.Instance.OnAnimalChangedEvent?.Invoke(true, CurrentAnimalType);
+
+        InteractCollisionComponent.OnTriggerEnter.AddListener(Interaction);
     }
 
     void Update()
@@ -449,5 +453,14 @@ public class PlayerController : GameObjectController
     public float GetVelocity()
     {
         return CurrentVelocity;
+    }
+
+    private void Interaction(GameObject InteractObject)
+    {
+        InteractableInterface InteractableObject = InteractObject.GetComponent<InteractableInterface>();
+        if(InteractableObject != null)
+        {
+            InteractableObject.Interaction(gameObject);
+        }
     }
 }

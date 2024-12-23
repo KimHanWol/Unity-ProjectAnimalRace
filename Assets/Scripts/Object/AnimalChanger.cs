@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class AnimalChanger : RuningObject
+public class AnimalChanger : RuningObject, InteractableInterface
 {
     private AnimalDataManager AnimalDataManager;
     private Animator Animator;
@@ -14,6 +14,19 @@ public class AnimalChanger : RuningObject
     public float MoveCenterSpeed;
     public float ChangeEffectForce = 100f;
 
+    //InteractableInterface
+    public void Interaction(GameObject InteractObject)
+    {
+        PlayerController OverlappedPlayer = InteractObject.GetComponent<PlayerController>();
+        if (OverlappedPlayer != null)
+        {
+            EventManager.Instance.OnAnimalTryingToChangeEvent?.Invoke();
+            StartCoroutine(SwitchAnimal(InteractObject.GetComponent<PlayerController>()));
+            bIsChanged = true;
+        }
+    }
+    //~InteractableInterface
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,43 +36,6 @@ public class AnimalChanger : RuningObject
 
         CurrentAnimalData = AnimalDataManager.GetRandomAnimalData(PlayerController.Get().GetCurrentAnimalType());
         Animator.runtimeAnimatorController = CurrentAnimalData.Animator;
-    }
-
-    public void InitializeAnimalChanger()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Update_CheckOverlap();
-        Update_ObjectMovement();
-    }
-
-    private void Update_CheckOverlap()
-    {
-        if (bIsChanged == true)
-        {
-            return;
-        }
-
-        Vector2 ColliderSize = OverlapBoundary;
-
-        Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(transform.localPosition, ColliderSize, 0);
-        foreach (Collider2D collider in collider2Ds)
-        {
-            PlayerController ColliderPlayer = collider.GetComponent<PlayerController>();
-            // TODO: AnimalChanger 에서 하지 말고 Player 의 컴포넌트에서
-            // 전면의 장애물을 인식해서 동작하도록 하자
-            if(ColliderPlayer != null)
-            {
-                EventManager.Instance.OnAnimalTryingToChangeEvent?.Invoke();
-                StartCoroutine(SwitchAnimal(ColliderPlayer));
-                bIsChanged = true;
-                break;
-            }
-        }
     }
 
     IEnumerator SwitchAnimal(PlayerController ColliderPlayer)

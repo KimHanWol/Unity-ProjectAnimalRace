@@ -16,6 +16,9 @@ public class HunterController : GameObjectController
     public float DelayDecreaseRate = 0.01f;
     public float DelayMin = 0.05f;
 
+    public TriggerCollisionComponent CanHitCollisionCompoment;
+    public TriggerCollisionComponent GameOverCollisionComponent;
+
     private float CurrentForceRate = 1f;
     private float CurrentDurationRate = 1f;
     private Vector2 StartPosition = Vector2.zero;
@@ -32,6 +35,11 @@ public class HunterController : GameObjectController
         StartPosition = transform.position;
         EventManager.Instance.OnPlayerAcceleratedEvent.AddListener(OnAnimalAccelerated);
         EventManager.Instance.OnAnimalChangedEvent.AddListener(OnAnimalChanged);
+
+        CanHitCollisionCompoment.OnTriggerEnter.AddListener(OnCanHit);
+        CanHitCollisionCompoment.OnTriggerExit.AddListener(OnCantHit);
+
+        GameOverCollisionComponent.OnTriggerEnter.AddListener(OnCatchAnimal);
     }
 
     protected override void OnPlayGame()
@@ -119,23 +127,18 @@ public class HunterController : GameObjectController
         RigidBody2D.AddForce(new Vector2(CurrentForce, 0));
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCanHit(GameObject OverlappedGameObject)
     {
-        if (collision.tag != "Player")
-        {
-            return;
-        }
-
         Animator.SetBool("CanHit", true);
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnCantHit(GameObject OverlappedGameObject)
     {
-        if (collision.tag != "Player")
-        {
-            return;
-        }
-
         Animator.SetBool("CanHit", false);
+    }
+
+    private void OnCatchAnimal(GameObject OverlappedGameObject)
+    {
+        EventManager.Instance.OnGameOverEvent?.Invoke();
     }
 }
