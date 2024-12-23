@@ -168,6 +168,7 @@ public class SoundManager : MonoBehaviour
             if (BGMAudioSource.time + SFXAudioLength + StartSFXOffset >= BGMAudioSource.clip.length)
             {
                 PlaySFX(ESFX.SFX_START);
+                EventManager.Instance.OnPlaySFXPlayedEvent?.Invoke();
 
                 break;
             }

@@ -15,4 +15,7 @@ public class EventManager : SingletonObject<EventManager>
 
     //Player
     public UnityEvent<float> OnPlayerAcceleratedEvent;
+
+    //Sound
+    public UnityEvent OnPlaySFXPlayedEvent;
 }

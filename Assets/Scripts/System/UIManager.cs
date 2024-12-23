@@ -27,6 +27,8 @@ public class UIManager : SingletonObject<UIManager>
     void Start()
     {
         OnGameStart(false);
+
+        EventManager.Instance.OnPlaySFXPlayedEvent.AddListener(OnRunTitle);
     }
 
     void Update()
@@ -159,13 +161,16 @@ public class UIManager : SingletonObject<UIManager>
         StartPlayUI.SetActive(false);
     }
 
-    public void OnPlaying()
+    public void OnRunTitle()
     {
         StartingUI.SetActive(false);
         StartPlayUI.SetActive(true);
-        ScoreInGameUI.SetActive(true);
+        StartCoroutine(WaitStartPlayUITimer(0.7f));
+    }
 
-        StartCoroutine(WaitStartPlayUITimer(1f));
+    public void OnPlaying()
+    {
+        ScoreInGameUI.SetActive(true);
     }
 
     public void OnGameOver(int NewScore)
