@@ -23,7 +23,7 @@ public class KeyGuideComponent : MonoBehaviour
 
     void Awake()
     {
-        PlayerController = this.gameObject.GetComponent<PlayerController>();
+        PlayerController = GetComponentInParent<PlayerController>();
         KeyGuideUI = UIManager.Instance.KeyGuideUI;
         KeyGuideAnimator = KeyGuideUI.GetComponentInChildren<Animator>();
         KeyGuideAnimator.speed = 2;
