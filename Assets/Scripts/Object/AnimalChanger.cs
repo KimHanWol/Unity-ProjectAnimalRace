@@ -28,8 +28,9 @@ public class AnimalChanger : RuningObject, InteractableInterface
     //~InteractableInterface
 
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
+        base.Start();
         AnimalDataManager = AnimalDataManager.Get();
         BoxCollider2D = GetComponent<BoxCollider2D>();
         Animator = GetComponent<Animator>();

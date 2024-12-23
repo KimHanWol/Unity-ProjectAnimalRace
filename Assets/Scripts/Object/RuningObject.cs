@@ -2,35 +2,35 @@ using UnityEngine;
 
 public class RuningObject : MonoBehaviour
 {
-    public float MovementSpeed;
+    public float MovementSpeedRate = 1;
     public bool IsActivated = false;
     protected bool IsNeedToStopWhenActivated = true;
     protected bool IsNeedToStopMove = false;
 
-    void Update()
+    private Rigidbody2D RigidBody2D;
+
+    public void Start()
     {
-        Update_ObjectMovement();
+        EventManager.Instance.OnPlayerAcceleratedEvent.AddListener(OnPlayerAccelerated);
+
+        RigidBody2D = GetComponent<Rigidbody2D>();
     }
 
-    protected void Update_ObjectMovement()
+    void OnPlayerAccelerated(float MoveForce)
     {
-        if (IsNeedToStopWhenActivated == true && IsActivated == true)
+        if(IsNeedToStopMove == false)
         {
-            return;
+            RigidBody2D.AddForce(new Vector2(-MoveForce * MovementSpeedRate, 0));
         }
-
-        if (IsNeedToStopMove == true)
-        {
-            return;
-        }
-
-        Vector2 NewPosition = transform.position;
-        NewPosition.x -= MovementSpeed;
-        transform.position = NewPosition;
     }
 
     public virtual void EnableMovement(bool Enabled)
     {
         IsNeedToStopMove = !Enabled;
+
+        if(IsNeedToStopMove == true)
+        {
+            RigidBody2D.velocity = Vector2.zero;
+        }
     }
 }
