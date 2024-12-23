@@ -10,6 +10,6 @@ public class GameOverObject : MonoBehaviour
             return;
         }
 
-        EventManager.Instance.OnGameOverEvent.Invoke();
+        EventManager.Instance.OnGameOverEvent?.Invoke();
     }
 }

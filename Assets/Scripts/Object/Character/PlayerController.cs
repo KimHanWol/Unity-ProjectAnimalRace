@@ -17,7 +17,7 @@ public enum AnimalType
     Tortoise,
 }
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : GameObjectController
 {
     private static PlayerController Instance;
 
@@ -56,16 +56,16 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     public float CurrentVelocity;
     public Rigidbody2D MoveSpeedObject;
-    private bool IsMoveEnabled = true;
     private Vector2 StartPosition = Vector2.zero;
 
-    void Start()
+    new void Start()
     {
-        IsMoveEnabled = false;
+        base.Start();
         StartPosition = transform.position;
+        CurrentMousePosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
-        InitializeInput();
-        ChangeAnimal(CurrentAnimalType);
+        UpdateAnimator();
+        EventManager.Instance.OnAnimalChangedEvent?.Invoke(true, CurrentAnimalType);
     }
 
     void Update()
@@ -74,22 +74,39 @@ public class PlayerController : MonoBehaviour
         Update_CheckVelocity();
     }
 
-    public void OnGameStart()
+    protected override void OnPlayGame()
     {
-        SetMoveEnabled(true);
-
-        EventManager.Instance.OnGameStartEvent.Invoke();
+        EnableMovement(true);
     }
 
-    public void OnGameOver()
+    protected override void OnGameOver()
     {
-        ResetPlayer();
-        SetMoveEnabled(false);
-
-        EventManager.Instance.OnGameOverEvent.Invoke();
+        EnableMovement(false);
+        ResetGameObject();
     }
 
-    private void ResetPlayer()
+    protected override void OnAnimalTryingToChange()
+    {
+        EnableMovement(false);
+    }
+
+    public void ChangeAnimalOnPlay(AnimalType NewAnimalType)
+    {
+        CurrentAnimalType = NewAnimalType;
+        UpdateAnimator();
+
+        EventManager.Instance.OnAnimalChangedEvent?.Invoke(false, CurrentAnimalType);
+        EnableMovement(true);
+    }
+
+    private void UpdateAnimator()
+    {
+        CurrentAnimalData = AnimalDataManager.Get().GetAnimalData(CurrentAnimalType);
+        ChangeAnimatorController(CurrentAnimalData.Animator);
+        CurrentInputStackIndex = 0;
+    }
+
+    protected override void ResetGameObject()
     {
         CurrentVelocity = 0f;
         Rigidbody2D PlayerRigidbody = GetComponent<Rigidbody2D>();
@@ -100,9 +117,17 @@ public class PlayerController : MonoBehaviour
         transform.position = StartPosition;
     }
 
-    private void InitializeInput()
+    protected override void EnableMovement(bool Enabled)
     {
-        CurrentMousePosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        IsMoveEnabled = Enabled;
+        if (Enabled == false)
+        {
+            CurrentVelocity = 0;
+            MoveSpeedObject.velocity = Vector2.zero;
+        }
+
+        Animator CurrentAnimator = GetComponent<Animator>();
+        CurrentAnimator.SetBool("IsRunning", Enabled);
     }
 
     public InputType GetCurrentAnimalInputType()
@@ -115,11 +140,6 @@ public class PlayerController : MonoBehaviour
         return CurrentAnimalData.AnimalType;
     }
 
-    private void SetMoveEnabled(bool Enabled)
-    {
-        IsMoveEnabled = Enabled;
-    }
-
     private void ChangeAnimatorController(RuntimeAnimatorController NewAnimatorController)
     {
         Animator CurrentAnimator = GetComponent<Animator>();
@@ -128,16 +148,6 @@ public class PlayerController : MonoBehaviour
             CurrentAnimator.SetBool("IsRunning", false);
             CurrentAnimator.runtimeAnimatorController = NewAnimatorController;
         }
-    }
-
-    public void ChangeAnimal(AnimalType NewAnimalType)
-    {
-        CurrentAnimalType = NewAnimalType;
-        CurrentAnimalData = AnimalDataManager.Get().GetAnimalData(CurrentAnimalType);
-        ChangeAnimatorController(CurrentAnimalData.Animator);
-        CurrentInputStackIndex = 0;
-
-        EventManager.Instance.OnAnimalTypeChangedEvent?.Invoke(CurrentAnimalType);
     }
 
     private void Update_PlayerMove()
@@ -439,27 +449,5 @@ public class PlayerController : MonoBehaviour
     public float GetVelocity()
     {
         return CurrentVelocity;
-    }
-
-    public void SetIsAnimalChanging(bool IsChanging)
-    {
-        if (IsMoveEnabled == !IsChanging)
-        {
-            return;
-        }
-
-        IsMoveEnabled = !IsChanging;
-
-        EnableMovement(IsMoveEnabled);
-        EventManager.Instance.OnPlayerMovementEnableChangedEvent?.Invoke(IsMoveEnabled);
-    }
-
-    public void EnableMovement(bool Enabled)
-    {
-        if (Enabled == false)
-        {
-            CurrentVelocity = 0;
-            MoveSpeedObject.velocity = Vector2.zero;
-        }
     }
 }

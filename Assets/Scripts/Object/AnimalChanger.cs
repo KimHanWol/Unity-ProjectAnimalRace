@@ -65,22 +65,16 @@ public class AnimalChanger : RuningObject
     IEnumerator SwitchAnimal(PlayerController ColliderPlayer)
     {
         PlayAnimalChangeEffect(ColliderPlayer);
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1f);
         EndAnnimalChangeEffect(ColliderPlayer);
 
-        StartCoroutine(MoveAnimal(ColliderPlayer));
+        StartCoroutine(StartMoveAnimal(ColliderPlayer));
+        ColliderPlayer.ChangeAnimalOnPlay(CurrentAnimalData.AnimalType);
     }
 
     private void PlayAnimalChangeEffect(PlayerController ColliderPlayer)
     {
         IsNeedToStopMove = true;
-
-        ColliderPlayer.SetIsAnimalChanging(true);
-        Animator CurrentAnimator = ColliderPlayer.GetComponent<Animator>();
-        CurrentAnimator.SetBool("IsRunning", false);
-
-        HunterController Hunter = GameManager.Instance.Hunter.gameObject.GetComponent<HunterController>();
-        Hunter.SetIsAnimalChanging(true);
 
         Rigidbody2D PlayerRigidbody = ColliderPlayer.GetComponent<Rigidbody2D>();
         PlayerRigidbody.velocity = Vector2.zero;
@@ -90,6 +84,7 @@ public class AnimalChanger : RuningObject
         AnimalChangerRigidbody.velocity = Vector2.zero;
         AnimalChangerRigidbody.AddForce(new Vector2(0, ChangeEffectForce));
 
+        HunterController Hunter = GameManager.Instance.Hunter;
         Rigidbody2D HunterRigidbody = Hunter.gameObject.GetComponent<Rigidbody2D>();
         HunterRigidbody.velocity = Vector2.zero;
         HunterRigidbody.AddForce(new Vector2(0, ChangeEffectForce));
@@ -98,25 +93,20 @@ public class AnimalChanger : RuningObject
     private void EndAnnimalChangeEffect(PlayerController ColliderPlayer)
     {
         IsNeedToStopMove = false;
-        ColliderPlayer.SetIsAnimalChanging(false);
-
-        HunterController Hunter = GameManager.Instance.Hunter.gameObject.GetComponent<HunterController>();
-        Hunter.SetIsAnimalChanging(false);
     }
 
-    IEnumerator MoveAnimal(PlayerController ColliderPlayer)
+    IEnumerator StartMoveAnimal(PlayerController ColliderPlayer)
     {
         AnimalType PlayerAnimalType = ColliderPlayer.CurrentAnimalType;
+
+        //switch position
         Vector2 PlayerPosition = ColliderPlayer.transform.position;
-
-        ColliderPlayer.ChangeAnimal(CurrentAnimalData.AnimalType);
         ColliderPlayer.transform.position = transform.position;
-
         transform.position = PlayerPosition;
 
         AnimalData PlayerAnimalData = AnimalDataManager.Get().GetAnimalData(PlayerAnimalType);
         Animator.runtimeAnimatorController = PlayerAnimalData.Animator;
-        
+
         StartCoroutine(DisableAnimalChanger());
 
         // Move to zero

@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class HunterController : MonoBehaviour
+public class HunterController : GameObjectController
 {
     public float HunterMovementRate = 20f;
 
@@ -19,25 +19,47 @@ public class HunterController : MonoBehaviour
     private float CurrentForceRate = 1f;
     private float CurrentDurationRate = 1f;
     private Vector2 StartPosition = Vector2.zero;
-    private bool IsMoveEnabled = false;
 
     private Rigidbody2D RigidBody2D;
     private Animator Animator;
 
-    void Start()
+    new void Start()
     {
+        base.Start();
         RigidBody2D = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
 
         StartPosition = transform.position;
+        EventManager.Instance.OnPlayerAcceleratedEvent.AddListener(OnAnimalAccelerated);
+        EventManager.Instance.OnAnimalChangedEvent.AddListener(OnAnimalChanged);
     }
 
-    public void OnGameStart()
+    protected override void OnPlayGame()
     {
         EnableMovement(true);
     }
 
-    public void ResetHunter()
+    protected override void OnGameOver()
+    {
+        ResetGameObject();
+    }
+
+    protected override void OnAnimalTryingToChange()
+    {
+        IsMoveEnabled = false;
+        EnableMovement(IsMoveEnabled);
+    }
+    
+    private void OnAnimalChanged(bool IsInitializing, AnimalType NewAnimalType)
+    {
+        IsMoveEnabled = true;
+        if(IsInitializing == false)
+        {
+            EnableMovement(IsMoveEnabled);
+        }
+    }
+
+    protected override void ResetGameObject()
     {
         Rigidbody2D PlayerRigidbody = GetComponent<Rigidbody2D>();
         PlayerRigidbody.velocity = Vector2.zero;
@@ -52,7 +74,12 @@ public class HunterController : MonoBehaviour
         StopAllCoroutines();
     }
 
-    public void EnableMovement(bool Enabled)
+    protected void OnAnimalAccelerated(float MoveForce)
+    {
+        RigidBody2D.AddForce(new Vector2(-MoveForce * HunterMovementRate, 0));
+    }
+
+    protected override void EnableMovement(bool Enabled)
     {
         IsMoveEnabled = Enabled;
         if(Enabled == true)
@@ -92,11 +119,6 @@ public class HunterController : MonoBehaviour
         RigidBody2D.AddForce(new Vector2(CurrentForce, 0));
     }
 
-    public void OnPlayerAccelerated(float MoveForce)
-    {
-        RigidBody2D.AddForce(new Vector2(-MoveForce * HunterMovementRate, 0));
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag != "Player")
@@ -115,21 +137,5 @@ public class HunterController : MonoBehaviour
         }
 
         Animator.SetBool("CanHit", false);
-    }
-
-    public void SetIsAnimalChanging(bool IsChanging)
-    {
-        if (IsMoveEnabled == !IsChanging)
-        {
-            return;
-        }
-        IsMoveEnabled = !IsChanging;
-
-        EnableMovement(IsMoveEnabled);
-
-        if(IsChanging == true)
-        {
-            EventManager.Instance.OnAnimalTryingToChangeEvent?.Invoke();
-        }
     }
 }

@@ -27,6 +27,20 @@ public class ObjectSpawner : MonoBehaviour
     void Start()
     {
         SpawnedObjectList = new List<GameObject>();
+
+        EventManager EventManager = EventManager.Instance;
+        EventManager.OnPlayGameEvent.AddListener(OnPlayGame);
+        EventManager.OnGameOverEvent.AddListener(OnGameOver);
+    }
+
+    private void OnPlayGame()
+    {
+        EnableSpawn(true);
+    }
+
+    private void OnGameOver()
+    {
+        EnableSpawn(false);
     }
 
     public void EnableSpawn(bool Enabled)

@@ -6,12 +6,13 @@ using UnityEngine.Events;
 public class EventManager : SingletonObject<EventManager>
 {
     //Game
-    public UnityEvent OnGameStartEvent;
+    public UnityEvent OnPlayGameEvent;
     public UnityEvent OnGameOverEvent;
     public UnityEvent OnAnimalTryingToChangeEvent;
-    public UnityEvent<AnimalType> OnAnimalTypeChangedEvent;
+
+    //IsInitializing, AnimalType
+    public UnityEvent<bool, AnimalType> OnAnimalChangedEvent;
 
     //Player
     public UnityEvent<float> OnPlayerAcceleratedEvent;
-    public UnityEvent<bool> OnPlayerMovementEnableChangedEvent;
 }

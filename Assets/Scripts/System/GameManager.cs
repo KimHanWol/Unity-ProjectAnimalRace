@@ -31,11 +31,9 @@ public class GameManager : SingletonObject<GameManager>
 
     void Start()
     {
-        EventManager EventManager = EventManager.Instance;
-        EventManager.OnPlayerMovementEnableChangedEvent.AddListener(OnAnimalChangeEffectStateChanged);
-        EventManager.OnPlayerAcceleratedEvent.AddListener(OnPlayerAccelerated);
-        EventManager.OnGameOverEvent.AddListener(OnGameOver);
         SoundManager.PlayBGM(SoundManager.EBGM.BGM_START, true);
+
+        EventManager.Instance.OnGameOverEvent.AddListener(OnGameOver);
 
         OnGameStart();
     }
@@ -112,11 +110,6 @@ public class GameManager : SingletonObject<GameManager>
         MapManager.EnableMovement(Enabled);
     }
 
-    private void OnPlayerAccelerated(float MoveForce)
-    {
-        Hunter.OnPlayerAccelerated(MoveForce);
-    }
-
     public void OnGameStart()
     {
         GameScore = 0;
@@ -136,23 +129,12 @@ public class GameManager : SingletonObject<GameManager>
         UIManager.OnAnyButtonPressed();
         UIManager.OnPlaying();
 
-        Player.OnGameStart();
-
-        Hunter.OnGameStart();
-
-        ObjectSpawner.EnableSpawn(true);
+        EventManager.Instance.OnPlayGameEvent.Invoke();
     }
 
     private void OnGameOver()
     {
-        //TODO: EventManager 만들어서 글로벌 이벤트로 변경
-        Player.OnGameOver();
-
-        Hunter.ResetHunter();
-
         UIManager.OnGameOver((int)GameScore);
-
-        ObjectSpawner.EnableSpawn(false);
 
         SoundManager.PlayBGM(SoundManager.EBGM.BGM_GAMEOVER, true);
     }

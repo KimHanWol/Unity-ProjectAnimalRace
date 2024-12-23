@@ -29,13 +29,13 @@ public class KeyGuideComponent : MonoBehaviour
         KeyGuideAnimator.speed = 2;
 
         EventManager EventManager = EventManager.Instance;
-        EventManager.OnGameStartEvent.AddListener(OnGameStart);
+        EventManager.OnPlayGameEvent.AddListener(OnPlayGame);
         EventManager.OnGameOverEvent.AddListener(OnGameOver);
         EventManager.OnAnimalTryingToChangeEvent.AddListener(OnAnimalTryingToChange);
-        EventManager.OnAnimalTypeChangedEvent.AddListener(OnAnimalTypeChanged);
+        EventManager.OnAnimalChangedEvent.AddListener(OnAnimalTypeChanged);
     }
 
-    void OnGameStart()
+    void OnPlayGame()
     {
         IsReadyState = false;
     }
@@ -52,7 +52,7 @@ public class KeyGuideComponent : MonoBehaviour
         EnableKeyGuide(false);
     }
 
-    void OnAnimalTypeChanged(AnimalType NewAnimalType)
+    void OnAnimalTypeChanged(bool IsInitializing, AnimalType NewAnimalType)
     {
         CurrentAnimalType = NewAnimalType;
         IsAnimalTryingToChange = false;
