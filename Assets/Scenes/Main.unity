@@ -1076,7 +1076,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 896172b2e52c5e84694208d8f333076f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentAnimalType: 11
+  CurrentAnimalType: 5
   RunAnimationSpeedRate: 1
   RunAnimationMaxSpeedRate: 4
   RunAnimationMinSpeedRate: 1
