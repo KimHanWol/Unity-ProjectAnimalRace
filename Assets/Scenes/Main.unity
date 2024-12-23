@@ -1076,7 +1076,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 896172b2e52c5e84694208d8f333076f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentAnimalType: 5
+  CurrentAnimalType: 11
   RunAnimationSpeedRate: 1
   RunAnimationMaxSpeedRate: 4
   RunAnimationMinSpeedRate: 1
@@ -9817,7 +9817,7 @@ MonoBehaviour:
     KeyGuideAnimation: {fileID: 7400000, guid: 8b496127c36948a4da21235f1321e5ec, type: 2}
   - InputType: 9
     InputStackCount: 1
-    Veclocity: 1
+    Veclocity: 0.55
     KeyGuideAnimation: {fileID: 7400000, guid: 8edd66e0ede94ad40b58cb021b7feb93, type: 2}
   - InputType: 10
     InputStackCount: 4
@@ -9858,6 +9858,9 @@ MonoBehaviour:
   - AnimalType: 5
     InputType: 1
     Animator: {fileID: 9100000, guid: 2476fead89c324b40b727e1a0ba71285, type: 2}
+  - AnimalType: 11
+    InputType: 9
+    Animator: {fileID: 9100000, guid: 776c8c51fe35f044b834db7c4ecb489f, type: 2}
 --- !u!1 &1363013145
 GameObject:
   m_ObjectHideFlags: 0

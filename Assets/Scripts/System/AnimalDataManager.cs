@@ -25,7 +25,7 @@ public class InputData
 {
     public InputType InputType;
     public int InputStackCount; //몇 번 눌러야 한 사이클인지 (AD 번갈아 누를 땐 2, QWER 번갈아 누를 땐 4)
-    public int Veclocity;
+    public float Veclocity;
     public AnimationClip KeyGuideAnimation;
 }
 
@@ -113,7 +113,7 @@ public class AnimalDataManager : MonoBehaviour
         return -1;
     }
 
-    public int GetVelocity(InputType InInputType)
+    public float GetVelocity(InputType InInputType)
     {
         foreach (InputData InInputData in InputDataList)
         {
