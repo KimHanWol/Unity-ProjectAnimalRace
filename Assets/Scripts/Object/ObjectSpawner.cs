@@ -31,6 +31,7 @@ public class ObjectSpawner : MonoBehaviour
         EventManager EventManager = EventManager.Instance;
         EventManager.OnPlayGameEvent.AddListener(OnPlayGame);
         EventManager.OnGameOverEvent.AddListener(OnGameOver);
+        EventManager.OnFeverStateChangedEvent.AddListener(OnFeverStateChanged);
     }
 
     private void OnPlayGame()
@@ -41,6 +42,11 @@ public class ObjectSpawner : MonoBehaviour
     private void OnGameOver()
     {
         EnableSpawn(false);
+    }
+
+    private void OnFeverStateChanged(bool Enabled)
+    {
+        EnableSpawn(Enabled == false);
     }
 
     public void EnableSpawn(bool Enabled)
@@ -120,7 +126,7 @@ public class ObjectSpawner : MonoBehaviour
             }
             else
             {
-                SpawnableObject SpawnableObject = SpawnedObject.GetComponent<SpawnableObject>();
+                SpawnableComponent SpawnableObject = SpawnedObject.GetComponent<SpawnableComponent>();
                 if (SpawnableObject == null || SpawnableObject.IsDestroying == true)
                 {
                     IsNeedToRemove = true;

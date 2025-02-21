@@ -9,8 +9,9 @@ public class EventManager : SingletonObject<EventManager>
     public UnityEvent OnPlayGameEvent;
     public UnityEvent OnGameOverEvent;
     public UnityEvent OnAnimalTryingToChangeEvent;
+    public UnityEvent<bool> OnFeverStateChangedEvent;
 
-    //IsInitializing, AnimalType
+    //<IsInitializing, AnimalType>
     public UnityEvent<bool, AnimalType> OnAnimalChangedEvent;
 
     //Player

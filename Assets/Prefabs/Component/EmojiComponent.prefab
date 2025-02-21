@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a460b2b59ec90d9429be4bd5609576ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EmojiAnimation: {fileID: 0}
+  EmojiAnimationDataList: []
 --- !u!222 &8730103640105466261
 CanvasRenderer:
   m_ObjectHideFlags: 0

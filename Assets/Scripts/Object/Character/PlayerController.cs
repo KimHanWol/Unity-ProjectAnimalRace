@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -17,7 +18,7 @@ public enum AnimalType
     Tortoise,
 }
 
-public class PlayerController : GameObjectController
+public class PlayerController : GameObjectController, FeverInterface
 {
     private static PlayerController Instance;
 
@@ -57,6 +58,9 @@ public class PlayerController : GameObjectController
     public float CurrentVelocity;
     public Rigidbody2D MoveSpeedObject;
     private Vector2 StartPosition = Vector2.zero;
+
+    [Header("Fever")]
+    public float FeverMaxSizeScale = 3f;
 
     public TriggerCollisionComponent InteractCollisionComponent;
 
@@ -416,6 +420,13 @@ public class PlayerController : GameObjectController
     private void MovePlayer()
     {
         Vector2 MoveForce = new Vector2(AnimalDataManager.Get().GetVelocity(CurrentAnimalData.InputType), 0);
+
+        // 피버타임일 경우 반대로
+        if (IsFever == true)
+        {
+            MoveForce *= -1;
+        }
+
         MoveSpeedObject.AddForce(MoveForce);
         EventManager.Instance.OnPlayerAcceleratedEvent?.Invoke(MoveForce.x);
     }
@@ -436,10 +447,10 @@ public class PlayerController : GameObjectController
 
         Animator CurrentAnimator = GetComponent<Animator>();
 
-        bool IsRunning = IsMoveEnabled == true && CurrentVelocity > 0.01f;
+        bool IsRunning = IsMoveEnabled == true && Mathf.Abs(CurrentVelocity) > 0.01f;
         if (IsRunning == true)
         {
-            float NewAnimationSpeed = Mathf.Clamp(CurrentVelocity * RunAnimationSpeedRate, RunAnimationMinSpeedRate, RunAnimationMaxSpeedRate);
+            float NewAnimationSpeed = Mathf.Clamp(Mathf.Abs(CurrentVelocity) * RunAnimationSpeedRate, RunAnimationMinSpeedRate, RunAnimationMaxSpeedRate);
             CurrentAnimator.speed = NewAnimationSpeed;
         }
         else
@@ -463,4 +474,74 @@ public class PlayerController : GameObjectController
             InteractableObject.Interaction(gameObject);
         }
     }
+
+    // FeverInterface
+    public override void FeverInitialize()
+    {
+        base.FeverInitialize();
+
+        KeyGuideComponent KeyGuideComponent = GetComponent<KeyGuideComponent>();
+    }
+
+    protected override IEnumerator FeverReadyForStart_Internal(float FirstDelay, float GrowDuration, float DelayAfterGrown, float TurnDuration, string EmojiKey, float EmojiDuration, float LastDuration)
+    {
+        yield return new WaitForSeconds(FirstDelay);
+
+        // 플레이어 크기 확대
+        float CurrentTime = 0f;
+        while (CurrentTime < GrowDuration)
+        {
+            float NewScale = 1f + CurrentTime / GrowDuration * (FeverMaxSizeScale - 1);
+            transform.localScale = new Vector3(NewScale, NewScale, NewScale);
+
+            yield return new WaitForSeconds(0.01f);
+            CurrentTime += 0.01f;
+        }
+        transform.localScale = new Vector3(FeverMaxSizeScale, FeverMaxSizeScale, FeverMaxSizeScale);
+
+        yield return new WaitForSeconds(DelayAfterGrown);
+
+        // 뒤돌기
+        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, 180f, 0f));
+        yield return new WaitForSeconds(TurnDuration);
+
+        // 피버 이모지
+        EmojiComponent EmojiComponent = GetComponentInChildren<EmojiComponent>();
+        EmojiComponent.PlayEmojiAnimation(EmojiKey);
+
+        yield return new WaitForSeconds(EmojiDuration + LastDuration);
+    }
+
+    protected override IEnumerator FeverReadyForFinish_Internal(float FinishFirstDelay, float ShrinkDuration, float DelayAfterShrink, string FinishEmojiKey, float FinishEmojiDuration, float FinishLastDuration)
+    {
+        MoveToDefaultPos(FinishFirstDelay);
+        yield return new WaitForSeconds(FinishFirstDelay);
+
+        float MaxScale = transform.localScale.x;
+        float ShrinkUnit = (MaxScale - 1f) * 0.01f / ShrinkDuration;
+
+        // 플레이어 크기 축소
+        float CurrentTime = 0f;
+        while (CurrentTime < ShrinkDuration)
+        {
+            transform.localScale -= new Vector3(ShrinkUnit, ShrinkUnit, ShrinkUnit);
+
+            yield return new WaitForSeconds(0.01f);
+            CurrentTime += 0.01f;
+        }
+        transform.localScale = new Vector3(1f, 1f, 1f);
+
+        yield return new WaitForSeconds(DelayAfterShrink);
+
+        EmojiComponent EmojiComponent = GetComponentInChildren<EmojiComponent>();
+        EmojiComponent.PlayEmojiAnimation(FinishEmojiKey);
+
+        PlayJumpEffect();
+
+        yield return new WaitForSeconds(FinishEmojiDuration);
+
+        transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
+        yield return new WaitForSeconds(FinishLastDuration);
+    }
+    // ~ FeverInterface
 }

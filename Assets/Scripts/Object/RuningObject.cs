@@ -1,9 +1,11 @@
+using System.Collections;
 using UnityEngine;
 
-public class RuningObject : MonoBehaviour
+public class RuningObject : MonoBehaviour, InteractableInterface
 {
     public float MovementSpeedRate = 1;
     public bool IsActivated = false;
+    public float DestroyDuration = 0.5f;
     protected bool IsNeedToStopWhenActivated = true;
     protected bool IsNeedToStopMove = false;
 
@@ -32,5 +34,35 @@ public class RuningObject : MonoBehaviour
         {
             RigidBody2D.velocity = Vector2.zero;
         }
+    }
+
+    //InteractableInterface
+    public virtual void Interaction(GameObject InteractObject) { }
+    //~InteractableInterface
+
+    private IEnumerator PlayDisappearEffect_Internal()
+    {
+        BoxCollider2D BoxCollider2D = GetComponent<BoxCollider2D>();
+        BoxCollider2D.enabled = false;
+
+        SpriteRenderer SpriteRenderer = GetComponent<SpriteRenderer>();
+
+        float CurrentTime = 0f;
+        while (CurrentTime < DestroyDuration)
+        {
+            SpriteRenderer.color = new Color(SpriteRenderer.color.r, SpriteRenderer.color.g, SpriteRenderer.color.b, 1f - CurrentTime / DestroyDuration);
+
+            yield return new WaitForSeconds(0.1f);
+            CurrentTime += 0.1f;
+        }
+        SpriteRenderer.color = new Color(SpriteRenderer.color.r, SpriteRenderer.color.g, SpriteRenderer.color.b, 0f);
+    }
+
+    protected void SelfDestroy()
+    {
+        SpawnableComponent SpawnableObject = GetComponent<SpawnableComponent>();
+        SpawnableObject.IsDestroying = true;
+
+        StartCoroutine(PlayDisappearEffect_Internal());
     }
 }

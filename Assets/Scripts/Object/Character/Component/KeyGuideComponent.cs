@@ -20,6 +20,7 @@ public class KeyGuideComponent : MonoBehaviour
     private bool IsKeyGuideActivated = false;
     private bool IsSpeedFasterThanShowSpeed = false;
     private bool IsAnimalTryingToChange = false;
+    private bool IsFeverState = false;
 
     void Awake()
     {
@@ -33,6 +34,7 @@ public class KeyGuideComponent : MonoBehaviour
         EventManager.OnGameOverEvent.AddListener(OnGameOver);
         EventManager.OnAnimalTryingToChangeEvent.AddListener(OnAnimalTryingToChange);
         EventManager.OnAnimalChangedEvent.AddListener(OnAnimalTypeChanged);
+        EventManager.OnFeverStateChangedEvent.AddListener(OnFeverStateChanged);
     }
 
     void OnPlayGame()
@@ -66,6 +68,12 @@ public class KeyGuideComponent : MonoBehaviour
         }
     }
 
+    void OnFeverStateChanged(bool Enabled)
+    {
+        IsFeverState = Enabled;
+        EnableKeyGuide(IsFeverState == false);
+    }
+
     bool IsKeyGuideNeedToBeEnabled()
     {
         // 현재 Duration 이내이면 조건 확인하지 않고 항상 true
@@ -88,6 +96,12 @@ public class KeyGuideComponent : MonoBehaviour
 
         // 속도가 충분히 빠르면 보여주지 않음
         if(IsSpeedFasterThanShowSpeed == true)
+        {
+            return false;
+        }
+
+        // 피버 타임에는 보여주지 않음
+        if(IsFeverState == true)
         {
             return false;
         }

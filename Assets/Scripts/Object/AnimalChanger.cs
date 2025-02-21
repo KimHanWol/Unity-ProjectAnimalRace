@@ -12,10 +12,14 @@ public class AnimalChanger : RuningObject, InteractableInterface
     private bool bIsChanged = false;
     public Vector2 OverlapBoundary;
     public float MoveCenterSpeed;
-    public float ChangeEffectForce = 100f;
+    public string EmojiKey;
+    public float JumpDuration;
+
+    //동물이 가운데 위치로 돌아가는 데 걸리는 시간
+    public float DefaultMoveDuration = 2f;
 
     //InteractableInterface
-    public void Interaction(GameObject InteractObject)
+    public override void Interaction(GameObject InteractObject)
     {
         PlayerController OverlappedPlayer = InteractObject.GetComponent<PlayerController>();
         if (OverlappedPlayer != null)
@@ -23,7 +27,12 @@ public class AnimalChanger : RuningObject, InteractableInterface
             EventManager.Instance.OnAnimalTryingToChangeEvent?.Invoke();
             StartCoroutine(SwitchAnimal(InteractObject.GetComponent<PlayerController>()));
             bIsChanged = true;
+
+            EmojiComponent PlayerEmojiComponent = OverlappedPlayer.GetComponentInChildren<EmojiComponent>();
+            PlayerEmojiComponent.PlayEmojiAnimation(EmojiKey);
         }
+
+        base.Interaction(InteractObject);
     }
     //~InteractableInterface
 
@@ -41,64 +50,39 @@ public class AnimalChanger : RuningObject, InteractableInterface
 
     IEnumerator SwitchAnimal(PlayerController ColliderPlayer)
     {
-        PlayAnimalChangeEffect(ColliderPlayer);
-        yield return new WaitForSeconds(1f);
-        EndAnnimalChangeEffect(ColliderPlayer);
+        IsNeedToStopMove = true;
 
-        StartCoroutine(StartMoveAnimal(ColliderPlayer));
+        ColliderPlayer.PlayJumpEffect();
+
+        //TODO: AnimationComponent 로 옮기기
+        Rigidbody2D AnimalChangerRigidbody = gameObject.GetComponent<Rigidbody2D>();
+        AnimalChangerRigidbody.velocity = Vector2.zero;
+        AnimalChangerRigidbody.AddForce(new Vector2(0, 230f));
+
+        HunterController Hunter = GameManager.Instance.Hunter;
+        Hunter.PlayJumpEffect();
+
+        yield return new WaitForSeconds(JumpDuration);
+        IsNeedToStopMove = false;
+
+        MoveAnimal(ColliderPlayer);
         ColliderPlayer.ChangeAnimalOnPlay(CurrentAnimalData.AnimalType);
     }
 
-    private void PlayAnimalChangeEffect(PlayerController ColliderPlayer)
+    private void MoveAnimal(PlayerController ColliderPlayer)
     {
-        IsNeedToStopMove = true;
-
-        Rigidbody2D PlayerRigidbody = ColliderPlayer.GetComponent<Rigidbody2D>();
-        PlayerRigidbody.velocity = Vector2.zero;
-        PlayerRigidbody.AddForce(new Vector2(0, ChangeEffectForce));
-
-        Rigidbody2D AnimalChangerRigidbody = gameObject.GetComponent<Rigidbody2D>();
-        AnimalChangerRigidbody.velocity = Vector2.zero;
-        AnimalChangerRigidbody.AddForce(new Vector2(0, ChangeEffectForce));
-
-        HunterController Hunter = GameManager.Instance.Hunter;
-        Rigidbody2D HunterRigidbody = Hunter.gameObject.GetComponent<Rigidbody2D>();
-        HunterRigidbody.velocity = Vector2.zero;
-        HunterRigidbody.AddForce(new Vector2(0, ChangeEffectForce));
-    }
-
-    private void EndAnnimalChangeEffect(PlayerController ColliderPlayer)
-    {
-        IsNeedToStopMove = false;
-    }
-
-    IEnumerator StartMoveAnimal(PlayerController ColliderPlayer)
-    {
-        AnimalType PlayerAnimalType = ColliderPlayer.CurrentAnimalType;
-
-        //switch position
+        //switch position with animal changer
         Vector2 PlayerPosition = ColliderPlayer.transform.position;
         ColliderPlayer.transform.position = transform.position;
         transform.position = PlayerPosition;
 
+        AnimalType PlayerAnimalType = ColliderPlayer.CurrentAnimalType;
         AnimalData PlayerAnimalData = AnimalDataManager.Get().GetAnimalData(PlayerAnimalType);
         Animator.runtimeAnimatorController = PlayerAnimalData.Animator;
 
         StartCoroutine(DisableAnimalChanger());
 
-        // Move to zero
-        while (ColliderPlayer.transform.position.x > 0)
-        {
-            Vector2 NewPosition = ColliderPlayer.transform.position;
-            NewPosition.x -= MoveCenterSpeed * Time.deltaTime;
-            ColliderPlayer.transform.position = NewPosition;
-            yield return new WaitForFixedUpdate();
-        }
-
-        // Set to zero
-        Vector2 NewPostion = ColliderPlayer.transform.position;
-        NewPostion.x = 0;
-        ColliderPlayer.transform.position = NewPostion;
+        ColliderPlayer.MoveToDefaultPos(DefaultMoveDuration);
 
         SelfDestroy();
     }
@@ -134,11 +118,5 @@ public class AnimalChanger : RuningObject, InteractableInterface
             Color NewColor = new Color(OriginColor.r, OriginColor.g, OriginColor.b, 1 - FadingTime / Duration);
             Renderder.material.color = NewColor;
         }
-    }
-
-    private void SelfDestroy()
-    {
-        SpawnableObject SpawnableObject = GetComponent<SpawnableObject>();
-        SpawnableObject.IsDestroying = true;
     }
 }

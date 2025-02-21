@@ -79,7 +79,9 @@ public class GameManager : SingletonObject<GameManager>
             return;
         }
 
-        float CurrentVelocity = Player.GetVelocity();
+        float CurrentVelocity = Mathf.Abs(Player.GetVelocity());
+
+        //TODO: 피버 타임이면 점수 더 빠르게 오르기
 
         GameScore += CurrentVelocity * Time.deltaTime * 100f;
 

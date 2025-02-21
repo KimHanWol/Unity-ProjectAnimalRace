@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SpawnableObject : MonoBehaviour
+public class SpawnableComponent : MonoBehaviour
 {
     public bool IsDestroying = false;
 }
