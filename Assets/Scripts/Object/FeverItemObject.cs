@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class FeverItemObject : RuningObject
+public class FeverItemObject : SpawnableObject
 {
     //InteractableInterface
     public override void Interaction(GameObject InteractObject)

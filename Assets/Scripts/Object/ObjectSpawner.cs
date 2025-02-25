@@ -126,7 +126,7 @@ public class ObjectSpawner : MonoBehaviour
             }
             else
             {
-                SpawnableComponent SpawnableObject = SpawnedObject.GetComponent<SpawnableComponent>();
+                SpawnableObject SpawnableObject = SpawnedObject.GetComponent<SpawnableObject>();
                 if (SpawnableObject == null || SpawnableObject.IsDestroying == true)
                 {
                     IsNeedToRemove = true;

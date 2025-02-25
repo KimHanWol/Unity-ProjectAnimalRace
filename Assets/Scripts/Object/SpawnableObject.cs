@@ -1,13 +1,15 @@
 using System.Collections;
 using UnityEngine;
 
-public class RuningObject : MonoBehaviour, InteractableInterface
+public class SpawnableObject : MonoBehaviour, InteractableInterface
 {
     public float MovementSpeedRate = 1;
     public bool IsActivated = false;
     public float DestroyDuration = 0.5f;
     protected bool IsNeedToStopWhenActivated = true;
     protected bool IsNeedToStopMove = false;
+
+    public bool IsDestroying = false;
 
     private Rigidbody2D RigidBody2D;
 
@@ -56,13 +58,12 @@ public class RuningObject : MonoBehaviour, InteractableInterface
             CurrentTime += 0.1f;
         }
         SpriteRenderer.color = new Color(SpriteRenderer.color.r, SpriteRenderer.color.g, SpriteRenderer.color.b, 0f);
+
+        IsDestroying = true;
     }
 
     protected void SelfDestroy()
     {
-        SpawnableComponent SpawnableObject = GetComponent<SpawnableComponent>();
-        SpawnableObject.IsDestroying = true;
-
         StartCoroutine(PlayDisappearEffect_Internal());
     }
 }

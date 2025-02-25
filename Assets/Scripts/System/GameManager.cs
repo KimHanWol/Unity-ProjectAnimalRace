@@ -11,7 +11,7 @@ public class GameManager : SingletonObject<GameManager>
     public UIManager UIManager;
     public SoundManager SoundManager;
 
-    public RuningObject[] SpawnedObjectList;
+    public SpawnableObject[] SpawnedObjectList;
 
     // 타이틀이 나오고 입력을 받지 않는 시간
     public float TitleNoInputDuration = 2f;
@@ -107,7 +107,7 @@ public class GameManager : SingletonObject<GameManager>
     private void OnAnimalChangeEffectStateChanged(bool Enabled)
     {
         // Object Spawner
-        foreach (RuningObject SpawnedObject in SpawnedObjectList)
+        foreach (SpawnableObject SpawnedObject in SpawnedObjectList)
         {
             SpawnedObject.EnableMovement(Enabled);
         }

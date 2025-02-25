@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class AnimalChanger : RuningObject, InteractableInterface
+public class AnimalChanger : SpawnableObject, InteractableInterface
 {
     private AnimalDataManager AnimalDataManager;
     private Animator Animator;
