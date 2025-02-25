@@ -52,15 +52,15 @@ public class AnimalChanger : RuningObject, InteractableInterface
     {
         IsNeedToStopMove = true;
 
-        ColliderPlayer.PlayJumpEffect();
+        CustomAnimationComponent PlayerMoveAnimComponent = ColliderPlayer.GetComponentInChildren<CustomAnimationComponent>();
+        PlayerMoveAnimComponent.PlayJumpEffect();
 
-        //TODO: AnimationComponent 로 옮기기
-        Rigidbody2D AnimalChangerRigidbody = gameObject.GetComponent<Rigidbody2D>();
-        AnimalChangerRigidbody.velocity = Vector2.zero;
-        AnimalChangerRigidbody.AddForce(new Vector2(0, 230f));
+        CustomAnimationComponent MoveAnimComponent = GetComponentInChildren<CustomAnimationComponent>();
+        MoveAnimComponent.PlayJumpEffect();
 
         HunterController Hunter = GameManager.Instance.Hunter;
-        Hunter.PlayJumpEffect();
+        CustomAnimationComponent HunterMoveAnimComponent = Hunter.GetComponentInChildren<CustomAnimationComponent>();
+        HunterMoveAnimComponent.PlayJumpEffect();
 
         yield return new WaitForSeconds(JumpDuration);
         IsNeedToStopMove = false;

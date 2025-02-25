@@ -476,33 +476,18 @@ public class PlayerController : GameObjectController, FeverInterface
     }
 
     // FeverInterface
-    public override void FeverInitialize()
-    {
-        base.FeverInitialize();
-
-        KeyGuideComponent KeyGuideComponent = GetComponent<KeyGuideComponent>();
-    }
-
     protected override IEnumerator FeverReadyForStart_Internal(float FirstDelay, float GrowDuration, float DelayAfterGrown, float TurnDuration, string EmojiKey, float EmojiDuration, float LastDuration)
     {
         yield return new WaitForSeconds(FirstDelay);
 
+        CustomAnimationComponent MovementAnimationComponent = GetComponentInChildren<CustomAnimationComponent>();
+
         // 플레이어 크기 확대
-        float CurrentTime = 0f;
-        while (CurrentTime < GrowDuration)
-        {
-            float NewScale = 1f + CurrentTime / GrowDuration * (FeverMaxSizeScale - 1);
-            transform.localScale = new Vector3(NewScale, NewScale, NewScale);
-
-            yield return new WaitForSeconds(0.01f);
-            CurrentTime += 0.01f;
-        }
-        transform.localScale = new Vector3(FeverMaxSizeScale, FeverMaxSizeScale, FeverMaxSizeScale);
-
+        MovementAnimationComponent.GrowCharacter(true, GrowDuration);
         yield return new WaitForSeconds(DelayAfterGrown);
 
         // 뒤돌기
-        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, 180f, 0f));
+        MovementAnimationComponent.TurnReverse(true);
         yield return new WaitForSeconds(TurnDuration);
 
         // 피버 이모지
@@ -517,30 +502,22 @@ public class PlayerController : GameObjectController, FeverInterface
         MoveToDefaultPos(FinishFirstDelay);
         yield return new WaitForSeconds(FinishFirstDelay);
 
-        float MaxScale = transform.localScale.x;
-        float ShrinkUnit = (MaxScale - 1f) * 0.01f / ShrinkDuration;
+        CustomAnimationComponent MovementAnimationComponent = GetComponentInChildren<CustomAnimationComponent>();
 
         // 플레이어 크기 축소
-        float CurrentTime = 0f;
-        while (CurrentTime < ShrinkDuration)
-        {
-            transform.localScale -= new Vector3(ShrinkUnit, ShrinkUnit, ShrinkUnit);
-
-            yield return new WaitForSeconds(0.01f);
-            CurrentTime += 0.01f;
-        }
-        transform.localScale = new Vector3(1f, 1f, 1f);
-
+        MovementAnimationComponent.GrowCharacter(false, ShrinkDuration);
         yield return new WaitForSeconds(DelayAfterShrink);
 
+        // 이모지
         EmojiComponent EmojiComponent = GetComponentInChildren<EmojiComponent>();
         EmojiComponent.PlayEmojiAnimation(FinishEmojiKey);
 
-        PlayJumpEffect();
-
+        // 점프
+        MovementAnimationComponent.PlayJumpEffect();
         yield return new WaitForSeconds(FinishEmojiDuration);
 
-        transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
+        // 방향 전환
+        MovementAnimationComponent.TurnReverse(false);
         yield return new WaitForSeconds(FinishLastDuration);
     }
     // ~ FeverInterface

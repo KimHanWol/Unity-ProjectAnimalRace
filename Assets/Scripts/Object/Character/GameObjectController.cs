@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using static UnityEngine.RuleTile.TilingRuleOutput;
@@ -8,9 +9,6 @@ public class GameObjectController : MonoBehaviour, FeverInterface
     protected bool IsMoveEnabled = false;
 
     public Vector3 DefaultPosition;
-
-    // TODO: 애니메이션 컴포넌트 만들어서 옮기기
-    public float JumpEffectForce = 100f;
 
     protected bool IsFever = false;
 
@@ -51,13 +49,6 @@ public class GameObjectController : MonoBehaviour, FeverInterface
         }
 
         transform.position = DefaultPosition;
-    }
-
-    public void PlayJumpEffect()
-    {
-        Rigidbody2D PlayerRigidbody = GetComponent<Rigidbody2D>();
-        PlayerRigidbody.velocity = Vector2.zero;
-        PlayerRigidbody.AddForce(new Vector2(0, JumpEffectForce));
     }
 
     // FeverInterface

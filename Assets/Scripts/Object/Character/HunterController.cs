@@ -184,21 +184,21 @@ public class HunterController : GameObjectController
         MoveToDefaultPos(FirstDelay);
         yield return new WaitForSeconds(FirstDelay);
 
-        yield return new WaitForSeconds(GrowDuration + DelayAfterGrown);
-
         // 이모지 재생
         EmojiComponent EmojiComponent = GetComponentInChildren<EmojiComponent>();
         EmojiComponent.PlayEmojiAnimation(EmojiKey);
 
-        // 점프
-        PlayJumpEffect();
+        // 점프 
+        CustomAnimationComponent MovementAnimationComponent = GetComponentInChildren<CustomAnimationComponent>();
+        MovementAnimationComponent.PlayJumpEffect();
+        yield return new WaitForSeconds(GrowDuration + DelayAfterGrown);
+
+        MovementAnimationComponent.PlayShakeEffect(EmojiDuration + TurnDuration + LastDuration);
         yield return new WaitForSeconds(EmojiDuration + TurnDuration);
 
-        // TODO: AnimationComponent 로 옮기기
-        // 뒤돌기
-        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, 180f, 0f));
-
+        MovementAnimationComponent.TurnReverse(true);
         yield return new WaitForSeconds(LastDuration);
+
         Animator.SetBool("IsRunning", true);
     }
 
@@ -210,7 +210,8 @@ public class HunterController : GameObjectController
         yield return new WaitForSeconds(ShrinkDuration);
 
         //뒤돌기
-        transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
+        CustomAnimationComponent MovementAnimationComponent = GetComponentInChildren<CustomAnimationComponent>();
+        MovementAnimationComponent.TurnReverse(false);
         yield return new WaitForSeconds(DelayAfterShrink);
 
         EmojiComponent EmojiComponent = GetComponentInChildren<EmojiComponent>();
