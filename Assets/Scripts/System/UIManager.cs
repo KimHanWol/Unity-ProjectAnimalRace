@@ -24,11 +24,33 @@ public class UIManager : SingletonObject<UIManager>
     private bool IsAnyButtonPressed = false;
     private float TitleAlpha = 1f;
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        EventManager.Instance.OnPlaySFXPlayedEvent.AddListener(OnRunTitle);
+        SaveSystem.Instance.OnSaveDataLoadedEvent.AddListener(OnSaveDataLoaded);
+    }
+
     void Start()
     {
         OnGameStart(false);
+    }
 
-        EventManager.Instance.OnPlaySFXPlayedEvent.AddListener(OnRunTitle);
+    private void OnSaveDataLoaded(SaveData LoadedSaveData)
+    {
+        Slider[] SliderList = FindObjectsOfType<Slider>(true);
+        foreach (Slider Slider in SliderList)
+        {
+            if (Slider.name == "Slider_BGM")
+            {
+                Slider.value = LoadedSaveData.BGMVolume;
+            }
+            else if (Slider.name == "Slider_SFX")
+            {
+                Slider.value = LoadedSaveData.SFXVolume;
+            }
+        }
     }
 
     void Update()

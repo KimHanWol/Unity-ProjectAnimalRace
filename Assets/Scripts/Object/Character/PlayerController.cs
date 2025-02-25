@@ -109,7 +109,7 @@ public class PlayerController : GameObjectController, FeverInterface
 
     private void UpdateAnimator()
     {
-        CurrentAnimalData = AnimalDataManager.Get().GetAnimalData(CurrentAnimalType);
+        CurrentAnimalData = AnimalDataManager.Instance.GetAnimalData(CurrentAnimalType);
         ChangeAnimatorController(CurrentAnimalData.Animator);
         CurrentInputStackIndex = 0;
     }
@@ -411,7 +411,7 @@ public class PlayerController : GameObjectController, FeverInterface
             MovePlayer();
         }
 
-        if (CurrentInputStackIndex >= AnimalDataManager.Get().GetInputStackCount(CurrentAnimalData.InputType))
+        if (CurrentInputStackIndex >= AnimalDataManager.Instance.GetInputStackCount(CurrentAnimalData.InputType))
         {
             CurrentInputStackIndex = 0;
         }
@@ -419,7 +419,7 @@ public class PlayerController : GameObjectController, FeverInterface
 
     private void MovePlayer()
     {
-        Vector2 MoveForce = new Vector2(AnimalDataManager.Get().GetVelocity(CurrentAnimalData.InputType), 0);
+        Vector2 MoveForce = new Vector2(AnimalDataManager.Instance.GetVelocity(CurrentAnimalData.InputType), 0);
 
         // 피버타임일 경우 반대로
         if (IsFever == true)

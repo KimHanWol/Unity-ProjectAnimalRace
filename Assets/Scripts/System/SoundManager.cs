@@ -20,12 +20,18 @@ public struct SFXAudioData
     public AudioClip AudioClip;
 }
 
-public class SoundManager : MonoBehaviour
+[Serializable]
+public struct SoundSettingData
+{
+    public float BGMVolume;
+    public float SFXVolume;
+}
+
+
+public class SoundManager : SingletonObject<SoundManager>
 {
     //준비 브금이 끝나기 전에 미리 틀어야 하는 시간
     public float StartSFXOffset = 0.25f;
-
-    public static SoundManager instance;
 
     public enum EBGM
     {
@@ -52,17 +58,13 @@ public class SoundManager : MonoBehaviour
     public UnityEvent<EBGM> OnBGMChanged;
     public UnityEvent<ESFX> OnSFXChanged;
 
-    private void Awake()
+    public SoundSettingData SoundSettingData;
+
+    protected override void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        base.Awake();
+
+        SaveSystem.Instance.OnSaveDataLoadedEvent.AddListener(OnSaveDataLoaded);
     }
 
     void Start()
@@ -70,6 +72,12 @@ public class SoundManager : MonoBehaviour
         BGMQueue = new List<AudioClip>();
 
         StartCoroutine(WaitNextBGMLoop());
+    }
+
+    private void OnSaveDataLoaded(SaveData LoadedSaveData)
+    {
+        BGMAudioSource.volume = SoundSettingData.BGMVolume = LoadedSaveData.BGMVolume;
+        SFXAudioSource.volume = SoundSettingData.SFXVolume = LoadedSaveData.SFXVolume;
     }
 
     public void PlayBGM(EBGM BGMIndex, bool PlayNow)
@@ -177,11 +185,11 @@ public class SoundManager : MonoBehaviour
 
     public void OnBGMVolumeChanged(Slider BGMSlider)
     {
-        BGMAudioSource.volume = BGMSlider.value;
+        SoundSettingData.BGMVolume = BGMAudioSource.volume = BGMSlider.value;
     }
 
     public void OnSFXVolumeChanged(Slider SFXSlider)
     {
-        SFXAudioSource.volume = SFXSlider.value;
+        SoundSettingData.SFXVolume = SFXAudioSource.volume = SFXSlider.value;
     }
 }

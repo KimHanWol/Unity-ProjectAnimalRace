@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum InputType
@@ -37,31 +38,23 @@ public class AnimalData
     public RuntimeAnimatorController Animator;
 }
 
-public class AnimalDataManager : MonoBehaviour
+public class AnimalDataManager : SingletonObject<AnimalDataManager>
 {
-    private static AnimalDataManager Instance;
-
-    static public AnimalDataManager Get()
-    {
-        return Instance;
-    }
-
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            // 다른 인스턴스 가 이미 생성된 경우 삭제
-            Destroy(gameObject);
-            return;
-        }
-    }
-
     public InputData[] InputDataList;
     public AnimalData[] AnimalDataList;
+    public List<string> UnlockedAnimalList;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        SaveSystem.Instance.OnSaveDataLoadedEvent.AddListener(OnSaveDataLoaded);
+    }
+
+    private void OnSaveDataLoaded(SaveData LoadedSaveData)
+    {
+        UnlockedAnimalList = LoadedSaveData.UnlockedAnimalKeyList;
+    }
 
     public AnimalData GetAnimalData(AnimalType TargetAnimalType)
     {

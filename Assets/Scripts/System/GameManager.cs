@@ -28,11 +28,16 @@ public class GameManager : SingletonObject<GameManager>
 
     private EGameState GameState;
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        EventManager.Instance.OnGameOverEvent.AddListener(OnGameOver);
+    }
+
     void Start()
     {
         SoundManager.PlayBGM(SoundManager.EBGM.BGM_START, true);
-
-        EventManager.Instance.OnGameOverEvent.AddListener(OnGameOver);
 
         OnGameStart();
     }
@@ -119,6 +124,9 @@ public class GameManager : SingletonObject<GameManager>
 
         GameState = EGameState.State_Title_NoInput;
         StartCoroutine(WaitTitleReady());
+
+        //Data Load
+        SaveSystem.Instance.LoadData();
 
         SoundManager.PlayBGM(SoundManager.EBGM.BGM_START, true);
     }

@@ -60,8 +60,7 @@ public class KeyGuideComponent : MonoBehaviour
         IsAnimalTryingToChange = false;
 
         InputType CurrentInputType = PlayerController.GetCurrentAnimalInputType();
-        AnimalDataManager AnimalDataManager = AnimalDataManager.Get();
-        CurrentInputAnimationClip = AnimalDataManager.GetInputTypeAnimationClip(CurrentInputType);
+        CurrentInputAnimationClip = AnimalDataManager.Instance.GetInputTypeAnimationClip(CurrentInputType);
         if(IsKeyGuideActivated == true)
         {
             KeyGuideAnimator.Play(CurrentInputAnimationClip.name, 0, 0f);

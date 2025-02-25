@@ -40,7 +40,7 @@ public class AnimalChanger : RuningObject, InteractableInterface
     new void Start()
     {
         base.Start();
-        AnimalDataManager = AnimalDataManager.Get();
+        AnimalDataManager = AnimalDataManager.Instance;
         BoxCollider2D = GetComponent<BoxCollider2D>();
         Animator = GetComponent<Animator>();
 
@@ -77,7 +77,7 @@ public class AnimalChanger : RuningObject, InteractableInterface
         transform.position = PlayerPosition;
 
         AnimalType PlayerAnimalType = ColliderPlayer.CurrentAnimalType;
-        AnimalData PlayerAnimalData = AnimalDataManager.Get().GetAnimalData(PlayerAnimalType);
+        AnimalData PlayerAnimalData = AnimalDataManager.Instance.GetAnimalData(PlayerAnimalType);
         Animator.runtimeAnimatorController = PlayerAnimalData.Animator;
 
         StartCoroutine(DisableAnimalChanger());
