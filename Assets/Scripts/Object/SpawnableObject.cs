@@ -3,44 +3,18 @@ using UnityEngine;
 
 public class SpawnableObject : MonoBehaviour, InteractableInterface
 {
-    public float MovementSpeedRate = 1;
     public bool IsActivated = false;
     public float DestroyDuration = 0.5f;
-    protected bool IsNeedToStopWhenActivated = true;
-    protected bool IsNeedToStopMove = false;
-
-    public bool IsDestroying = false;
-
-    private Rigidbody2D RigidBody2D;
-
-    public void Start()
-    {
-        EventManager.Instance.OnPlayerAcceleratedEvent.AddListener(OnPlayerAccelerated);
-
-        RigidBody2D = GetComponent<Rigidbody2D>();
-    }
-
-    void OnPlayerAccelerated(float MoveForce)
-    {
-        if(IsNeedToStopMove == false)
-        {
-            RigidBody2D.AddForce(new Vector2(-MoveForce * MovementSpeedRate, 0));
-        }
-    }
-
-    public virtual void EnableMovement(bool Enabled)
-    {
-        IsNeedToStopMove = !Enabled;
-
-        if(IsNeedToStopMove == true)
-        {
-            RigidBody2D.velocity = Vector2.zero;
-        }
-    }
 
     //InteractableInterface
     public virtual void Interaction(GameObject InteractObject) { }
     //~InteractableInterface
+
+    //TODO: 게임 종료 시에는 아이템 바로 사라지도록 만들기
+    public virtual bool IsSpawnable()
+    {
+        return true;
+    }
 
     private IEnumerator PlayDisappearEffect_Internal()
     {
@@ -59,7 +33,7 @@ public class SpawnableObject : MonoBehaviour, InteractableInterface
         }
         SpriteRenderer.color = new Color(SpriteRenderer.color.r, SpriteRenderer.color.g, SpriteRenderer.color.b, 0f);
 
-        IsDestroying = true;
+        Destroy(gameObject);
     }
 
     protected void SelfDestroy()

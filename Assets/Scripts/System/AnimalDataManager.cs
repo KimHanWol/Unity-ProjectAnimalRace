@@ -42,7 +42,7 @@ public class AnimalDataManager : SingletonObject<AnimalDataManager>
 {
     public InputData[] InputDataList;
     public AnimalData[] AnimalDataList;
-    public List<string> UnlockedAnimalList;
+    public List<AnimalType> UnlockedAnimalList;
 
     protected override void Awake()
     {
@@ -53,7 +53,7 @@ public class AnimalDataManager : SingletonObject<AnimalDataManager>
 
     private void OnSaveDataLoaded(SaveData LoadedSaveData)
     {
-        UnlockedAnimalList = LoadedSaveData.UnlockedAnimalKeyList;
+        UnlockedAnimalList = LoadedSaveData.UnlockedAnimalList;
     }
 
     public AnimalData GetAnimalData(AnimalType TargetAnimalType)
@@ -68,16 +68,16 @@ public class AnimalDataManager : SingletonObject<AnimalDataManager>
         return null;
     }
 
-    public AnimalData GetRandomAnimalData(AnimalType CurrentAnimalType)
+    public AnimalData GetUnlockedAnimalDataByRandom(AnimalType CurrentAnimalType)
     {
         int TargetAnimalDataIndex = 0;
         do
         {
-            TargetAnimalDataIndex = Random.Range(0, AnimalDataList.Length);
+            TargetAnimalDataIndex = Random.Range(0, UnlockedAnimalList.Count);
         }
-        while (TargetAnimalDataIndex == GetAnimalIndex(CurrentAnimalType));
+        while (UnlockedAnimalList[TargetAnimalDataIndex] == CurrentAnimalType);
 
-        return AnimalDataList[TargetAnimalDataIndex];
+        return GetAnimalData(UnlockedAnimalList[TargetAnimalDataIndex]);
     }
 
     private int GetAnimalIndex(AnimalType TargetAnimalType)

@@ -112,18 +112,6 @@ public class GameManager : SingletonObject<GameManager>
         OnPlay();
     }
 
-    private void OnAnimalChangeEffectStateChanged(bool Enabled)
-    {
-        // Object Spawner
-        foreach (SpawnableObject SpawnedObject in SpawnedObjectList)
-        {
-            SpawnedObject.EnableMovement(Enabled);
-        }
-
-        // Map Manager
-        MapManager.EnableMovement(Enabled);
-    }
-
     public void OnGameStart()
     {
         GameScore = 0;

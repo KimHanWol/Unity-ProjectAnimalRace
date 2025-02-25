@@ -36,21 +36,34 @@ public class AnimalChanger : SpawnableObject, InteractableInterface
     }
     //~InteractableInterface
 
-    // Start is called before the first frame update
-    new void Start()
+    void Start()
     {
-        base.Start();
         AnimalDataManager = AnimalDataManager.Instance;
         BoxCollider2D = GetComponent<BoxCollider2D>();
         Animator = GetComponent<Animator>();
 
-        CurrentAnimalData = AnimalDataManager.GetRandomAnimalData(PlayerController.Get().GetCurrentAnimalType());
+        CurrentAnimalData = AnimalDataManager.GetUnlockedAnimalDataByRandom(PlayerController.Get().GetCurrentAnimalType());
         Animator.runtimeAnimatorController = CurrentAnimalData.Animator;
+    }
+
+    public override bool IsSpawnable()
+    {
+        // 기본 캐릭터 밖에 언락이 되지 않았을 때 스폰 불가능
+        if (AnimalDataManager.Instance.UnlockedAnimalList.Count <= 1)
+        {
+            if(GameManager.Instance.Player.CurrentAnimalType == AnimalDataManager.Instance.UnlockedAnimalList[0])
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     IEnumerator SwitchAnimal(PlayerController ColliderPlayer)
     {
-        IsNeedToStopMove = true;
+        MoveToPlayerComponent MoveToPlayerComponent = GetComponentInChildren<MoveToPlayerComponent>();
+        MoveToPlayerComponent.EnableMovement(false);
 
         CustomAnimationComponent PlayerMoveAnimComponent = ColliderPlayer.GetComponentInChildren<CustomAnimationComponent>();
         PlayerMoveAnimComponent.PlayJumpEffect();
@@ -63,7 +76,7 @@ public class AnimalChanger : SpawnableObject, InteractableInterface
         HunterMoveAnimComponent.PlayJumpEffect();
 
         yield return new WaitForSeconds(JumpDuration);
-        IsNeedToStopMove = false;
+        MoveToPlayerComponent.EnableMovement(true);
 
         MoveAnimal(ColliderPlayer);
         ColliderPlayer.ChangeAnimalOnPlay(CurrentAnimalData.AnimalType);

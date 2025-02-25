@@ -23,15 +23,16 @@ public class ObjectSpawner : MonoBehaviour
 
     public SpawnData[] SpawnDataList;
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        EventManager.Instance.OnPlayGameEvent.AddListener(OnPlayGame);
+        EventManager.Instance.OnGameOverEvent.AddListener(OnGameOver);
+        EventManager.Instance.OnFeverStateChangedEvent.AddListener(OnFeverStateChanged);
+    }
+
     void Start()
     {
         SpawnedObjectList = new List<GameObject>();
-
-        EventManager EventManager = EventManager.Instance;
-        EventManager.OnPlayGameEvent.AddListener(OnPlayGame);
-        EventManager.OnGameOverEvent.AddListener(OnGameOver);
-        EventManager.OnFeverStateChangedEvent.AddListener(OnFeverStateChanged);
     }
 
     private void OnPlayGame()
@@ -60,12 +61,7 @@ public class ObjectSpawner : MonoBehaviour
         else
         {
             StopAllCoroutines();
-            for (int i = 0; i < SpawnedObjectList.Count; i++)
-            {
-                GameObject SpawnedObject = SpawnedObjectList[i];
-                SpawnedObjectList.RemoveSwapBack(SpawnedObject);
-                Destroy(SpawnedObject);
-            }
+            CheckSpawnedObjectList();
         }
     }
 
@@ -86,26 +82,40 @@ public class ObjectSpawner : MonoBehaviour
 
     private void TrySpawn()
     {
-        CheckSpawnedObjectList();
-
-        if (SpawnOneByOne == true && SpawnedObjectList.Count > 0)
+        if(IsSpawnable() == false)
         {
             return;
         }
 
+        // 스폰 불가능한 오브젝트 제외
+        List<SpawnData> SpawnableObjectDataList = new List<SpawnData>();
+        for (int i = 0; i < SpawnDataList.Length; i++)
+        {
+            SpawnableObject SpawnableObject = SpawnDataList[i].TargetObject.GetComponent<SpawnableObject>();
+            if (SpawnableObject.IsSpawnable() == true)
+            {
+                SpawnableObjectDataList.Add(SpawnDataList[i]);
+            }
+        }
+
+        if (SpawnableObjectDataList.Count <= 0)
+        {
+            Debug.Log("Spawn Failed : There's no spawnable Object");
+            return;
+        }
+
+        float RandomValue = Random.Range(0, SpawnableObjectDataList.Count);
+
         GameObject SpawnedObject = null;
-
-        float TotalPercentage = SpawnDataList.Length;
-        float RandomValue = Random.Range(0, TotalPercentage);
-
         float CurrentPercentage = 0;
-        foreach (SpawnData InSpawnData in SpawnDataList)
+        foreach (SpawnData InSpawnData in SpawnableObjectDataList)
         {
             CurrentPercentage += InSpawnData.Probability;
             if (RandomValue < CurrentPercentage)
             {
                 SpawnedObject = Instantiate(InSpawnData.TargetObject);
                 SpawnedObject.transform.position = transform.position;
+                Debug.Log("Spawn Success : " + InSpawnData.TargetObject.name);
                 break;
             }
         }
@@ -118,26 +128,22 @@ public class ObjectSpawner : MonoBehaviour
         for (int i = 0; i < SpawnedObjectList.Count; i++)
         {
             GameObject SpawnedObject = SpawnedObjectList[i];
-
-            bool IsNeedToRemove = false;
             if (SpawnedObject == null)
             {
-                IsNeedToRemove = true;
-            }
-            else
-            {
-                SpawnableObject SpawnableObject = SpawnedObject.GetComponent<SpawnableObject>();
-                if (SpawnableObject == null || SpawnableObject.IsDestroying == true)
-                {
-                    IsNeedToRemove = true;
-                }
-            }
-
-            if (IsNeedToRemove == true)
-            {
                 SpawnedObjectList.RemoveSwapBack(SpawnedObject);
-                Destroy(SpawnedObject);
             }
         }
+    }
+
+    private bool IsSpawnable()
+    {
+        CheckSpawnedObjectList();
+
+        if (SpawnOneByOne == true && SpawnedObjectList.Count > 0)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -8,8 +8,8 @@ public class SaveData
 {
     public SaveData()
     {
-        UnlockedAnimalKeyList = new List<string>();
-        UnlockedAnimalKeyList.Add("Dog");
+        UnlockedAnimalList = new List<AnimalType>();
+        UnlockedAnimalList.Add(AnimalType.Dog);
 
         BGMVolume = 0.7f;
         SFXVolume = 0.7f;
@@ -18,7 +18,7 @@ public class SaveData
     }
 
     //Unlocked Animal
-    public List<string> UnlockedAnimalKeyList;
+    public List<AnimalType> UnlockedAnimalList;
 
     //Sound Setting
     public float BGMVolume;
@@ -78,9 +78,9 @@ public class SaveSystem : SingletonObject<SaveSystem>
     private void LogCurrentData()
     {
         string LogString = "[UNLOCKED ANIMAL LIST] \n";
-        for (int i = 0; i < CurrentSaveData.UnlockedAnimalKeyList.Count; i++)
+        for (int i = 0; i < CurrentSaveData.UnlockedAnimalList.Count; i++)
         {
-            LogString += CurrentSaveData.UnlockedAnimalKeyList[i] + "\n";
+            LogString += CurrentSaveData.UnlockedAnimalList[i] + "\n";
         }
         Debug.Log(LogString);
 
@@ -97,7 +97,7 @@ public class SaveSystem : SingletonObject<SaveSystem>
     private void CollectData()
     {
         // Unlocked Animal
-        CurrentSaveData.UnlockedAnimalKeyList = AnimalDataManager.Instance.UnlockedAnimalList;
+        CurrentSaveData.UnlockedAnimalList = AnimalDataManager.Instance.UnlockedAnimalList;
 
         // Sound Setting
         CurrentSaveData.BGMVolume = SoundManager.Instance.SoundSettingData.BGMVolume;

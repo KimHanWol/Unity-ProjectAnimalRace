@@ -9995,7 +9995,7 @@ MonoBehaviour:
   - AnimalType: 11
     InputType: 9
     Animator: {fileID: 9100000, guid: 776c8c51fe35f044b834db7c4ecb489f, type: 2}
-  UnlockedAnimalList: []
+  UnlockedAnimalList: 
 --- !u!1 &1363013145
 GameObject:
   m_ObjectHideFlags: 0
@@ -10493,9 +10493,9 @@ MonoBehaviour:
   SpawnOneByOne: 1
   SpawnDataList:
   - TargetObject: {fileID: 6599046169947675177, guid: 1cad7bb55297bc6498864a8c75c3757c, type: 3}
-    Probability: 0.2
+    Probability: 0
   - TargetObject: {fileID: 5946724224848709668, guid: f3920c8510c2dcc45b9d44e272bbfc14, type: 3}
-    Probability: 0.2
+    Probability: 1
 --- !u!1 &1494851864
 GameObject:
   m_ObjectHideFlags: 0
@@ -11243,6 +11243,8 @@ MonoBehaviour:
   SoundManager: {fileID: 1801995442}
   SpawnedObjectList: []
   TitleNoInputDuration: 2
+  GameScore: 0
+  HighScore: 0
 --- !u!1 &1568323216
 GameObject:
   m_ObjectHideFlags: 0
