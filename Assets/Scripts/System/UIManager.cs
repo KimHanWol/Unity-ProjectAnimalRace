@@ -195,8 +195,10 @@ public class UIManager : SingletonObject<UIManager>
         ScoreInGameUI.SetActive(true);
     }
 
-    public void OnGameOver(int NewScore)
+    public void OnGameOver(int NewScore, bool IsNewRecord)
     {
+        //TODO: New Record 효과 추가하기
+
         ScoreBoardUI.SetActive(true);
         Text[] ScoreboardUITexts = ScoreBoardUI.GetComponentsInChildren<Text>();
         if (ScoreboardUITexts.Length > 1)

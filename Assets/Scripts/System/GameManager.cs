@@ -16,7 +16,8 @@ public class GameManager : SingletonObject<GameManager>
     // 타이틀이 나오고 입력을 받지 않는 시간
     public float TitleNoInputDuration = 2f;
 
-    private float GameScore = 0;
+    public float GameScore = 0;
+    public int HighScore = 0;
 
     enum EGameState
     {
@@ -33,13 +34,20 @@ public class GameManager : SingletonObject<GameManager>
         base.Awake();
 
         EventManager.Instance.OnGameOverEvent.AddListener(OnGameOver);
+        SaveSystem.Instance.OnSaveDataLoadedEvent.AddListener(OnSaveDataLoaded);
     }
 
     void Start()
     {
-        SoundManager.PlayBGM(SoundManager.EBGM.BGM_START, true);
+        //Data Load
+        SaveSystem.Instance.LoadData();
 
         OnGameStart();
+    }
+
+    void OnSaveDataLoaded(SaveData LoadedSaveData)
+    {
+        HighScore = LoadedSaveData.HighScore;
     }
 
     void Update()
@@ -125,9 +133,6 @@ public class GameManager : SingletonObject<GameManager>
         GameState = EGameState.State_Title_NoInput;
         StartCoroutine(WaitTitleReady());
 
-        //Data Load
-        SaveSystem.Instance.LoadData();
-
         SoundManager.PlayBGM(SoundManager.EBGM.BGM_START, true);
     }
 
@@ -143,9 +148,17 @@ public class GameManager : SingletonObject<GameManager>
 
     private void OnGameOver()
     {
-        UIManager.OnGameOver((int)GameScore);
+        bool IsNewRecord = (int)GameScore > HighScore;
+        if (IsNewRecord == true)
+        {
+            HighScore = (int)GameScore;
+            SaveSystem.Instance.SaveData();
+        }
 
+        UIManager.OnGameOver((int)GameScore, IsNewRecord);
         SoundManager.PlayBGM(SoundManager.EBGM.BGM_GAMEOVER, true);
+
+        
     }
 
     IEnumerator WaitTitleReady()
