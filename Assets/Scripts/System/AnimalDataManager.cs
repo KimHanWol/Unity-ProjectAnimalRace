@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public enum InputType
 {
@@ -49,11 +50,22 @@ public class AnimalDataManager : SingletonObject<AnimalDataManager>
         base.Awake();
 
         SaveSystem.Instance.OnSaveDataLoadedEvent.AddListener(OnSaveDataLoaded);
+        EventManager.Instance.OnNewAnimalUnlockStartEvent.AddListener(OnNewAnimalUnlocked);
     }
 
     private void OnSaveDataLoaded(SaveData LoadedSaveData)
     {
         UnlockedAnimalList = LoadedSaveData.UnlockedAnimalList;
+    }
+
+    private void OnNewAnimalUnlocked(AnimalType UnlockedAnimalType)
+    {
+        UnlockedAnimalList.Add(UnlockedAnimalType);
+        string LogString = "";
+        LogString += "New animal unlocked : " + UnlockedAnimalType.ToString() + "\n";
+        LogString += "Current unlocked animal count ( " + UnlockedAnimalList.Count + " / " + AnimalDataList.Length + " )\n";
+        Debug.Log(LogString);
+        SaveSystem.Instance.SaveData();
     }
 
     public AnimalData GetAnimalData(AnimalType TargetAnimalType)
@@ -78,6 +90,27 @@ public class AnimalDataManager : SingletonObject<AnimalDataManager>
         while (UnlockedAnimalList[TargetAnimalDataIndex] == CurrentAnimalType);
 
         return GetAnimalData(UnlockedAnimalList[TargetAnimalDataIndex]);
+    }
+
+    public AnimalData GetLockedAnimalDataByRandom()
+    {
+        int LockedAnimalCount = AnimalDataList.Length - UnlockedAnimalList.Count;
+        int TargetAnimalDataIndex = Random.Range(0, LockedAnimalCount);
+        foreach (AnimalData AnimalData in AnimalDataList)
+        {
+            if (UnlockedAnimalList.Contains(AnimalData.AnimalType) == true)
+            {
+                continue;
+            }
+
+            if (TargetAnimalDataIndex == 0)
+            {
+                return AnimalData;
+            }
+            TargetAnimalDataIndex--;
+        }
+
+        return null;
     }
 
     private int GetAnimalIndex(AnimalType TargetAnimalType)

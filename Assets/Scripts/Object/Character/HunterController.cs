@@ -45,22 +45,12 @@ public class HunterController : GameObjectController
         GameOverCollisionComponent.OnTriggerEnter.AddListener(OnCatchAnimal);
     }
 
-    protected override void OnPlayGame()
-    {
-        EnableMovement(true);
-    }
-
-    protected override void OnGameOver()
-    {
-        ResetGameObject();
-    }
-
     protected override void OnAnimalTryingToChange()
     {
         IsMoveEnabled = false;
         EnableMovement(IsMoveEnabled);
     }
-    
+
     private void OnAnimalChanged(bool IsInitializing, AnimalType NewAnimalType)
     {
         IsMoveEnabled = true;

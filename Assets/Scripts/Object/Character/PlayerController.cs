@@ -27,8 +27,9 @@ public class PlayerController : GameObjectController, FeverInterface
         return Instance;
     }
 
-    void Awake()
+    new void Awake()
     {
+        base.Awake();
         if (Instance == null)
         {
             Instance = this;
@@ -80,17 +81,6 @@ public class PlayerController : GameObjectController, FeverInterface
     {
         Update_PlayerMove();
         Update_CheckVelocity();
-    }
-
-    protected override void OnPlayGame()
-    {
-        EnableMovement(true);
-    }
-
-    protected override void OnGameOver()
-    {
-        EnableMovement(false);
-        ResetGameObject();
     }
 
     protected override void OnAnimalTryingToChange()

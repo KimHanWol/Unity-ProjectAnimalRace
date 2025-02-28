@@ -13,6 +13,7 @@ public class UIManager : SingletonObject<UIManager>
     public GameObject ScoreInGameUI;
     public GameObject SettingUI;
     public GameObject KeyGuideUI;
+    public GameObject NewAnimalUI;
 
     private bool IsWaitingInput = false;
     private bool IsStarted = false;
@@ -29,6 +30,7 @@ public class UIManager : SingletonObject<UIManager>
         base.Awake();
 
         EventManager.Instance.OnPlaySFXPlayedEvent.AddListener(OnRunTitle);
+        EventManager.Instance.OnNewAnimalUnlockStartEvent.AddListener(OnNewAnimalUnlocked);
         SaveSystem.Instance.OnSaveDataLoadedEvent.AddListener(OnSaveDataLoaded);
     }
 
@@ -207,6 +209,56 @@ public class UIManager : SingletonObject<UIManager>
         }
 
         ScoreInGameUI.SetActive(false);
+    }
+
+    private void OnNewAnimalUnlocked(AnimalType NewAnimalType)
+    {
+        AnimalData TargetAnimalData = AnimalDataManager.Instance.GetAnimalData(NewAnimalType);
+
+        NewAnimalUI.SetActive(true);
+
+        // 애니메이션 교체
+        Animator Animator_Animal = NewAnimalUI.transform.Find("AnimalPanel").GetComponentInChildren<Animator>();
+        Animator_Animal.runtimeAnimatorController = TargetAnimalData.Animator;
+        Animator_Animal.speed = 0.5f;
+        Animator_Animal.enabled = true;
+        StartCoroutine(PlayNewAnimalAnimation());
+
+        // 이름 변경
+        Text Text_Name = NewAnimalUI.transform.Find("AnimalPanel").GetComponentInChildren<Text>();
+        Text_Name.text = TargetAnimalData.AnimalType.ToString();
+
+        // 키 가이드 설정
+        Animator KeyGuideAnimator = NewAnimalUI.transform.Find("KeyGuidePanel").GetComponentInChildren<Animator>();
+        KeyGuideAnimator.enabled = true;
+        AnimationClip InputAnimationClip = AnimalDataManager.Instance.GetInputTypeAnimationClip(TargetAnimalData.InputType);
+        KeyGuideAnimator.Play(InputAnimationClip.name, 0, 0f);
+    }
+
+    IEnumerator PlayNewAnimalAnimation()
+    {
+        Image AnimalImage = NewAnimalUI.transform.Find("AnimalPanel").Find("Animator_Animal").GetComponentInChildren<Image>();
+        SpriteRenderer SpriteRenderer = NewAnimalUI.transform.Find("AnimalPanel").GetComponentInChildren<SpriteRenderer>();
+        while (true)
+        {
+            yield return new WaitForSeconds(0.01f);
+            AnimalImage.sprite = SpriteRenderer.sprite;
+        }
+    }
+
+    public void OnNewAnimalUIButtonClicked()
+    {
+        StopCoroutine(PlayNewAnimalAnimation());
+
+        Animator Animator_Animal = NewAnimalUI.transform.Find("AnimalPanel").GetComponentInChildren<Animator>();
+        Animator_Animal.enabled = false;
+
+        Animator KeyGuideAnimator = NewAnimalUI.transform.Find("KeyGuidePanel").GetComponentInChildren<Animator>();
+        KeyGuideAnimator.enabled = false;
+
+        NewAnimalUI.SetActive(false);
+
+        EventManager.Instance.OnNewAnimalUnlockFinishedEvent?.Invoke();
     }
 
     IEnumerator WaitStartPlayUITimer(float ShowDuration)

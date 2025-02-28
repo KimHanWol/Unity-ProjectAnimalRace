@@ -12,19 +12,39 @@ public class GameObjectController : MonoBehaviour, FeverInterface
 
     protected bool IsFever = false;
 
-    protected void Start()
+    protected void Awake()
     {
-        DefaultPosition = transform.position;
-
         EventManager EventManager = EventManager.Instance;
         EventManager.OnPlayGameEvent.AddListener(OnPlayGame);
         EventManager.OnGameOverEvent.AddListener(OnGameOver);
         EventManager.OnAnimalTryingToChangeEvent.AddListener(OnAnimalTryingToChange);
+        EventManager.OnNewAnimalUnlockStartEvent.AddListener(OnNewAnimalUnlockStarted);
+        EventManager.OnNewAnimalUnlockFinishedEvent.AddListener(OnNewAnimalUnlockFinished);
     }
 
-    protected virtual void OnPlayGame() { }
-    protected virtual void OnGameOver() { }
+    protected void Start()
+    {
+        DefaultPosition = transform.position;
+    }
+
+    protected virtual void OnPlayGame() 
+    {
+        EnableMovement(true);
+    }
+
+    protected virtual void OnGameOver() 
+    {
+        EnableMovement(false);
+        ResetGameObject();
+    }
+
     protected virtual void OnAnimalTryingToChange() { }
+    protected virtual void OnNewAnimalUnlockStarted(AnimalType UnlockedAnimalType) 
+    {
+        EnableMovement(false);
+    }
+
+    protected virtual void OnNewAnimalUnlockFinished() { }
 
     protected virtual void ResetGameObject() { }
     protected virtual void EnableMovement(bool Enabled) { }

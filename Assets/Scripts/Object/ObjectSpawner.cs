@@ -120,6 +120,12 @@ public class ObjectSpawner : MonoBehaviour
             }
         }
 
+        if(CurrentPercentage <= 0f)
+        {
+            Debug.Log("Spawn Failed : Spawnable objects have no chance to be spawned.");
+            return;
+        }
+
         SpawnedObjectList.Add(SpawnedObject);
     }
 

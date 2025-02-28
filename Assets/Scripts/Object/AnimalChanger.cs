@@ -4,11 +4,11 @@ using UnityEngine;
 public class AnimalChanger : SpawnableObject, InteractableInterface
 {
     private AnimalDataManager AnimalDataManager;
-    private Animator Animator;
+    protected Animator Animator;
     private BoxCollider2D BoxCollider2D;
 
     //Data
-    private AnimalData CurrentAnimalData;
+    protected AnimalData CurrentAnimalData;
     private bool bIsChanged = false;
     public Vector2 OverlapBoundary;
     public float MoveCenterSpeed;
@@ -21,6 +21,13 @@ public class AnimalChanger : SpawnableObject, InteractableInterface
     //InteractableInterface
     public override void Interaction(GameObject InteractObject)
     {
+        SwitchAnimal(InteractObject);
+        base.Interaction(InteractObject);
+    }
+    //~InteractableInterface
+
+    protected void SwitchAnimal(GameObject InteractObject)
+    {
         PlayerController OverlappedPlayer = InteractObject.GetComponent<PlayerController>();
         if (OverlappedPlayer != null)
         {
@@ -30,11 +37,12 @@ public class AnimalChanger : SpawnableObject, InteractableInterface
 
             EmojiComponent PlayerEmojiComponent = OverlappedPlayer.GetComponentInChildren<EmojiComponent>();
             PlayerEmojiComponent.PlayEmojiAnimation(EmojiKey);
-        }
 
-        base.Interaction(InteractObject);
+            HunterController Hunter = GameManager.Instance.Hunter;
+            EmojiComponent HunterEmojiComponent = Hunter.GetComponentInChildren<EmojiComponent>();
+            HunterEmojiComponent.PlayEmojiAnimation(EmojiKey);
+        }
     }
-    //~InteractableInterface
 
     void Start()
     {
@@ -42,6 +50,11 @@ public class AnimalChanger : SpawnableObject, InteractableInterface
         BoxCollider2D = GetComponent<BoxCollider2D>();
         Animator = GetComponent<Animator>();
 
+        InitializeAnimalData();
+    }
+
+    protected virtual void InitializeAnimalData()
+    {
         CurrentAnimalData = AnimalDataManager.GetUnlockedAnimalDataByRandom(PlayerController.Get().GetCurrentAnimalType());
         Animator.runtimeAnimatorController = CurrentAnimalData.Animator;
     }
