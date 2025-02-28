@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GameManager : SingletonObject<GameManager>
 {
@@ -81,9 +82,17 @@ public class GameManager : SingletonObject<GameManager>
             return;
         }
 
-        //왼쪽 마우스 클릭은 무시
-        if (Input.anyKeyDown == true && Input.GetKey(KeyCode.Mouse0) == false)
+        if (Input.anyKeyDown == true)
         {
+            // 다른 오브젝트(버튼) 를 좌클릭했을 때는 무시
+            if (Input.GetKey(KeyCode.Mouse0) == true)
+            {
+                if (EventSystem.current.currentSelectedGameObject != null)
+                {
+                    return;
+                }
+            }
+
             GameState = EGameState.State_Starting;
             SoundManager.PlayBGM(SoundManager.EBGM.BGM_PLAYING, false);
             UIManager.OnPlayStarting();
