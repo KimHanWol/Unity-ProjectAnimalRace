@@ -173,7 +173,7 @@ public class UIManager : SingletonObject<UIManager>
         PressAnyButtonUI.SetActive(InputEnabled);
     }
 
-    public void OnStarting()
+    public void OnPlayStarting()
     {
         IsStarted = true;
 

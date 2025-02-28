@@ -156,6 +156,7 @@ public class SoundManager : SingletonObject<SoundManager>
     public void PlaySFX(ESFX SFXIndex)
     {
         SFXAudioSource.PlayOneShot(SFXDataList[(int)SFXIndex].AudioClip);
+        EventManager.Instance.OnPlaySFXPlayedEvent?.Invoke();
     }
 
     IEnumerator ReadyToStart()
@@ -176,8 +177,6 @@ public class SoundManager : SingletonObject<SoundManager>
             if (BGMAudioSource.time + SFXAudioLength + StartSFXOffset >= BGMAudioSource.clip.length)
             {
                 PlaySFX(ESFX.SFX_START);
-                EventManager.Instance.OnPlaySFXPlayedEvent?.Invoke();
-
                 break;
             }
         }

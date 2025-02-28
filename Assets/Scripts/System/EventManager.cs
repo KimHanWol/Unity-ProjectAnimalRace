@@ -6,8 +6,9 @@ using UnityEngine.Events;
 public class EventManager : SingletonObject<EventManager>
 {
     //Game
-    public UnityEvent OnPlayGameEvent;
-    public UnityEvent OnGameOverEvent;
+    public UnityEvent OnStartGameEvent; //타이틀 화면 시작
+    public UnityEvent OnPlayGameEvent; //달리기 시작
+    public UnityEvent OnGameOverEvent; //달리기 끝
     public UnityEvent OnAnimalTryingToChangeEvent;
     public UnityEvent<bool> OnFeverStateChangedEvent;
     public UnityEvent<AnimalType> OnNewAnimalUnlockStartEvent;

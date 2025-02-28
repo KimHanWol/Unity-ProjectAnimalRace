@@ -4,6 +4,7 @@ using UnityEngine;
 public class GameManager : SingletonObject<GameManager>
 {
     // GameObject
+    [Header("Object")]
     public PlayerController Player;
     public HunterController Hunter;
     public ObjectSpawner ObjectSpawner;
@@ -11,11 +12,13 @@ public class GameManager : SingletonObject<GameManager>
     public UIManager UIManager;
     public SoundManager SoundManager;
 
-    public SpawnableObject[] SpawnedObjectList;
+    [Header("Data")]
+    public AnimalType DefaultAnimalType;
 
     // 타이틀이 나오고 입력을 받지 않는 시간
     public float TitleNoInputDuration = 2f;
 
+    [Header("Score")]
     public float GameScore = 0;
     public int HighScore = 0;
 
@@ -34,7 +37,10 @@ public class GameManager : SingletonObject<GameManager>
         base.Awake();
 
         EventManager.Instance.OnGameOverEvent.AddListener(OnGameOver);
+        EventManager.Instance.OnStartGameEvent.AddListener(OnGameStart);
         SaveSystem.Instance.OnSaveDataLoadedEvent.AddListener(OnSaveDataLoaded);
+
+        SoundManager.OnBGMChanged.AddListener(OnBGMChanged);
     }
 
     void Start()
@@ -80,8 +86,7 @@ public class GameManager : SingletonObject<GameManager>
         {
             GameState = EGameState.State_Starting;
             SoundManager.PlayBGM(SoundManager.EBGM.BGM_PLAYING, false);
-            SoundManager.OnBGMChanged.AddListener(OnBGMChanged);
-            UIManager.OnStarting();
+            UIManager.OnPlayStarting();
         }
     }
 
@@ -108,7 +113,6 @@ public class GameManager : SingletonObject<GameManager>
             return;
         }
 
-        SoundManager.OnBGMChanged.RemoveListener(OnBGMChanged);
         OnPlay();
     }
 

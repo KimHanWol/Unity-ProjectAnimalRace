@@ -29,13 +29,10 @@ public class HunterController : GameObjectController
     private Rigidbody2D RigidBody2D;
     private Animator Animator;
 
-    new void Start()
+    new void Awake()
     {
-        base.Start();
-        RigidBody2D = GetComponent<Rigidbody2D>();
-        Animator = GetComponent<Animator>();
+        base.Awake();
 
-        StartPosition = transform.position;
         EventManager.Instance.OnPlayerAcceleratedEvent.AddListener(OnAnimalAccelerated);
         EventManager.Instance.OnAnimalChangedEvent.AddListener(OnAnimalChanged);
 
@@ -43,6 +40,20 @@ public class HunterController : GameObjectController
         CanHitCollisionCompoment.OnTriggerExit.AddListener(OnCantHit);
 
         GameOverCollisionComponent.OnTriggerEnter.AddListener(OnCatchAnimal);
+    }
+
+    new void Start()
+    {
+        base.Start();
+        RigidBody2D = GetComponent<Rigidbody2D>();
+        Animator = GetComponent<Animator>();
+
+        InitializeGameObject();
+    }
+
+    public override void InitializeGameObject()
+    {
+        StartPosition = transform.position;
     }
 
     protected override void OnAnimalTryingToChange()

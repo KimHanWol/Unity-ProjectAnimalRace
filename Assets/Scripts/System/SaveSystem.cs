@@ -75,6 +75,12 @@ public class SaveSystem : SingletonObject<SaveSystem>
         Debug.Log("New Data Saved (Path : " + Application.persistentDataPath + "/savefile.json )");
     }
 
+    public void ResetData()
+    {
+        CreateAndSaveData();
+        LogCurrentData();
+    }
+
     private void LogCurrentData()
     {
         string LogString = "[UNLOCKED ANIMAL LIST] \n";

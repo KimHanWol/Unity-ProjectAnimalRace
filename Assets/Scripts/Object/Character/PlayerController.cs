@@ -29,7 +29,10 @@ public class PlayerController : GameObjectController, FeverInterface
 
     new void Awake()
     {
+        InteractCollisionComponent.OnTriggerEnter.AddListener(Interaction);
+
         base.Awake();
+
         if (Instance == null)
         {
             Instance = this;
@@ -68,13 +71,20 @@ public class PlayerController : GameObjectController, FeverInterface
     new void Start()
     {
         base.Start();
+        InitializeGameObject();
+
+        InteractCollisionComponent.OnTriggerEnter.AddListener(Interaction);
+    }
+
+    public override void InitializeGameObject()
+    {
+        base.InitializeGameObject();
+
         StartPosition = transform.position;
         CurrentMousePosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
         UpdateAnimator();
         EventManager.Instance.OnAnimalChangedEvent?.Invoke(true, CurrentAnimalType);
-
-        InteractCollisionComponent.OnTriggerEnter.AddListener(Interaction);
     }
 
     void Update()

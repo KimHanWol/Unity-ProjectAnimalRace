@@ -27,6 +27,8 @@ public class GameObjectController : MonoBehaviour, FeverInterface
         DefaultPosition = transform.position;
     }
 
+    public virtual void InitializeGameObject() { }
+
     protected virtual void OnPlayGame() 
     {
         EnableMovement(true);
