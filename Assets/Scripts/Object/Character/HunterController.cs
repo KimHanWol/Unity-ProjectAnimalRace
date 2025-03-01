@@ -102,6 +102,8 @@ public class HunterController : GameObjectController
         else
         {
             Animator.SetBool("IsRunning", false);
+            StopCoroutine(WaitFirstDelay());
+            StopCoroutine(MoveHunter());
         }
     }
 

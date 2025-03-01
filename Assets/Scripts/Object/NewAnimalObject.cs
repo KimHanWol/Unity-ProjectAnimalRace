@@ -4,8 +4,9 @@ public class NewAnimalObject : AnimalChanger
 {
     private GameObject CurrentInteractObject;
 
-    private void Awake()
+    new void Awake()
     {
+        base.Awake();
         EventManager.Instance.OnNewAnimalUnlockFinishedEvent.AddListener(OnNewAnimalUnlockFinished);
     }
 
@@ -29,11 +30,17 @@ public class NewAnimalObject : AnimalChanger
     //InteractableInterface
     public override void Interaction(GameObject InteractObject)
     {
+        if (IsActivated == true)
+        {
+            return;
+        }
+
         CurrentInteractObject = InteractObject;
         PlayerController OverlappedPlayer = CurrentInteractObject.GetComponent<PlayerController>();
         if (OverlappedPlayer != null)
         {
             EventManager.Instance.OnNewAnimalUnlockStartEvent?.Invoke(CurrentAnimalData.AnimalType);
+            IsActivated = true;
         }
     }
     //~InteractableInterface

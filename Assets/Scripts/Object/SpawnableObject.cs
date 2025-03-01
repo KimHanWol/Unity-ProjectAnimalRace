@@ -6,11 +6,20 @@ public class SpawnableObject : MonoBehaviour, InteractableInterface
     public bool IsActivated = false;
     public float DestroyDuration = 0.5f;
 
+    protected void Awake()
+    {
+        EventManager.Instance.OnGameOverEvent.AddListener(OnGameOver);
+    }
+
     //InteractableInterface
     public virtual void Interaction(GameObject InteractObject) { }
     //~InteractableInterface
 
-    //TODO: 게임 종료 시에는 아이템 바로 사라지도록 만들기
+    private void OnGameOver()
+    {
+        SelfDestroy();
+    }
+
     public virtual bool IsSpawnable()
     {
         return true;

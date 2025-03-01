@@ -1324,7 +1324,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultPosition: {x: 0, y: 0, z: 0}
-  CurrentAnimalType: 7
+  CurrentAnimalType: 5
   RunAnimationSpeedRate: 1
   RunAnimationMaxSpeedRate: 4
   RunAnimationMinSpeedRate: 1
