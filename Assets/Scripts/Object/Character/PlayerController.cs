@@ -72,8 +72,6 @@ public class PlayerController : GameObjectController, FeverInterface
     {
         base.Start();
         InitializeGameObject();
-
-        InteractCollisionComponent.OnTriggerEnter.AddListener(Interaction);
     }
 
     public override void InitializeGameObject()
