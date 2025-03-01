@@ -13,6 +13,7 @@ public class EventManager : SingletonObject<EventManager>
     public UnityEvent<bool> OnFeverStateChangedEvent;
     public UnityEvent<AnimalType> OnNewAnimalUnlockStartEvent;
     public UnityEvent OnNewAnimalUnlockFinishedEvent;
+    public UnityEvent<AnimalType> OnNewAnimalFeverUnlockedEvent;
 
     //<IsInitializing, AnimalType>
     public UnityEvent<bool, AnimalType> OnAnimalChangedEvent;

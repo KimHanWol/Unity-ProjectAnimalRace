@@ -44,6 +44,7 @@ public class AnimalDataManager : SingletonObject<AnimalDataManager>
     public InputData[] InputDataList;
     public AnimalData[] AnimalDataList;
     public List<AnimalType> UnlockedAnimalList;
+    public List<AnimalType> UnlockedFeverAnimalList;
 
     protected override void Awake()
     {
@@ -51,11 +52,13 @@ public class AnimalDataManager : SingletonObject<AnimalDataManager>
 
         SaveSystem.Instance.OnSaveDataLoadedEvent.AddListener(OnSaveDataLoaded);
         EventManager.Instance.OnNewAnimalUnlockStartEvent.AddListener(OnNewAnimalUnlocked);
+        EventManager.Instance.OnNewAnimalFeverUnlockedEvent.AddListener(OnNewFeverAnimalUnlocked);
     }
 
     private void OnSaveDataLoaded(SaveData LoadedSaveData)
     {
         UnlockedAnimalList = LoadedSaveData.UnlockedAnimalList;
+        UnlockedFeverAnimalList = LoadedSaveData.UnlockedFeverAnimalList;
     }
 
     private void OnNewAnimalUnlocked(AnimalType UnlockedAnimalType)
@@ -64,6 +67,16 @@ public class AnimalDataManager : SingletonObject<AnimalDataManager>
         string LogString = "";
         LogString += "New animal unlocked : " + UnlockedAnimalType.ToString() + "\n";
         LogString += "Current unlocked animal count ( " + UnlockedAnimalList.Count + " / " + AnimalDataList.Length + " )\n";
+        Debug.Log(LogString);
+        SaveSystem.Instance.SaveData();
+    }
+
+    private void OnNewFeverAnimalUnlocked(AnimalType UnlockedFeverAnimalType)
+    {
+        UnlockedFeverAnimalList.Add(UnlockedFeverAnimalType);
+        string LogString = "";
+        LogString += "New fever animal unlocked : " + UnlockedFeverAnimalType.ToString() + "\n";
+        LogString += "Current unlocked fever animal count ( " + UnlockedFeverAnimalList.Count + " / " + AnimalDataList.Length + " )\n";
         Debug.Log(LogString);
         SaveSystem.Instance.SaveData();
     }
@@ -111,20 +124,6 @@ public class AnimalDataManager : SingletonObject<AnimalDataManager>
         }
 
         return null;
-    }
-
-    private int GetAnimalIndex(AnimalType TargetAnimalType)
-    {
-        for (int i = 0; i < AnimalDataList.Length; i++)
-        {
-            AnimalData InAnimalData = AnimalDataList[i];
-            if (InAnimalData.AnimalType == TargetAnimalType)
-            {
-                return i;
-            }
-        }
-
-        return -1;
     }
 
     public int GetInputStackCount(InputType InInputType)

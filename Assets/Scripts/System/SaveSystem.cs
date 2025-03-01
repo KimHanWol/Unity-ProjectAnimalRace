@@ -11,6 +11,8 @@ public class SaveData
         UnlockedAnimalList = new List<AnimalType>();
         UnlockedAnimalList.Add(AnimalType.Dog);
 
+        UnlockedFeverAnimalList = new List<AnimalType>();
+
         BGMVolume = 0.7f;
         SFXVolume = 0.7f;
 
@@ -19,6 +21,9 @@ public class SaveData
 
     //Unlocked Animal
     public List<AnimalType> UnlockedAnimalList;
+
+    //Unlocked Fever Animal
+    public List<AnimalType> UnlockedFeverAnimalList;
 
     //Sound Setting
     public float BGMVolume;
@@ -88,6 +93,13 @@ public class SaveSystem : SingletonObject<SaveSystem>
         {
             LogString += CurrentSaveData.UnlockedAnimalList[i] + "\n";
         }
+
+        LogString += "[UNLOCKED FEVER ANIMAL LIST]\n";
+        for (int i = 0; i < CurrentSaveData.UnlockedFeverAnimalList.Count; i++)
+        {
+            LogString += CurrentSaveData.UnlockedFeverAnimalList[i] + "\n";
+        }
+
         Debug.Log(LogString);
 
         LogString = "[SOUND SETTING] \n";
@@ -104,6 +116,9 @@ public class SaveSystem : SingletonObject<SaveSystem>
     {
         // Unlocked Animal
         CurrentSaveData.UnlockedAnimalList = AnimalDataManager.Instance.UnlockedAnimalList;
+
+        // Unlocked Animal
+        CurrentSaveData.UnlockedFeverAnimalList = AnimalDataManager.Instance.UnlockedFeverAnimalList;
 
         // Sound Setting
         CurrentSaveData.BGMVolume = SoundManager.Instance.SoundSettingData.BGMVolume;

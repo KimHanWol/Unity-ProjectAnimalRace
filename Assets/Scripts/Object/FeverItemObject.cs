@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class FeverItemObject : SpawnableObject
@@ -15,6 +16,13 @@ public class FeverItemObject : SpawnableObject
 
         IsActivated = true;
         EventManager.Instance.OnFeverStateChangedEvent?.Invoke(true);
+
+        // 현재 동물이 처음 피버 상태면
+        AnimalType CurrentAnimalType = GameManager.Instance.Player.GetCurrentAnimalType();
+        if (AnimalDataManager.Instance.UnlockedFeverAnimalList.Contains(CurrentAnimalType) == false)
+        {
+            EventManager.Instance.OnNewAnimalFeverUnlockedEvent?.Invoke(CurrentAnimalType);
+        }
 
         SelfDestroy();
     }
