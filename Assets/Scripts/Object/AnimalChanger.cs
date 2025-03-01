@@ -45,13 +45,12 @@ public class AnimalChanger : SpawnableObject, InteractableInterface
         IsNewAnimal = RandomValue < NewAnimalProbability;
 
         // 언락할 수 있는 동물이 없으면 기존 것
-        if (AnimalDataManager.Instance.UnlockedAnimalList.Count < AnimalDataManager.Instance.AnimalDataList.Length)
+        if (AnimalDataManager.Instance.UnlockedAnimalList.Count == AnimalDataManager.Instance.AnimalDataList.Length)
         {
             IsNewAnimal = false;
         }
-
         // 스폰 가능한 동물이 하나 밖에 없으면 새로운 것
-        if (AnimalDataManager.Instance.UnlockedAnimalList.Count <= 1)
+        else if (AnimalDataManager.Instance.UnlockedAnimalList.Count <= 1)
         {
             IsNewAnimal = true;
         }

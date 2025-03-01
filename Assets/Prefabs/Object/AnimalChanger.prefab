@@ -56,8 +56,8 @@ MonoBehaviour:
   MoveCenterSpeed: 1
   EmojiKey: Emoji_AnimalChange
   JumpDuration: 1
-  NewAnimalProbability: 0.2
   DefaultMoveDuration: 2
+  NewAnimalProbability: 0.3
 --- !u!95 &1576721374589612816
 Animator:
   serializedVersion: 5
