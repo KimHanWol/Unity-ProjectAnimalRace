@@ -14,7 +14,7 @@ public class ObjectSpawner : MonoBehaviour
 {
     private List<GameObject> SpawnedObjectList;
 
-    private bool IsStarted = false;
+    private bool IsEnabled = false;
 
     public float FirstDelayTime = 1f;
     public float SpawnMinTime = 5f;
@@ -52,9 +52,14 @@ public class ObjectSpawner : MonoBehaviour
 
     public void EnableSpawn(bool Enabled)
     {
-        IsStarted = Enabled;
+        if(IsEnabled == Enabled)
+        {
+            return;
+        }
 
-        if (IsStarted == true)
+        IsEnabled = Enabled;
+
+        if (IsEnabled == true)
         {
             StartCoroutine(StartFirstDelay());
         }
@@ -143,6 +148,11 @@ public class ObjectSpawner : MonoBehaviour
 
     private bool IsSpawnable()
     {
+        if(IsEnabled == false)
+        {
+            return false;
+        }
+
         CheckSpawnedObjectList();
 
         if (SpawnOneByOne == true && SpawnedObjectList.Count > 0)
