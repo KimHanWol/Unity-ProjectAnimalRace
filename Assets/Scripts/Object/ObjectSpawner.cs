@@ -45,8 +45,7 @@ public class ObjectSpawner : MonoBehaviour
     private void OnGameOver()
     {
         IsPlaying = false;
-        StopCoroutine(StartFirstDelay());
-        StopCoroutine(StartSpawnLoop());
+        StopAllCoroutines();
     }
 
     private void OnFeverStateChanged(bool Enabled)
@@ -62,7 +61,7 @@ public class ObjectSpawner : MonoBehaviour
 
     IEnumerator StartSpawnLoop()
     {
-        while (true)
+        while (IsPlaying == true)
         {
             TrySpawn();
             yield return new WaitForSeconds(1);
@@ -93,10 +92,17 @@ public class ObjectSpawner : MonoBehaviour
             return;
         }
 
-        float RandomValue = Random.Range(0, SpawnableObjectDataList.Count);
+        // 총 확률 구하기
+        float MaxPercentage = 0f;
+        foreach (SpawnData InSpawnData in SpawnableObjectDataList)
+        {
+            MaxPercentage += InSpawnData.Probability;
+        }
 
-        GameObject SpawnedObject = null;
+        // 랜덤 변수 뽑은 다음 비교해서 뽑기
+        float RandomValue = Random.Range(0f, 1f);
         float CurrentPercentage = 0;
+        GameObject SpawnedObject = null;
         foreach (SpawnData InSpawnData in SpawnableObjectDataList)
         {
             CurrentPercentage += InSpawnData.Probability;
@@ -104,7 +110,15 @@ public class ObjectSpawner : MonoBehaviour
             {
                 SpawnedObject = Instantiate(InSpawnData.TargetObject);
                 SpawnedObject.transform.position = transform.position;
-                Debug.Log("Spawn Success : " + InSpawnData.TargetObject.name);
+
+                string DebugString = "Spawn Success : " + InSpawnData.TargetObject.name + "\n";
+                DebugString += "Spawn Random value : " + RandomValue + "\n";
+                foreach (SpawnData DebugSpawnData in SpawnableObjectDataList)
+                {
+                    DebugString += DebugSpawnData.TargetObject.name + " : " + DebugSpawnData.Probability + "\n";
+                }
+
+                Debug.Log(DebugString);
                 break;
             }
         }
