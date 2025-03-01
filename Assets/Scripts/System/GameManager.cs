@@ -50,6 +50,9 @@ public class GameManager : SingletonObject<GameManager>
         SaveSystem.Instance.LoadData();
 
         OnGameStart();
+
+        //Full HD
+        Screen.SetResolution(1920, 1080, false);
     }
 
     void OnSaveDataLoaded(SaveData LoadedSaveData)
