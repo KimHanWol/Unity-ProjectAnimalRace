@@ -95,25 +95,22 @@ public class HunterController : GameObjectController
     protected override void EnableMovement(bool Enabled)
     {
         IsMoveEnabled = Enabled;
-        if(IsMoveEnabled == true)
+
+        StopAllCoroutines();
+        if (IsMoveEnabled == true)
         {
-            StartCoroutine(WaitFirstDelay());
+            StartCoroutine(MoveHunter());
         }
         else
         {
             Animator.SetBool("IsRunning", false);
-            StopAllCoroutines();
         }
-    }
-
-    private IEnumerator WaitFirstDelay()
-    {
-        yield return new WaitForSeconds(FirstDelay);
-        StartCoroutine(MoveHunter());
     }
 
     private IEnumerator MoveHunter()
     {
+        yield return new WaitForSeconds(FirstDelay);
+
         float CurrentDuration = 1f;
         Animator.SetBool("IsRunning", true);
 

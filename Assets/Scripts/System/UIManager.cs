@@ -92,7 +92,6 @@ public class UIManager : SingletonObject<UIManager>
     public void OnAnyButtonPressed()
     {
         IsAnyButtonPressed = true;
-        //PlayTitleFadeAnimation(false);
     }
 
     public void PlayTitleFadeAnimation(bool IsFadeIn)
@@ -100,11 +99,8 @@ public class UIManager : SingletonObject<UIManager>
         IsAnyButtonPressed = true;
 
         PressAnyButtonUI.SetActive(IsFadeIn);
-
         SettingButtonUI.SetActive(IsFadeIn);
 
-        StopCoroutine(Loop_TitleFadeAnimation(IsFadeIn));
-        StopCoroutine(Loop_TitleFadeAnimation(!IsFadeIn));
         StopAllCoroutines();
         StartCoroutine(Loop_TitleFadeAnimation(IsFadeIn));
     }

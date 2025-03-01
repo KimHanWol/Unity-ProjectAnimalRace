@@ -48,34 +48,30 @@ public class FeverSystem : MonoBehaviour
     {
         if (Enabled == true)
         {
-            InitializeFever();
+            StartCoroutine(ReadyFever());
         }
-    }
-
-    public void InitializeFever()
-    {
-        StartCoroutine(ReadyFever());
+        else
+        {
+            StopAllCoroutines();
+        }
     }
 
     private IEnumerator ReadyFever()
     {
         PlayerFeverInterface.FeverInitialize();
         HunterFeverInterface.FeverInitialize();
-
         yield return new WaitForSeconds(FirstDelay);
 
         PlayerFeverInterface.FeverReadyForStart(FirstDelay, GrowDuration, DelayAfterGrown, TurnDuration, ReadyEmojiKey, EmojiDuration, LastDuration);
         HunterFeverInterface.FeverReadyForStart(FirstDelay, GrowDuration, DelayAfterGrown, TurnDuration, ReadyEmojiKey, EmojiDuration, LastDuration);
 
         float ReadyDuration = FirstDelay + GrowDuration + DelayAfterGrown + TurnDuration + EmojiDuration + LastDuration;
-
         yield return new WaitForSeconds(ReadyDuration);
 
         // Fever Time
         PlayerFeverInterface.FeverStart();
         HunterFeverInterface.FeverStart();
         yield return new WaitForSeconds(FeverTimeDuration);
-
 
         PlayerFeverInterface.FeverReadyForFinish(FinishFirstDelay, ShrinkDuration, DelayAfterShrink, FinishEmojiKey, FinishEmojiDuration, FinishLastDuration);
         HunterFeverInterface.FeverReadyForFinish(FinishFirstDelay, ShrinkDuration, DelayAfterShrink, FinishEmojiKey, FinishEmojiDuration, FinishLastDuration);

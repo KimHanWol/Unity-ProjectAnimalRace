@@ -87,6 +87,7 @@ public class SoundManager : SingletonObject<SoundManager>
         //Ready to play
         if (BGMIndex == EBGM.BGM_PLAYING)
         {
+            StopCoroutine(ReadyToStart());
             StartCoroutine(ReadyToStart());
         }
     }
