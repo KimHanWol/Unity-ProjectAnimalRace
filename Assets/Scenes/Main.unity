@@ -6694,14 +6694,14 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1247731093}
   - {fileID: 1756866712}
+  - {fileID: 1247731093}
   m_Father: {fileID: 849292054}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 50.003, y: -193.5}
-  m_SizeDelta: {x: 636.46, y: 396.5032}
+  m_SizeDelta: {x: 930.75, y: 600.3}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &697850313
 CanvasRenderer:
@@ -11543,8 +11543,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -75}
+  m_SizeDelta: {x: 0, y: -150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1247731094
 MonoBehaviour:
@@ -11568,7 +11568,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 50
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -13470,11 +13470,11 @@ MonoBehaviour:
   SpawnOneByOne: 1
   SpawnDataList:
   - TargetObject: {fileID: 6599046169947675177, guid: 1cad7bb55297bc6498864a8c75c3757c, type: 3}
-    Probability: 0.3
+    Probability: 0
   - TargetObject: {fileID: 5946724224848709668, guid: f3920c8510c2dcc45b9d44e272bbfc14, type: 3}
-    Probability: 0.2
+    Probability: 1
   - TargetObject: {fileID: 8920448043311737136, guid: b3d7bfd53026b1a439970dadbffa11c0, type: 3}
-    Probability: 0.1
+    Probability: 0
 --- !u!1 &1494419291
 GameObject:
   m_ObjectHideFlags: 0
@@ -16572,7 +16572,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -157}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 170.2684, y: 99.328}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1756866713

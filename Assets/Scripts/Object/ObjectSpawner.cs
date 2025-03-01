@@ -52,6 +52,7 @@ public class ObjectSpawner : MonoBehaviour
 
     public void EnableSpawn(bool Enabled)
     {
+        Debug.Log("Spawn Enabled : " + Enabled);
         if(IsEnabled == Enabled)
         {
             return;

@@ -176,11 +176,6 @@ public class HunterController : GameObjectController
     }
 
     // FeverInterface
-    public override void FeverInitialize()
-    {
-        base.FeverInitialize();
-    }
-
     protected override IEnumerator FeverReadyForStart_Internal(float FirstDelay, float GrowDuration, float DelayAfterGrown, float TurnDuration, string EmojiKey, float EmojiDuration, float LastDuration)
     {
         // 원래 위치로 이동

@@ -10,10 +10,17 @@ public class DebugSystem : MonoBehaviour
     public Text DebugUI;
     public GameObject TitleDataResetButton;
 
+    private string DefaultDebugString;
+
     private void Awake()
     {
         EventManager.Instance.OnPlayGameEvent.AddListener(OnPlayGame);
         EventManager.Instance.OnGameOverEvent.AddListener(OnGameOver);
+    }
+
+    private void Start()
+    {
+        DefaultDebugString = DebugUI.text;
     }
 
     private void OnPlayGame()
@@ -35,5 +42,29 @@ public class DebugSystem : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    private void Update()
+    {
+        // Default 출력
+        string DebugString = DefaultDebugString + "\n";
+
+        // 획득한 동물 수
+        DebugString +=
+            "Animal collection ( " + AnimalDataManager.Instance.UnlockedAnimalList.Count +
+            " / " + AnimalDataManager.Instance.AnimalDataList.Length + " )\n";
+
+        // 획득한 동물 목록
+        foreach(AnimalType UnlockedAnimalType in AnimalDataManager.Instance.UnlockedAnimalList)
+        {
+            DebugString += UnlockedAnimalType.ToString() + " ";
+        }
+        DebugString += "\n";
+
+        // 현재 속도
+        DebugString +=
+            "Current Speed : " + GameManager.Instance.Player.CurrentVelocity + "\n";
+
+        DebugUI.text = DebugString;
     }
 }

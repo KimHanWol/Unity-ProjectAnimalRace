@@ -98,6 +98,7 @@ public class GameObjectController : MonoBehaviour, FeverInterface
     public virtual void FeverReadyForFinish(float FinishFirstDelay, float ShrinkDuration, float DelayAfterShrink, string FinishEmojiKey, float FinishEmojiDuration, float FinishLastDuration)
     {
         EnableMovement(false);
+        StopCoroutine("FeverReadyForStart_Internal");
         StartCoroutine(FeverReadyForFinish_Internal(FinishFirstDelay, ShrinkDuration, DelayAfterShrink, FinishEmojiKey, FinishEmojiDuration, FinishLastDuration));
     }
 
@@ -110,6 +111,7 @@ public class GameObjectController : MonoBehaviour, FeverInterface
     {
         IsFever = false;
         EnableMovement(true);
+        StopCoroutine("FeverReadyForFinish_Internal");
     }
     // ~ FeverInterface
 
