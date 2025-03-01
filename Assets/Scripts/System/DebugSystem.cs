@@ -65,6 +65,10 @@ public class DebugSystem : MonoBehaviour
         DebugString +=
             "Current Speed : " + GameManager.Instance.Player.CurrentVelocity + "\n";
 
+        // 최고 기록
+        DebugString +=
+            "High Score : " + GameManager.Instance.HighScore + "m\n";
+
         DebugUI.text = DebugString;
     }
 }
