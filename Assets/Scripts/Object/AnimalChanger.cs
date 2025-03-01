@@ -14,14 +14,78 @@ public class AnimalChanger : SpawnableObject, InteractableInterface
     public float MoveCenterSpeed;
     public string EmojiKey;
     public float JumpDuration;
+    private GameObject CurrentInteractObject;
+    private bool IsNewAnimal = false;
 
     //동물이 가운데 위치로 돌아가는 데 걸리는 시간
     public float DefaultMoveDuration = 2f;
 
+    [Header("NewAnimal")]
+    public float NewAnimalProbability;
+
+    new void Awake()
+    {
+        base.Awake();
+
+        EventManager.Instance.OnNewAnimalUnlockFinishedEvent.AddListener(OnNewAnimalUnlockFinished);
+    }
+
+    void Start()
+    {
+        AnimalDataManager = AnimalDataManager.Instance;
+        BoxCollider2D = GetComponent<BoxCollider2D>();
+        Animator = GetComponent<Animator>();
+
+        InitializeAnimalChanger();
+    }
+
+    private void InitializeAnimalChanger()
+    {
+        float RandomValue = Random.Range(0f, 1f);
+        IsNewAnimal = RandomValue < NewAnimalProbability;
+
+        // 언락할 수 있는 동물이 없으면 기존 것
+        if (AnimalDataManager.Instance.UnlockedAnimalList.Count < AnimalDataManager.Instance.AnimalDataList.Length)
+        {
+            IsNewAnimal = false;
+        }
+
+        // 스폰 가능한 동물이 하나 밖에 없으면 새로운 것
+        if (AnimalDataManager.Instance.UnlockedAnimalList.Count <= 1)
+        {
+            IsNewAnimal = true;
+        }
+
+        if (IsNewAnimal == true)
+        {
+            CurrentAnimalData = AnimalDataManager.Instance.GetLockedAnimalDataByRandom();
+        }
+        else
+        {
+            CurrentAnimalData = AnimalDataManager.GetUnlockedAnimalDataByRandom(PlayerController.Get().GetCurrentAnimalType());
+        }
+        Animator.runtimeAnimatorController = CurrentAnimalData.Animator;
+    }
+
     //InteractableInterface
     public override void Interaction(GameObject InteractObject)
     {
-        SwitchAnimal(InteractObject);
+        if (IsActivated == true)
+        {
+            return;
+        }
+
+        CurrentInteractObject = InteractObject;
+
+        if (IsNewAnimal == true)
+        {
+            EventManager.Instance.OnNewAnimalUnlockStartEvent?.Invoke(CurrentAnimalData.AnimalType);
+        }
+        else
+        {
+            SwitchAnimal(InteractObject);
+        }
+
         base.Interaction(InteractObject);
     }
     //~InteractableInterface
@@ -32,7 +96,7 @@ public class AnimalChanger : SpawnableObject, InteractableInterface
         if (OverlappedPlayer != null)
         {
             EventManager.Instance.OnAnimalTryingToChangeEvent?.Invoke();
-            StartCoroutine(SwitchAnimal(InteractObject.GetComponent<PlayerController>()));
+            StartCoroutine(SwitchAnimal_Internal(InteractObject.GetComponent<PlayerController>()));
             bIsChanged = true;
 
             EmojiComponent PlayerEmojiComponent = OverlappedPlayer.GetComponentInChildren<EmojiComponent>();
@@ -44,36 +108,7 @@ public class AnimalChanger : SpawnableObject, InteractableInterface
         }
     }
 
-    void Start()
-    {
-        AnimalDataManager = AnimalDataManager.Instance;
-        BoxCollider2D = GetComponent<BoxCollider2D>();
-        Animator = GetComponent<Animator>();
-
-        InitializeAnimalData();
-    }
-
-    protected virtual void InitializeAnimalData()
-    {
-        CurrentAnimalData = AnimalDataManager.GetUnlockedAnimalDataByRandom(PlayerController.Get().GetCurrentAnimalType());
-        Animator.runtimeAnimatorController = CurrentAnimalData.Animator;
-    }
-
-    public override bool IsSpawnable()
-    {
-        // 기본 캐릭터 밖에 언락이 되지 않았을 때 스폰 불가능
-        if (AnimalDataManager.Instance.UnlockedAnimalList.Count <= 1)
-        {
-            if(GameManager.Instance.Player.CurrentAnimalType == AnimalDataManager.Instance.UnlockedAnimalList[0])
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    IEnumerator SwitchAnimal(PlayerController ColliderPlayer)
+    IEnumerator SwitchAnimal_Internal(PlayerController ColliderPlayer)
     {
         MoveToPlayerComponent MoveToPlayerComponent = GetComponentInChildren<MoveToPlayerComponent>();
         MoveToPlayerComponent.EnableMovement(false);
@@ -144,5 +179,10 @@ public class AnimalChanger : SpawnableObject, InteractableInterface
             Color NewColor = new Color(OriginColor.r, OriginColor.g, OriginColor.b, 1 - FadingTime / Duration);
             Renderder.material.color = NewColor;
         }
+    }
+
+    private void OnNewAnimalUnlockFinished()
+    {
+        SwitchAnimal(CurrentInteractObject);
     }
 }

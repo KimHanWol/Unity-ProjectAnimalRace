@@ -12,7 +12,10 @@ public class SpawnableObject : MonoBehaviour, InteractableInterface
     }
 
     //InteractableInterface
-    public virtual void Interaction(GameObject InteractObject) { }
+    public virtual void Interaction(GameObject InteractObject) 
+    {
+        IsActivated = true;
+    }
     //~InteractableInterface
 
     private void OnGameOver()
