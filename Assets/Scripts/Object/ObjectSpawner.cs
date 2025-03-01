@@ -14,7 +14,8 @@ public class ObjectSpawner : MonoBehaviour
 {
     private List<GameObject> SpawnedObjectList;
 
-    private bool IsEnabled = false;
+    private bool IsPlaying = false;
+    private bool IsFeverTime = false;
 
     public float FirstDelayTime = 1f;
     public float SpawnMinTime = 5f;
@@ -37,38 +38,20 @@ public class ObjectSpawner : MonoBehaviour
 
     private void OnPlayGame()
     {
-        EnableSpawn(true);
+        IsPlaying = true;
+        StartCoroutine(StartFirstDelay());
     }
 
     private void OnGameOver()
     {
-        EnableSpawn(false);
+        IsPlaying = false;
+        StopCoroutine(StartFirstDelay());
+        StopCoroutine(StartSpawnLoop());
     }
 
     private void OnFeverStateChanged(bool Enabled)
     {
-        EnableSpawn(Enabled == false);
-    }
-
-    public void EnableSpawn(bool Enabled)
-    {
-        Debug.Log("Spawn Enabled : " + Enabled);
-        if(IsEnabled == Enabled)
-        {
-            return;
-        }
-
-        IsEnabled = Enabled;
-
-        if (IsEnabled == true)
-        {
-            StartCoroutine(StartFirstDelay());
-        }
-        else
-        {
-            StopAllCoroutines();
-            CheckSpawnedObjectList();
-        }
+        IsFeverTime = Enabled;
     }
 
     IEnumerator StartFirstDelay()
@@ -149,7 +132,7 @@ public class ObjectSpawner : MonoBehaviour
 
     private bool IsSpawnable()
     {
-        if(IsEnabled == false)
+        if(IsPlaying == false || IsFeverTime == true)
         {
             return false;
         }
