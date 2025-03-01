@@ -55,11 +55,12 @@ public class DebugSystem : MonoBehaviour
             " / " + AnimalDataManager.Instance.AnimalDataList.Length + " )\n";
 
         // 획득한 동물 목록
-        foreach(AnimalType UnlockedAnimalType in AnimalDataManager.Instance.UnlockedAnimalList)
+        DebugString += "(";
+        foreach (AnimalType UnlockedAnimalType in AnimalDataManager.Instance.UnlockedAnimalList)
         {
             DebugString += UnlockedAnimalType.ToString() + " ";
         }
-        DebugString += "\n";
+        DebugString += ")\n";
 
         // 현재 속도
         DebugString +=

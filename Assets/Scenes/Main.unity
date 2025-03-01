@@ -1324,7 +1324,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultPosition: {x: 0, y: 0, z: 0}
-  CurrentAnimalType: 11
+  CurrentAnimalType: 5
   RunAnimationSpeedRate: 1
   RunAnimationMaxSpeedRate: 4
   RunAnimationMinSpeedRate: 1
@@ -13470,11 +13470,11 @@ MonoBehaviour:
   SpawnOneByOne: 1
   SpawnDataList:
   - TargetObject: {fileID: 6599046169947675177, guid: 1cad7bb55297bc6498864a8c75c3757c, type: 3}
-    Probability: 0
+    Probability: 0.2
   - TargetObject: {fileID: 5946724224848709668, guid: f3920c8510c2dcc45b9d44e272bbfc14, type: 3}
-    Probability: 1
+    Probability: 0.1
   - TargetObject: {fileID: 8920448043311737136, guid: b3d7bfd53026b1a439970dadbffa11c0, type: 3}
-    Probability: 0
+    Probability: 0.1
 --- !u!1 &1494419291
 GameObject:
   m_ObjectHideFlags: 0
@@ -15854,10 +15854,10 @@ RectTransform:
   - {fileID: 1951574074}
   m_Father: {fileID: 849292054}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1675769268
 GameObject:
@@ -18253,7 +18253,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -879.94257, y: 430.21106}
+  m_AnchoredPosition: {x: 50, y: 430.21106}
   m_SizeDelta: {x: 397.0984, y: 91.545}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1951574075
