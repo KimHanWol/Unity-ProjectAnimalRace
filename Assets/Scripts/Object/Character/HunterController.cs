@@ -95,15 +95,14 @@ public class HunterController : GameObjectController
     protected override void EnableMovement(bool Enabled)
     {
         IsMoveEnabled = Enabled;
-        if(Enabled == true)
+        if(IsMoveEnabled == true)
         {
             StartCoroutine(WaitFirstDelay());
         }
         else
         {
             Animator.SetBool("IsRunning", false);
-            StopCoroutine(WaitFirstDelay());
-            StopCoroutine(MoveHunter());
+            StopAllCoroutines();
         }
     }
 
@@ -138,8 +137,12 @@ public class HunterController : GameObjectController
             Internal_MoveHunter();
             yield return new WaitForSeconds(CurrentDuration);
 
-            CurrentDurationRate -= DelayDecreaseRate;
-            CurrentForceRate += ForceIncreaseRate;
+            //피버타임이 아닐 때만 속도 증가
+            if (IsFever == false)
+            {
+                CurrentDurationRate -= DelayDecreaseRate;
+                CurrentForceRate += ForceIncreaseRate;
+            }
         }
     }
 

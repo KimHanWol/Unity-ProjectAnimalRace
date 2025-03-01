@@ -942,10 +942,10 @@ MonoBehaviour:
   DefaultPosition: {x: 0, y: 0, z: 0}
   HunterMovementRate: 20
   ForceInitial: 250
-  ForceIncreaseRate: 0.02
+  ForceIncreaseRate: 0.01
   FirstDelay: 0
   DelayInitial: 1
-  DelayDecreaseRate: 0.002
+  DelayDecreaseRate: 0.0003
   DelayMin: 0.05
   CanHitCollisionCompoment: {fileID: 304747819}
   GameOverCollisionComponent: {fileID: 523001586}
