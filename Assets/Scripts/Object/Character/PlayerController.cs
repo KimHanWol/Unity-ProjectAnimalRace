@@ -445,7 +445,7 @@ public class PlayerController : GameObjectController, FeverInterface
 
         Animator CurrentAnimator = GetComponent<Animator>();
 
-        bool IsRunning = IsMoveEnabled == true && Mathf.Abs(CurrentVelocity) > 0.01f;
+        bool IsRunning = (IsMoveEnabled == true) && (Mathf.Abs(CurrentVelocity) > 0.01f);
         if (IsRunning == true)
         {
             float NewAnimationSpeed = Mathf.Clamp(Mathf.Abs(CurrentVelocity) * RunAnimationSpeedRate, RunAnimationMinSpeedRate, RunAnimationMaxSpeedRate);
@@ -474,6 +474,13 @@ public class PlayerController : GameObjectController, FeverInterface
     }
 
     // FeverInterface
+    public override void FeverStart()
+    {
+        base.FeverStart();
+        
+
+    }
+
     protected override IEnumerator FeverReadyForStart_Internal(float FirstDelay, float GrowDuration, float DelayAfterGrown, float TurnDuration, string EmojiKey, float EmojiDuration, float LastDuration)
     {
         yield return new WaitForSeconds(FirstDelay);

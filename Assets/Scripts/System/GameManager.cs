@@ -8,6 +8,7 @@ public class GameManager : SingletonObject<GameManager>
     [Header("Object")]
     public PlayerController Player;
     public HunterController Hunter;
+    public Camera MainCamera;
     public ObjectSpawner ObjectSpawner;
     public MapManager MapManager;
     public UIManager UIManager;

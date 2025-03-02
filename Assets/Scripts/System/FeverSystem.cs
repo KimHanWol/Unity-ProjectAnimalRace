@@ -18,6 +18,9 @@ public class FeverSystem : MonoBehaviour
     [Header("FeverTime")]
     public float FeverTimeDuration = 1f;
     public float MaxSizeScale = 3f;
+    public float CameraShakeVelocity = 0.05f;
+    private ShakeComponent CameraShakeComponent;
+    private ShakeComponent ScoreUIShakeComponent;
 
     [Header("Fever Finish")]
     public float FinishFirstDelay = 1f;
@@ -42,6 +45,9 @@ public class FeverSystem : MonoBehaviour
 
         GameObject HunterObject = GameManager.Instance.Hunter.gameObject;
         HunterFeverInterface = HunterObject.GetComponent<FeverInterface>();
+
+        CameraShakeComponent = GameManager.Instance.MainCamera.GetComponentInChildren<ShakeComponent>();
+        ScoreUIShakeComponent = UIManager.Instance.ScoreInGameUI.GetComponentInChildren<ShakeComponent>();
     }
 
     private void OnFeverStateChanged(bool Enabled)
@@ -71,15 +77,40 @@ public class FeverSystem : MonoBehaviour
         // Fever Time
         PlayerFeverInterface.FeverStart();
         HunterFeverInterface.FeverStart();
+        StartCoroutine(ShakeCameraWhenPlayerMoves());
+        ScoreUIShakeComponent.EnableShake(ScoreUIShakeComponent.transform.parent.gameObject, true);
         yield return new WaitForSeconds(FeverTimeDuration);
+        // ~Fever Time
 
         PlayerFeverInterface.FeverReadyForFinish(FinishFirstDelay, ShrinkDuration, DelayAfterShrink, FinishEmojiKey, FinishEmojiDuration, FinishLastDuration);
         HunterFeverInterface.FeverReadyForFinish(FinishFirstDelay, ShrinkDuration, DelayAfterShrink, FinishEmojiKey, FinishEmojiDuration, FinishLastDuration);
+        StopCoroutine(ShakeCameraWhenPlayerMoves());
+        CameraShakeComponent.EnableShake(GameManager.Instance.MainCamera.gameObject, false);
+        ScoreUIShakeComponent.EnableShake(ScoreUIShakeComponent.transform.parent.gameObject, false);
         yield return new WaitForSeconds(FinishFirstDelay + ShrinkDuration + DelayAfterShrink + FinishEmojiDuration + FinishLastDuration);
 
         PlayerFeverInterface.FeverFinished();
         HunterFeverInterface.FeverFinished();
 
         EventManager.Instance.OnFeverStateChangedEvent?.Invoke(false);
+    }
+
+    private IEnumerator ShakeCameraWhenPlayerMoves()
+    {
+        PlayerController Player = GameManager.Instance.Player;
+        GameObject MainCameraObject = GameManager.Instance.MainCamera.gameObject;
+
+        bool IsPlayerMoved = false;
+        while(true)
+        {
+            bool IsPlayerMoving = Mathf.Abs(Player.CurrentVelocity) >= CameraShakeVelocity;
+            if (IsPlayerMoved != IsPlayerMoving)
+            {
+                IsPlayerMoved = IsPlayerMoving;
+                CameraShakeComponent.EnableShake(MainCameraObject, IsPlayerMoving);
+            }
+
+            yield return new WaitForFixedUpdate();
+        }
     }
 }
