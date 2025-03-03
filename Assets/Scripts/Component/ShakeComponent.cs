@@ -85,6 +85,7 @@ public class ShakeComponent : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
+        ObjectDefaultPositionDic.Remove(TargetObject);
         TargetObject.transform.position = ObjectDefaultPosition; // 흔들기 종료 후 원래 위치로 복구
     }
 }

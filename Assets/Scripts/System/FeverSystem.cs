@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 
@@ -21,6 +22,11 @@ public class FeverSystem : MonoBehaviour
     public float CameraShakeVelocity = 0.05f;
     private ShakeComponent CameraShakeComponent;
     private ShakeComponent ScoreUIShakeComponent;
+    public float ScoreColorChangeSpeed = 1f;
+    public Text ScoreInGameText;
+    public Text ScoreInGameFeverText;
+    private Color ScoreInGameTextDefaultColor;
+    public float FeverTimeAdditionalScoreRate = 1f;
 
     [Header("Fever Finish")]
     public float FinishFirstDelay = 1f;
@@ -32,6 +38,8 @@ public class FeverSystem : MonoBehaviour
 
     private FeverInterface PlayerFeverInterface;
     private FeverInterface HunterFeverInterface;
+
+    private bool IsInFeverTime = false;
 
     private void Awake()
     {
@@ -48,6 +56,8 @@ public class FeverSystem : MonoBehaviour
 
         CameraShakeComponent = GameManager.Instance.MainCamera.GetComponentInChildren<ShakeComponent>();
         ScoreUIShakeComponent = UIManager.Instance.ScoreInGameUI.GetComponentInChildren<ShakeComponent>();
+
+        ScoreInGameTextDefaultColor = ScoreInGameText.color;
     }
 
     private void OnFeverStateChanged(bool Enabled)
@@ -75,17 +85,21 @@ public class FeverSystem : MonoBehaviour
         yield return new WaitForSeconds(ReadyDuration);
 
         // Fever Time
+        IsInFeverTime = true;
         PlayerFeverInterface.FeverStart();
         HunterFeverInterface.FeverStart();
         StartCoroutine(ShakeCameraWhenPlayerMoves());
+        StartCoroutine(ChangeColorOfScoreText());
+        ScoreInGameFeverText.gameObject.SetActive(true);
         ScoreUIShakeComponent.EnableShake(ScoreUIShakeComponent.transform.parent.gameObject, true);
         yield return new WaitForSeconds(FeverTimeDuration);
         // ~Fever Time
 
+        IsInFeverTime = false;
         PlayerFeverInterface.FeverReadyForFinish(FinishFirstDelay, ShrinkDuration, DelayAfterShrink, FinishEmojiKey, FinishEmojiDuration, FinishLastDuration);
         HunterFeverInterface.FeverReadyForFinish(FinishFirstDelay, ShrinkDuration, DelayAfterShrink, FinishEmojiKey, FinishEmojiDuration, FinishLastDuration);
-        StopCoroutine(ShakeCameraWhenPlayerMoves());
-        CameraShakeComponent.EnableShake(GameManager.Instance.MainCamera.gameObject, false);
+        ScoreInGameText.color = ScoreInGameTextDefaultColor;
+        ScoreInGameFeverText.gameObject.SetActive(false);
         ScoreUIShakeComponent.EnableShake(ScoreUIShakeComponent.transform.parent.gameObject, false);
         yield return new WaitForSeconds(FinishFirstDelay + ShrinkDuration + DelayAfterShrink + FinishEmojiDuration + FinishLastDuration);
 
@@ -101,7 +115,7 @@ public class FeverSystem : MonoBehaviour
         GameObject MainCameraObject = GameManager.Instance.MainCamera.gameObject;
 
         bool IsPlayerMoved = false;
-        while(true)
+        while (IsInFeverTime == true)
         {
             bool IsPlayerMoving = Mathf.Abs(Player.CurrentVelocity) >= CameraShakeVelocity;
             if (IsPlayerMoved != IsPlayerMoving)
@@ -112,5 +126,28 @@ public class FeverSystem : MonoBehaviour
 
             yield return new WaitForFixedUpdate();
         }
+
+        CameraShakeComponent.EnableShake(GameManager.Instance.MainCamera.gameObject, false);
+    }
+
+    private IEnumerator ChangeColorOfScoreText()
+    {
+        while (IsInFeverTime == true)
+        {
+            // 시간에 따라 Hue 값 변경
+            float hue = Mathf.PingPong(Time.time * ScoreColorChangeSpeed, 1.0f);
+
+            // 무지개 색 생성 및 반영
+            Color rainbowColor = Color.HSVToRGB(hue, 1, 1);
+            ScoreInGameText.color = rainbowColor;
+            yield return new WaitForFixedUpdate();
+        }
+
+        ScoreInGameText.color = ScoreInGameTextDefaultColor;
+    }
+
+    public bool IsFeverTime()
+    {
+        return IsInFeverTime;
     }
 }

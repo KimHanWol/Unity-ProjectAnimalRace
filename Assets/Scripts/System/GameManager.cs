@@ -13,6 +13,7 @@ public class GameManager : SingletonObject<GameManager>
     public MapManager MapManager;
     public UIManager UIManager;
     public SoundManager SoundManager;
+    public FeverSystem FeverSystem;
 
     [Header("Data")]
     public AnimalType DefaultAnimalType;
@@ -111,10 +112,15 @@ public class GameManager : SingletonObject<GameManager>
         }
 
         float CurrentVelocity = Mathf.Abs(Player.GetVelocity());
+        float ScoreRate = 1f;
 
-        //TODO: 피버 타임이면 점수 더 빠르게 오르기
+        //피버 타임이면 점수 더 빠르게 오르기
+        if (FeverSystem.IsFeverTime() == true)
+        {
+            ScoreRate += FeverSystem.FeverTimeAdditionalScoreRate;
+        }
 
-        GameScore += CurrentVelocity * Time.deltaTime * 100f;
+        GameScore += CurrentVelocity * ScoreRate * Time.deltaTime * 100f;
 
         UIManager.UpdateScoreData((int)GameScore);
     }
@@ -163,7 +169,6 @@ public class GameManager : SingletonObject<GameManager>
         UIManager.OnGameOver((int)GameScore, IsNewRecord);
         SoundManager.PlayBGM(SoundManager.EBGM.BGM_GAMEOVER, true);
 
-        
     }
 
     IEnumerator WaitTitleReady()
