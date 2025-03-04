@@ -8,6 +8,8 @@ public class SaveData
 {
     public SaveData()
     {
+        SaveVersion = SaveSystem.CURRENT_SAVE_VERSION;
+
         UnlockedAnimalList = new List<AnimalType>();
         UnlockedAnimalList.Add(AnimalType.Dog);
 
@@ -18,6 +20,9 @@ public class SaveData
 
         HighScore = 0;
     }
+
+    //Save Data Version
+    public int SaveVersion;
 
     //Unlocked Animal
     public List<AnimalType> UnlockedAnimalList;
@@ -35,13 +40,16 @@ public class SaveData
 
 public class SaveSystem : SingletonObject<SaveSystem>
 {
+    public static readonly int CURRENT_SAVE_VERSION = 10002;
+
+    public static readonly int SAVE_VERSION_FIRST = 10001; // 초기 세이브 버전
+    public static readonly int SAVE_VERSION_FEVER_ANIMAL = 10002; // 피버 타임 동물 언락 데이터 추가 버전
+
     private SaveData CurrentSaveData;
 
     public UnityEvent<SaveData> OnSaveDataLoadedEvent;
 
-    //TODO: 싱글톤 말고 글로벌 이벤트로 저장하고 불러오기 할까
-
-    // 이벤트를 직접 받지 않고, 다른 시스템에서 이벤트 관련 로직을 처리한 다음에
+    // 다른 시스템에서 이벤트 관련 로직을 처리한 다음에
     // 싱글톤으로 SaveData 를 호출, 모든 데이터를 업데이트한 다음 저장
     public void SaveData()
     {
@@ -66,6 +74,12 @@ public class SaveSystem : SingletonObject<SaveSystem>
         CurrentSaveData = JsonUtility.FromJson<SaveData>(json);
         Debug.Log("Data Loaded (Path : " + Application.persistentDataPath + "/savefile.json )");
 
+        //버전이 다르면 마이그레이트
+        if (CurrentSaveData.SaveVersion != CURRENT_SAVE_VERSION)
+        {
+            MigrateData();
+        }
+
         LogCurrentData();
 
         OnSaveDataLoadedEvent?.Invoke(CurrentSaveData);
@@ -84,6 +98,18 @@ public class SaveSystem : SingletonObject<SaveSystem>
     {
         CreateAndSaveData();
         LogCurrentData();
+    }
+
+    private void MigrateData()
+    {
+        // 피버 타임 동물 언락 데이터
+        if (CurrentSaveData.SaveVersion < SAVE_VERSION_FEVER_ANIMAL)
+        {
+            Debug.Log("Data Migrated ( Version : " + CurrentSaveData.SaveVersion + " -> " + SAVE_VERSION_FEVER_ANIMAL + " )");
+
+            CurrentSaveData.SaveVersion = SAVE_VERSION_FEVER_ANIMAL;
+            // 피버 타임 동물 언락 데이터는 기본값 사용하므로 따로 처리하지 않음
+        }
     }
 
     private void LogCurrentData()
