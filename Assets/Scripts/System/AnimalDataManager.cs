@@ -36,7 +36,10 @@ public class AnimalData
 {
     public AnimalType AnimalType;
     public InputType InputType;
+    public Sprite AnimalPortrait;
+    public Sprite AnimalFeverPortrait;
     public RuntimeAnimatorController Animator;
+    public RuntimeAnimatorController FeverAnimator;
 }
 
 public class AnimalDataManager : SingletonObject<AnimalDataManager>

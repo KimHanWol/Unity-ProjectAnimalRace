@@ -1,4 +1,8 @@
 using System.Collections;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using UnityEditor;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +18,8 @@ public class UIManager : SingletonObject<UIManager>
     public GameObject SettingUI;
     public GameObject KeyGuideUI;
     public GameObject NewAnimalUI;
+    public GameObject UnlockedAnimalUI;
+    public GameObject UnlockedAnimalPanelPrefab;
 
     private bool IsWaitingInput = false;
     private bool IsStarted = false;
@@ -271,13 +277,97 @@ public class UIManager : SingletonObject<UIManager>
         ScoreInGameUIText.text = NewScore.ToString() + "m";
     }
 
-    public void EnableSettingsPanel(bool Eanbled)
+    public void EnableSettingsPanel(bool Enabled)
     {
-        SettingUI.SetActive(Eanbled);
+        SettingUI.SetActive(Enabled);
     }
 
-    public void EnableKeyGuidePanel(bool Eanbled)
+    public void EnableKeyGuidePanel(bool Enabled)
     {
-        KeyGuideUI.SetActive(Eanbled);
+        KeyGuideUI.SetActive(Enabled);
+    }
+
+    public void EnableUnlockedAnimalPanel(bool Enabled)
+    {
+        if (Enabled == true)
+        {
+            InitializeUnlockedAnimalPanel();
+        }
+
+        UnlockedAnimalUI.SetActive(Enabled);
+    }
+
+    private void InitializeUnlockedAnimalPanel()
+    {
+        GameObject ParentGameObject = UnlockedAnimalUI.GetComponentInChildren<GridLayoutGroup>().gameObject;
+
+        // 개수 세팅
+        if(ParentGameObject.transform.childCount != AnimalDataManager.Instance.AnimalDataList.Length)
+        {
+            ParentGameObject.transform.DetachChildren();
+
+            foreach (AnimalData InAnimalData in AnimalDataManager.Instance.AnimalDataList)
+            {
+                GameObject NewAnimalPanel = Instantiate(UnlockedAnimalPanelPrefab, ParentGameObject.transform);
+                Image[] ImageAnimalArray = NewAnimalPanel.transform.GetComponentsInChildren<Image>();
+
+                ImageAnimalArray[0].sprite = InAnimalData.AnimalPortrait;
+                ImageAnimalArray[1].sprite = InAnimalData.AnimalFeverPortrait;
+
+                Text Text_Name = NewAnimalPanel.GetComponentInChildren<Text>();
+                Text_Name.text = InAnimalData.AnimalType.ToString();
+            }
+        }
+
+        // 언락 데이터 업데이트
+        for (int i = 0; i < ParentGameObject.transform.childCount; i++) 
+        {
+            GameObject AnimalPanel = ParentGameObject.transform.GetChild(i).gameObject;
+            Image[] ImageAnimalArray = AnimalPanel.transform.GetComponentsInChildren<Image>();
+            Text Text_Name = AnimalPanel.GetComponentInChildren<Text>();
+
+            // Normal Animal
+            {
+                bool IsNormalUnlocked = false;
+                foreach (AnimalType InAnimalType in AnimalDataManager.Instance.UnlockedAnimalList)
+                {
+                    if (InAnimalType.ToString() == Text_Name.text)
+                    {
+                        IsNormalUnlocked = true;
+                    }
+                }
+
+                if (IsNormalUnlocked == true)
+                {
+                    ImageAnimalArray[0].color = Color.white;
+                }
+                else
+                {
+                    ImageAnimalArray[0].color = Color.black;
+                }
+            }
+
+            // Fever Animal
+            {
+                bool IsFeverUnlocked = false;
+                foreach (AnimalType InAnimalType in AnimalDataManager.Instance.UnlockedFeverAnimalList)
+                {
+                    if (InAnimalType.ToString() == Text_Name.text)
+                    {
+                        IsFeverUnlocked = true;
+                    }
+                }
+
+                if (IsFeverUnlocked == true)
+                {
+                    ImageAnimalArray[1].color = Color.white;
+                }
+                else
+                {
+                    ImageAnimalArray[1].color = Color.black;
+                }
+            }
+
+        }
     }
 }
