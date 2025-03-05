@@ -474,13 +474,6 @@ public class PlayerController : GameObjectController, FeverInterface
     }
 
     // FeverInterface
-    public override void FeverStart()
-    {
-        base.FeverStart();
-        
-
-    }
-
     protected override IEnumerator FeverReadyForStart_Internal(float FirstDelay, float GrowDuration, float DelayAfterGrown, float TurnDuration, string EmojiKey, float EmojiDuration, float LastDuration)
     {
         yield return new WaitForSeconds(FirstDelay);
@@ -489,7 +482,14 @@ public class PlayerController : GameObjectController, FeverInterface
 
         // 플레이어 크기 확대
         MovementAnimationComponent.GrowCharacter(true, GrowDuration);
-        yield return new WaitForSeconds(DelayAfterGrown);
+        yield return new WaitForSeconds(GrowDuration + DelayAfterGrown);
+
+        /// Fever Time 용 애니메이션 재생
+        Animator CurrentAnimator = GetComponent<Animator>();
+        if (gameObject.activeInHierarchy == true)
+        {
+            CurrentAnimator.SetBool("IsFeverTime", true);
+        }
 
         // 뒤돌기
         MovementAnimationComponent.TurnReverse(true);
@@ -506,6 +506,13 @@ public class PlayerController : GameObjectController, FeverInterface
     {
         MoveToDefaultPos(FinishFirstDelay);
         yield return new WaitForSeconds(FinishFirstDelay);
+
+        /// 기본 애니메이션 재생 
+        Animator CurrentAnimator = GetComponent<Animator>();
+        if (gameObject.activeInHierarchy == true)
+        {
+            CurrentAnimator.SetBool("IsFeverTime", false);
+        }
 
         CustomAnimationComponent MovementAnimationComponent = GetComponentInChildren<CustomAnimationComponent>();
 
