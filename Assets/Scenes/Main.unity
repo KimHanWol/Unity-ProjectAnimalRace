@@ -20043,9 +20043,9 @@ MonoBehaviour:
   SpawnOneByOne: 1
   SpawnDataList:
   - TargetObject: {fileID: 6599046169947675177, guid: 1cad7bb55297bc6498864a8c75c3757c, type: 3}
-    Probability: 0.5
+    Probability: 0.07
   - TargetObject: {fileID: 5946724224848709668, guid: f3920c8510c2dcc45b9d44e272bbfc14, type: 3}
-    Probability: 0.5
+    Probability: 0.035
 --- !u!1 &1494419291
 GameObject:
   m_ObjectHideFlags: 0
@@ -26924,14 +26924,15 @@ MonoBehaviour:
   PressAnyButtonUI: {fileID: 475020867}
   SettingButtonUI: {fileID: 1085913752}
   UnlockedAnimalButtonUI: {fileID: 2087748415}
-  ScoreBoardUI: {fileID: 695665754}
-  ScoreInGameUI: {fileID: 1672598073}
+  ExitButtonUI: {fileID: 593426099}
   SettingUI: {fileID: 707298173}
+  UnlockedAnimalUI: {fileID: 1024906848}
+  ScoreBoardUI: {fileID: 695665754}
+  ExitUI: {fileID: 1179770643}
+  ScoreInGameUI: {fileID: 1672598073}
   KeyGuideUI: {fileID: 1944541662}
   NewAnimalUI: {fileID: 242701921}
-  UnlockedAnimalUI: {fileID: 1024906848}
   UnlockedAnimalPanelPrefab: {fileID: 8435299755101387696, guid: 8b13ebe4f13634a4fa0f44e54c622c51, type: 3}
-  ExitUI: {fileID: 1179770643}
   PressAnyButtonBlinkingDuration: 1
   TitleFadeDuration: 1
 --- !u!1 &1990080045

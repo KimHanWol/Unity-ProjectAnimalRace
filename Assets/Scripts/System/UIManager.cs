@@ -8,20 +8,30 @@ using UnityEngine.UI;
 
 public class UIManager : SingletonObject<UIManager>
 {
+    [Header("[OutGame]")]
+    [Header("Title")]
     public GameObject TitleUI;
     public GameObject StartingUI;
     public GameObject StartPlayUI;
     public GameObject PressAnyButtonUI;
     public GameObject SettingButtonUI;
     public GameObject UnlockedAnimalButtonUI;
-    public GameObject ScoreBoardUI;
-    public GameObject ScoreInGameUI;
+    public GameObject ExitButtonUI;
+    [Header("Util")]
     public GameObject SettingUI;
+    public GameObject UnlockedAnimalUI;
+    public GameObject ScoreBoardUI;
+    public GameObject ExitUI;
+
+    [Space(8)]
+    [Header("[InGame]")]
+    [Header("Util")]
+    public GameObject ScoreInGameUI;
     public GameObject KeyGuideUI;
     public GameObject NewAnimalUI;
-    public GameObject UnlockedAnimalUI;
+
+    [Header("[ETC]")]
     public GameObject UnlockedAnimalPanelPrefab;
-    public GameObject ExitUI;
 
     private bool IsWaitingInput = false;
     private bool IsStarted = false;
@@ -109,6 +119,7 @@ public class UIManager : SingletonObject<UIManager>
         PressAnyButtonUI.SetActive(IsFadeIn);
         SettingButtonUI.SetActive(IsFadeIn);
         UnlockedAnimalButtonUI.SetActive(IsFadeIn);
+        ExitButtonUI.SetActive(IsFadeIn);
 
         StopAllCoroutines();
         StartCoroutine(Loop_TitleFadeAnimation(IsFadeIn));
@@ -172,6 +183,7 @@ public class UIManager : SingletonObject<UIManager>
         TitleUI.SetActive(true);
         SettingButtonUI.SetActive(true);
         UnlockedAnimalButtonUI.SetActive(true);
+        ExitButtonUI.SetActive(true);
         ScoreBoardUI.SetActive(false);
         ScoreInGameUI.SetActive(false);
 
@@ -187,6 +199,7 @@ public class UIManager : SingletonObject<UIManager>
         PressAnyButtonUI.SetActive(false);
         SettingButtonUI.SetActive(false);
         UnlockedAnimalButtonUI.SetActive(false);
+        ExitButtonUI.SetActive(false);
 
         StartingUI.SetActive(true);
         StartPlayUI.SetActive(false);
