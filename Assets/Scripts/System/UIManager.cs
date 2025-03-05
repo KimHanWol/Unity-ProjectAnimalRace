@@ -21,6 +21,7 @@ public class UIManager : SingletonObject<UIManager>
     public GameObject NewAnimalUI;
     public GameObject UnlockedAnimalUI;
     public GameObject UnlockedAnimalPanelPrefab;
+    public GameObject ExitUI;
 
     private bool IsWaitingInput = false;
     private bool IsStarted = false;
@@ -377,11 +378,30 @@ public class UIManager : SingletonObject<UIManager>
 
     public bool IsInputDisableUIOpened()
     {
-        if(SettingUI.activeInHierarchy == true || UnlockedAnimalUI.activeInHierarchy == true)
+        if( SettingUI.activeInHierarchy == true || 
+            UnlockedAnimalUI.activeInHierarchy == true ||
+            ExitUI.activeInHierarchy == true)
         {
             return true;
         }
 
         return false;
+    }
+
+    public void EnableExitUI(bool Enabled)
+    {
+       ExitUI.SetActive(Enabled);
+    }
+
+    public void EnableExitUIRunAnimation(bool Enabled)
+    {
+        Animator[] AnimatorArray = ExitUI.GetComponentsInChildren<Animator>();
+        AnimatorArray[0].SetBool("IsMouseHovered", Enabled);
+    }
+
+    public void EnableExitUIDeathAnimation(bool Enabled)
+    {
+        Animator[] AnimatorArray = ExitUI.GetComponentsInChildren<Animator>();
+        AnimatorArray[1].SetBool("IsMouseHovered", Enabled);
     }
 }

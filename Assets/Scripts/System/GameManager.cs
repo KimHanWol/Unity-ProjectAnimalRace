@@ -184,4 +184,13 @@ public class GameManager : SingletonObject<GameManager>
         GameState = EGameState.State_Title_Input;
         UIManager.OnGameStart(true);
     }
+
+    public void ExitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
 }
