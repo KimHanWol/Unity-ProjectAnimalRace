@@ -14358,9 +14358,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'TEST BUILD
-
-    Build : 0.1v'
+  m_Text: 
 --- !u!222 &1247731095
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -22268,6 +22266,7 @@ MonoBehaviour:
   StartPlayUI: {fileID: 154733401}
   PressAnyButtonUI: {fileID: 475020867}
   SettingButtonUI: {fileID: 1085913752}
+  UnlockedAnimalButtonUI: {fileID: 2087748415}
   ScoreBoardUI: {fileID: 695665754}
   ScoreInGameUI: {fileID: 1672598073}
   SettingUI: {fileID: 707298173}

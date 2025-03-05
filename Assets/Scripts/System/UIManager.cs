@@ -13,6 +13,7 @@ public class UIManager : SingletonObject<UIManager>
     public GameObject StartPlayUI;
     public GameObject PressAnyButtonUI;
     public GameObject SettingButtonUI;
+    public GameObject UnlockedAnimalButtonUI;
     public GameObject ScoreBoardUI;
     public GameObject ScoreInGameUI;
     public GameObject SettingUI;
@@ -106,6 +107,7 @@ public class UIManager : SingletonObject<UIManager>
 
         PressAnyButtonUI.SetActive(IsFadeIn);
         SettingButtonUI.SetActive(IsFadeIn);
+        UnlockedAnimalButtonUI.SetActive(IsFadeIn);
 
         StopAllCoroutines();
         StartCoroutine(Loop_TitleFadeAnimation(IsFadeIn));
@@ -168,6 +170,7 @@ public class UIManager : SingletonObject<UIManager>
     {
         TitleUI.SetActive(true);
         SettingButtonUI.SetActive(true);
+        UnlockedAnimalButtonUI.SetActive(true);
         ScoreBoardUI.SetActive(false);
         ScoreInGameUI.SetActive(false);
 
@@ -182,6 +185,7 @@ public class UIManager : SingletonObject<UIManager>
         TitleUI.SetActive(false);
         PressAnyButtonUI.SetActive(false);
         SettingButtonUI.SetActive(false);
+        UnlockedAnimalButtonUI.SetActive(false);
 
         StartingUI.SetActive(true);
         StartPlayUI.SetActive(false);
@@ -369,5 +373,15 @@ public class UIManager : SingletonObject<UIManager>
             }
 
         }
+    }
+
+    public bool IsInputDisableUIOpened()
+    {
+        if(SettingUI.activeInHierarchy == true || UnlockedAnimalUI.activeInHierarchy == true)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

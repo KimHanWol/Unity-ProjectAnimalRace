@@ -10,17 +10,10 @@ public class DebugSystem : MonoBehaviour
     public Text DebugUI;
     public GameObject TitleDataResetButton;
 
-    private string DefaultDebugString;
-
     private void Awake()
     {
         EventManager.Instance.OnPlayGameEvent.AddListener(OnPlayGame);
         EventManager.Instance.OnGameOverEvent.AddListener(OnGameOver);
-    }
-
-    private void Start()
-    {
-        DefaultDebugString = DebugUI.text;
     }
 
     private void OnPlayGame()
@@ -46,8 +39,12 @@ public class DebugSystem : MonoBehaviour
 
     private void Update()
     {
-        // Default 출력
-        string DebugString = DefaultDebugString + "\n";
+        string DebugString = "";
+
+        DebugString += "TEXT BUILD\n";
+
+        // 빌드 버전
+        DebugString += "Build : " + Application.version + "\n";
 
         // 획득한 동물 수
         DebugString +=
