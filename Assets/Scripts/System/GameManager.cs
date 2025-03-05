@@ -87,6 +87,12 @@ public class GameManager : SingletonObject<GameManager>
             return;
         }
 
+        // UI 가 열렸을 때 게임 실행되지 않도록 방지
+        if(UIManager.IsInputDisableUIOpened() == true)
+        {
+            return;
+        }
+
         if (Input.anyKeyDown == true)
         {
             // 다른 오브젝트(버튼) 를 좌클릭했을 때는 무시
