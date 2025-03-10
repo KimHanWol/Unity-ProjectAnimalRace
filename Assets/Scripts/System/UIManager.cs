@@ -1,8 +1,4 @@
 using System.Collections;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using UnityEditor;
-using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -219,13 +215,12 @@ public class UIManager : SingletonObject<UIManager>
 
     public void OnGameOver(int NewScore, bool IsNewRecord)
     {
-        //TODO: New Record 효과 추가하기
-
         ScoreBoardUI.SetActive(true);
         Text[] ScoreboardUITexts = ScoreBoardUI.GetComponentsInChildren<Text>();
         if (ScoreboardUITexts.Length > 1)
         {
             ScoreboardUITexts[1].text = NewScore.ToString() + "m";
+            ScoreboardUITexts[2].gameObject.SetActive(IsNewRecord);
         }
 
         ScoreInGameUI.SetActive(false);
@@ -293,6 +288,17 @@ public class UIManager : SingletonObject<UIManager>
     {
         Text ScoreInGameUIText = ScoreInGameUI.GetComponentInChildren<Text>();
         ScoreInGameUIText.text = NewScore.ToString() + "m";
+
+        GameObject NewRecordObject = ScoreInGameUI.transform.Find("NewRecord").gameObject;
+        // 최고 기록 이상이면
+        if (GameManager.Instance.HighScore < NewScore)
+        {
+            NewRecordObject.SetActive(true);
+        }
+        else
+        {
+            NewRecordObject.SetActive(false);
+        }
     }
 
     public void EnableSettingsPanel(bool Enabled)
