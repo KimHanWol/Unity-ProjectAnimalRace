@@ -220,7 +220,7 @@ public class UIManager : SingletonObject<UIManager>
         if (ScoreboardUITexts.Length > 1)
         {
             ScoreboardUITexts[1].text = NewScore.ToString() + "m";
-            ScoreboardUITexts[2].gameObject.SetActive(IsNewRecord);
+            ScoreboardUITexts[2].transform.parent.gameObject.SetActive(IsNewRecord);
         }
 
         ScoreInGameUI.SetActive(false);
