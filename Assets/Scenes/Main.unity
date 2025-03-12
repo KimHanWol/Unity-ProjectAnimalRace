@@ -2149,7 +2149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultPosition: {x: 0, y: 0, z: 0}
-  CurrentAnimalType: 2
+  CurrentAnimalType: 5
   RunAnimationSpeedRate: 1
   RunAnimationMaxSpeedRate: 4
   RunAnimationMinSpeedRate: 1
@@ -2249,7 +2249,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 1
+  m_Constraints: 5
 --- !u!1 &96557408
 GameObject:
   m_ObjectHideFlags: 0
@@ -19971,10 +19971,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 426210780}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 96, y: 96}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1285721548
 MonoBehaviour:
@@ -21150,7 +21150,7 @@ MonoBehaviour:
   InputDataList:
   - InputType: 0
     InputStackCount: 2
-    Veclocity: 3
+    Veclocity: 3.2
     KeyGuideAnimation: {fileID: 7400000, guid: 28b224a23ebc88f41a5ea9c298678651, type: 2}
   - InputType: 1
     InputStackCount: 4
@@ -21162,107 +21162,118 @@ MonoBehaviour:
     KeyGuideAnimation: {fileID: 7400000, guid: 2f6c54f69e444174ab4d17d952043260, type: 2}
   - InputType: 3
     InputStackCount: 2
-    Veclocity: 3
+    Veclocity: 3.3
     KeyGuideAnimation: {fileID: 7400000, guid: 395ae449c438c5b418420262814c1682, type: 2}
   - InputType: 4
     InputStackCount: 2
-    Veclocity: 3
+    Veclocity: 3.2
     KeyGuideAnimation: {fileID: 7400000, guid: 3d61f2daa50b5c24387470092640a2a7, type: 2}
   - InputType: 5
     InputStackCount: 1
-    Veclocity: 1.3
+    Veclocity: 1.28
     KeyGuideAnimation: {fileID: 7400000, guid: 8907a5b983bd87a42b2b6c63891edd3a, type: 2}
-  - InputType: 6
-    InputStackCount: 1
-    Veclocity: 2.3
-    KeyGuideAnimation: {fileID: 7400000, guid: f02d9119cd0653246a0be39c22deb04c, type: 2}
   - InputType: 7
     InputStackCount: 1
-    Veclocity: 4
-    KeyGuideAnimation: {fileID: 7400000, guid: c0877f6e73d50af498afa536de63c383, type: 2}
+    Veclocity: 5
+    KeyGuideAnimation: {fileID: 7400000, guid: e6fb70e00c1707f48968c9052e415e09, type: 2}
   - InputType: 8
     InputStackCount: 1
-    Veclocity: 2
-    KeyGuideAnimation: {fileID: 7400000, guid: 8b496127c36948a4da21235f1321e5ec, type: 2}
-  - InputType: 9
-    InputStackCount: 1
-    Veclocity: 1
-    KeyGuideAnimation: {fileID: 7400000, guid: 8edd66e0ede94ad40b58cb021b7feb93, type: 2}
+    Veclocity: 5
+    KeyGuideAnimation: {fileID: 7400000, guid: c0877f6e73d50af498afa536de63c383, type: 2}
   - InputType: 10
     InputStackCount: 4
     Veclocity: 3.5
-    KeyGuideAnimation: {fileID: 7400000, guid: b1619ed377ec45c46b0b034ad914885a, type: 2}
+    KeyGuideAnimation: {fileID: 7400000, guid: 8b496127c36948a4da21235f1321e5ec, type: 2}
   - InputType: 11
     InputStackCount: 6
-    Veclocity: 1.6
+    Veclocity: 1.2
+    KeyGuideAnimation: {fileID: 7400000, guid: 8edd66e0ede94ad40b58cb021b7feb93, type: 2}
+  - InputType: 9
+    InputStackCount: 0
+    Veclocity: 2.3
+    KeyGuideAnimation: {fileID: 7400000, guid: d4d7752a2a40bab4498bf9205869fe24, type: 2}
+  - InputType: 7
+    InputStackCount: 1
+    Veclocity: 3
+    KeyGuideAnimation: {fileID: 7400000, guid: e6fb70e00c1707f48968c9052e415e09, type: 2}
+  - InputType: 13
+    InputStackCount: 1
+    Veclocity: 1.2
     KeyGuideAnimation: {fileID: 7400000, guid: a2ec8d2f444e12341a3c590f443a52c9, type: 2}
+  - InputType: 12
+    InputStackCount: 1
+    Veclocity: 0.35
+    KeyGuideAnimation: {fileID: 7400000, guid: b1619ed377ec45c46b0b034ad914885a, type: 2}
+  - InputType: 6
+    InputStackCount: 1
+    Veclocity: 2.5
+    KeyGuideAnimation: {fileID: 7400000, guid: f02d9119cd0653246a0be39c22deb04c, type: 2}
   AnimalDataList:
   - AnimalType: 4
-    InputType: 2
+    InputType: 4
     AnimalPortrait: {fileID: 4723107735738678597, guid: 540060be46a5446893a52aa7d03c23a7, type: 3}
     AnimalFeverPortrait: {fileID: 4723107735738678597, guid: 480d9981b52243e9b42bb2b925d60dec, type: 3}
     Animator: {fileID: 9100000, guid: 0d4cceb64904d4c4a9ebc3222ffb9b5e, type: 2}
-    FeverAnimator: {fileID: 0}
   - AnimalType: 0
-    InputType: 10
+    InputType: 12
     AnimalPortrait: {fileID: 4723107735738678597, guid: 154990ef4bb3439ca7a516a947d12450, type: 3}
     AnimalFeverPortrait: {fileID: -853250683, guid: 4882f36e1b920d9428787d6acb84805f, type: 3}
     Animator: {fileID: 9100000, guid: 2362cbdcc8e810244b71948e7ee805d9, type: 2}
-    FeverAnimator: {fileID: 0}
   - AnimalType: 6
     InputType: 0
     AnimalPortrait: {fileID: 4723107735738678597, guid: 13fcf1104bc34719ae7c3055fa66e936, type: 3}
     AnimalFeverPortrait: {fileID: 4723107735738678597, guid: 1c14a2ef29e64d8bb1f7012df9dd3360, type: 3}
     Animator: {fileID: 9100000, guid: c508574cd6847ac46ae0c840afec4bd5, type: 2}
-    FeverAnimator: {fileID: 0}
   - AnimalType: 7
-    InputType: 7
+    InputType: 8
     AnimalPortrait: {fileID: 4723107735738678597, guid: 18fb515a85b54a56995b74bbb998c710, type: 3}
     AnimalFeverPortrait: {fileID: 4723107735738678597, guid: 1d755599e9a64bffab3d3fc6a127d8d5, type: 3}
     Animator: {fileID: 9100000, guid: 8bff81e7975fad845a251c704b4cd0de, type: 2}
-    FeverAnimator: {fileID: 0}
-  - AnimalType: 1
-    InputType: 6
-    AnimalPortrait: {fileID: 4723107735738678597, guid: aa70afbe22a24960a1c00d671e5aa2f7, type: 3}
-    AnimalFeverPortrait: {fileID: 4723107735738678597, guid: 27b9aa06a119430fb9f8ada26dae623d, type: 3}
-    Animator: {fileID: 9100000, guid: cd03d9d246c0be541a47e0341ea1ee19, type: 2}
-    FeverAnimator: {fileID: 0}
   - AnimalType: 8
     InputType: 3
     AnimalPortrait: {fileID: 4723107735738678597, guid: dc22c75f331645059e2c82d9b6856dbe, type: 3}
     AnimalFeverPortrait: {fileID: 4723107735738678597, guid: c35daf1f04c549f4acee8f5d63fc43af, type: 3}
     Animator: {fileID: 9100000, guid: 68c1b4f516d020c4e8cff102c72b4552, type: 2}
-    FeverAnimator: {fileID: 0}
   - AnimalType: 9
-    InputType: 4
-    AnimalPortrait: {fileID: 4944230376442633554, guid: 6a7ad50cd5e247c5a7bd57ceb7a5f5c9, type: 3}
-    AnimalFeverPortrait: {fileID: -458062255, guid: 59353ff7b3ab20e4c9b5a84ee6275e27, type: 3}
-    Animator: {fileID: 9100000, guid: c293f6ca94cddb84a84d97d26b77e567, type: 2}
-    FeverAnimator: {fileID: 0}
+    InputType: 7
+    AnimalPortrait: {fileID: 4723107735738678597, guid: 0e5f7102f7cf401ab50ad1856733bc08, type: 3}
+    AnimalFeverPortrait: {fileID: 4723107735738678597, guid: 1e13e7d28e96478baf3bd5cd6aca464f, type: 3}
+    Animator: {fileID: 9100000, guid: 221a0ab17cf12d14db2006e9b381c4c8, type: 2}
   - AnimalType: 10
-    InputType: 5
-    AnimalPortrait: {fileID: 4723107735738678597, guid: 2037ecc6d6ff4e0aaf97db498b7add0b, type: 3}
-    AnimalFeverPortrait: {fileID: 4723107735738678597, guid: a029bf493a0d4dbf99ed108d9b837678, type: 3}
-    Animator: {fileID: 9100000, guid: a6d0d3f10d2d78249b51401c3747160c, type: 2}
-    FeverAnimator: {fileID: 0}
+    InputType: 4
+    AnimalPortrait: {fileID: 4723107735738678597, guid: 6a7ad50cd5e247c5a7bd57ceb7a5f5c9, type: 3}
+    AnimalFeverPortrait: {fileID: -594556376, guid: 59353ff7b3ab20e4c9b5a84ee6275e27, type: 3}
+    Animator: {fileID: 9100000, guid: c293f6ca94cddb84a84d97d26b77e567, type: 2}
   - AnimalType: 2
-    InputType: 11
+    InputType: 13
     AnimalPortrait: {fileID: 8284087734974297348, guid: 26484599b8c0409b932be5160d39dadc, type: 3}
     AnimalFeverPortrait: {fileID: -1572148909, guid: e478986156111194c97126c1b652cace, type: 3}
     Animator: {fileID: 9100000, guid: 0125434c9347e7445a5581fa587971ff, type: 2}
-    FeverAnimator: {fileID: 0}
   - AnimalType: 5
     InputType: 1
     AnimalPortrait: {fileID: 4723107735738678597, guid: e55827d219cb4ca39d504a1367693bc8, type: 3}
     AnimalFeverPortrait: {fileID: 4723107735738678597, guid: 0e4b6973956340fc8813f55b8d23c971, type: 3}
     Animator: {fileID: 9100000, guid: 2476fead89c324b40b727e1a0ba71285, type: 2}
-    FeverAnimator: {fileID: 0}
   - AnimalType: 11
+    InputType: 5
+    AnimalPortrait: {fileID: 4723107735738678597, guid: 2037ecc6d6ff4e0aaf97db498b7add0b, type: 3}
+    AnimalFeverPortrait: {fileID: 4723107735738678597, guid: a029bf493a0d4dbf99ed108d9b837678, type: 3}
+    Animator: {fileID: 9100000, guid: a6d0d3f10d2d78249b51401c3747160c, type: 2}
+  - AnimalType: 3
     InputType: 9
-    AnimalPortrait: {fileID: 2833043080597125133, guid: 6f153459ffcc49339672702849b64240, type: 3}
-    AnimalFeverPortrait: {fileID: 1033783747, guid: ef647426d0d7d524789bc2eabda9f928, type: 3}
+    AnimalPortrait: {fileID: 4723107735738678597, guid: 324ea03e7edd42ee8c1988ffb608edca, type: 3}
+    AnimalFeverPortrait: {fileID: 4723107735738678597, guid: 3057e8e6bd3c437ba69938b3254fe58c, type: 3}
+    Animator: {fileID: 9100000, guid: c19be67381ddd2047a83cc226f756ffe, type: 2}
+  - AnimalType: 1
+    InputType: 6
+    AnimalPortrait: {fileID: 4723107735738678597, guid: 27b9aa06a119430fb9f8ada26dae623d, type: 3}
+    AnimalFeverPortrait: {fileID: 4723107735738678597, guid: aa70afbe22a24960a1c00d671e5aa2f7, type: 3}
+    Animator: {fileID: 9100000, guid: cd03d9d246c0be541a47e0341ea1ee19, type: 2}
+  - AnimalType: 12
+    InputType: 11
+    AnimalPortrait: {fileID: -2274363484027164459, guid: 6f153459ffcc49339672702849b64240, type: 3}
+    AnimalFeverPortrait: {fileID: 655961488, guid: ef647426d0d7d524789bc2eabda9f928, type: 3}
     Animator: {fileID: 9100000, guid: 776c8c51fe35f044b834db7c4ecb489f, type: 2}
-    FeverAnimator: {fileID: 0}
   UnlockedAnimalList: 
   UnlockedFeverAnimalList: 
 --- !u!1 &1363013145
@@ -22137,9 +22148,9 @@ MonoBehaviour:
   SpawnOneByOne: 1
   SpawnDataList:
   - TargetObject: {fileID: 6599046169947675177, guid: 1cad7bb55297bc6498864a8c75c3757c, type: 3}
-    Probability: 1
+    Probability: 0.07
   - TargetObject: {fileID: 5946724224848709668, guid: f3920c8510c2dcc45b9d44e272bbfc14, type: 3}
-    Probability: 0
+    Probability: 0.035
 --- !u!1 &1494419291
 GameObject:
   m_ObjectHideFlags: 0

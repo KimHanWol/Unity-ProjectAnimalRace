@@ -172,6 +172,12 @@ public class HunterController : GameObjectController
 
     private void OnCatchAnimal(GameObject OverlappedGameObject)
     {
+        // 피버 타임에는 무적
+        if(IsFever == true)
+        {
+            return;
+        }
+
         EventManager.Instance.OnGameOverEvent?.Invoke();
     }
 

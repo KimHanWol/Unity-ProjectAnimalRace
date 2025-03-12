@@ -13,6 +13,7 @@ public enum AnimalType
     Duck,
     Frog,
     Pig,
+    Rat,
     Scorpion,
     Spider,
     Tortoise,
@@ -233,6 +234,14 @@ public class PlayerController : GameObjectController, FeverInterface
                     }
                     break;
                 }
+            case InputType.SpaceBarRepeatEnter:
+                {
+                    if (Input.GetKeyDown(KeyCode.Space))
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                    break;
+                }
             case InputType.MouseVerticalHorizonal:
                 {
                     Vector2 PastMousePosition = CurrentMousePosition;
@@ -321,21 +330,17 @@ public class PlayerController : GameObjectController, FeverInterface
 
                     break;
                 }
-            case InputType.SpaceBarToCrash:
-                {
-
-                    break;
-                }
             case InputType.ArrowRightLeft_TakeTurn:
                 {
                     //왼쪽
-                    if (Input.GetKeyDown(KeyCode.LeftArrow))
+                    if (Input.GetKeyDown(KeyCode.LeftArrow) &&
+                        CurrentInputStackIndex == 0)
                     {
                         CurrentInputStackIndex++;
-                        MovePlayer();
                     }
                     //오른쪽
-                    else if (Input.GetKeyDown(KeyCode.RightArrow))
+                    else if (Input.GetKeyDown(KeyCode.RightArrow) &&
+                        CurrentInputStackIndex == 1)
                     {
                         CurrentInputStackIndex++;
                     }
@@ -364,6 +369,17 @@ public class PlayerController : GameObjectController, FeverInterface
                         Input.GetKeyDown(KeyCode.X) ||
                         Input.GetKeyDown(KeyCode.Period) ||
                         Input.GetKeyDown(KeyCode.Comma))
+                    {
+                        CurrentInputStackIndex++;
+                    }
+                }
+                break;
+            case InputType.ArrowAll:
+                {
+                    if (Input.GetKeyDown(KeyCode.LeftArrow) ||
+                       Input.GetKeyDown(KeyCode.LeftArrow) ||
+                       Input.GetKeyDown(KeyCode.LeftArrow) ||
+                       Input.GetKeyDown(KeyCode.LeftArrow))
                     {
                         CurrentInputStackIndex++;
                     }
@@ -403,21 +419,50 @@ public class PlayerController : GameObjectController, FeverInterface
                 break;
         }
 
-        // 동작을 진행했을 때 마다
-        if (PrevInputStackIndex != CurrentInputStackIndex)
-        {
-            MovePlayer();
-        }
+        int InputStackCount = AnimalDataManager.Instance.GetInputStackCount(CurrentAnimalData.InputType);
 
-        if (CurrentInputStackIndex >= AnimalDataManager.Instance.GetInputStackCount(CurrentAnimalData.InputType))
+        // Input Stack 이 Custom 일 때
+        if (InputStackCount == 0)
         {
-            CurrentInputStackIndex = 0;
+            if(CurrentAnimalData.InputType == InputType.SpaceBarRepeatEnter)
+            {
+                if(Input.GetKeyDown(KeyCode.Return))
+                {
+                    // 최소 3개 이상 차지 하지 않으면 동작하지 않음
+                    if (CurrentInputStackIndex < 3)
+                    {
+                        CurrentInputStackIndex = 0;
+                        return;
+                    }
+
+                    MovePlayer(CurrentInputStackIndex);
+                    CurrentInputStackIndex = 0;
+                }
+            }
+        }
+        else
+        {
+            // 동작을 진행했을 때 마다
+            if (PrevInputStackIndex != CurrentInputStackIndex)
+            {
+                MovePlayer();
+            }
+
+            if (CurrentInputStackIndex >= InputStackCount)
+            {
+                CurrentInputStackIndex = 0;
+            }
         }
     }
 
     private void MovePlayer()
     {
-        Vector2 MoveForce = new Vector2(AnimalDataManager.Instance.GetVelocity(CurrentAnimalData.InputType), 0);
+        MovePlayer(1f);
+    }
+
+    private void MovePlayer(float VelocityRate)
+    {
+        Vector2 MoveForce = new Vector2(AnimalDataManager.Instance.GetVelocity(CurrentAnimalData.InputType), 0) * VelocityRate;
 
         // 피버타임일 경우 반대로
         if (IsFever == true)
@@ -427,6 +472,8 @@ public class PlayerController : GameObjectController, FeverInterface
 
         MoveSpeedObject.AddForce(MoveForce);
         EventManager.Instance.OnPlayerAcceleratedEvent?.Invoke(MoveForce.x);
+
+        Debug.Log(MoveForce);
     }
 
     private void Update_CheckVelocity()

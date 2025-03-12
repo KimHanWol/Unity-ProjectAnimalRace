@@ -12,21 +12,21 @@ public enum InputType
 
     QWERASDF, // QWERASDF 막 누르기
     ZXDotSlash, // ZX>? 막 누르기
+    ArrowAll, // 화살표 전부 막 누르기
     SpaceBar, // 스페이스바
+    SpaceBarRepeatEnter, // 스페이스바 연타 후 엔터
 
     MouseScrollUp, // 마우스 스크롤 올리기
     MouseScrollDown, // 마우스 스크롤 내리기
     MouseVerticalHorizonal, // 마우스 수직 수평
     Mouse8, // 마우스 8자로 그리기
-
-    SpaceBarToCrash, // 타이밍 맞춰서 스페이스 바
 }
 
 [System.Serializable]
 public class InputData
 {
     public InputType InputType;
-    public int InputStackCount; //몇 번 눌러야 한 사이클인지 (AD 번갈아 누를 땐 2, QWER 번갈아 누를 땐 4)
+    public int InputStackCount; //몇 번 눌러야 한 사이클인지 (AD 번갈아 누를 땐 2, QWER 번갈아 누를 땐 4, 0은 커스텀) 
     public float Veclocity;
     public AnimationClip KeyGuideAnimation;
 }
@@ -39,7 +39,6 @@ public class AnimalData
     public Sprite AnimalPortrait;
     public Sprite AnimalFeverPortrait;
     public RuntimeAnimatorController Animator;
-    public RuntimeAnimatorController FeverAnimator;
 }
 
 public class AnimalDataManager : SingletonObject<AnimalDataManager>
