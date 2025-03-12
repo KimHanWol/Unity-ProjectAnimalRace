@@ -17,6 +17,7 @@ public class CustomAnimationComponent : MonoBehaviour
     {
         GameObject ShakeComponentObject = Instantiate(ShakeComponentPrefab);
         ShakeComponent = ShakeComponentObject.GetComponent<ShakeComponent>();
+        ShakeComponent.transform.SetParent(transform);
     }
 
     public void PlayJumpEffect()
