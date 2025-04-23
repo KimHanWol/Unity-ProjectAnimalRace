@@ -38,12 +38,18 @@ public class SoundManager : SingletonObject<SoundManager>
         BGM_START,
         BGM_PLAYING,
         BGM_GAMEOVER,
+        BGM_FEVER,
     }
 
     public enum ESFX
     {
         SFX_START,
         SFX_BUTTON,
+        SFX_GROW,
+        SFX_SHRINK,
+        SFX_GAMEOVER,
+        SFX_EAT,
+        SFX_UNLOCKED,
     }
 
     [SerializeField] BGMAudioData[] BGMDataList;
@@ -59,6 +65,8 @@ public class SoundManager : SingletonObject<SoundManager>
     public UnityEvent<ESFX> OnSFXChanged;
 
     public SoundSettingData SoundSettingData;
+
+    private bool IsBGMNeedToPlay = true;
 
     protected override void Awake()
     {
@@ -82,18 +90,24 @@ public class SoundManager : SingletonObject<SoundManager>
 
     public void PlayBGM(EBGM BGMIndex, bool PlayNow)
     {
-        PlayBGM(BGMDataList[(int)BGMIndex].AudioClip, PlayNow);
-
-        //Ready to play
-        if (BGMIndex == EBGM.BGM_PLAYING)
-        {
-            StopCoroutine(ReadyToStart());
-            StartCoroutine(ReadyToStart());
-        }
+        PlayBGM(BGMDataList[(int)BGMIndex].AudioClip, PlayNow, false);
     }
 
-    public void PlayBGM(AudioClip AudioClip, bool PlayNow)
+    public void ReadyToStart()
     {
+        StopCoroutine(ReadyToStart_Internal());
+        StartCoroutine(ReadyToStart_Internal());
+    }
+
+    public void PlayBGM(AudioClip AudioClip, bool PlayNow, bool ForceReplay)
+    {
+        if(BGMAudioSource.clip == AudioClip && BGMAudioSource.isPlaying == true && ForceReplay == false)
+        {
+            return;
+        }
+
+        IsBGMNeedToPlay = true;
+
         if (PlayNow == true)
         {
             BGMAudioSource.clip = AudioClip;
@@ -115,33 +129,43 @@ public class SoundManager : SingletonObject<SoundManager>
         }
     }
 
+    public void StopBGM(bool RemoveAllQueue)
+    {
+        if (RemoveAllQueue == true)
+        {
+            BGMQueue.Clear();
+        }
+
+        IsBGMNeedToPlay = false;
+        BGMAudioSource.Stop();
+    }
+
     IEnumerator WaitNextBGMLoop()
     {
         while (true)
         {
+            yield return new WaitForSeconds(0.1f);
+
             if (BGMAudioSource.isPlaying == true)
             {
-                yield return new WaitForSeconds(0.1f);
+                continue;
+            }
+
+            if(IsBGMNeedToPlay == false)
+            {
                 continue;
             }
 
             if (BGMQueue.Count > 0)
             {
-                PlayBGM(BGMQueue[BGMQueue.Count - 1], true);
+                PlayBGM(BGMQueue[BGMQueue.Count - 1], true, false);
                 BGMQueue.RemoveAt(BGMQueue.Count - 1);
             }
             else
             {
-                PlayBGM(LastBGM, true);
+                PlayBGM(LastBGM, true, false);
             }
-
-            yield return new WaitForSeconds(0.1f);
         }
-    }
-
-    public void StopBGM()
-    {
-        BGMAudioSource.Stop();
     }
 
     public bool IsBGMPlaying(EBGM BGMIndex)
@@ -154,13 +178,17 @@ public class SoundManager : SingletonObject<SoundManager>
         return false;
     }
 
-    public void PlaySFX(ESFX SFXIndex)
+    public void PlaySFX(ESFX SFXType)
     {
-        SFXAudioSource.PlayOneShot(SFXDataList[(int)SFXIndex].AudioClip);
-        EventManager.Instance.OnPlaySFXPlayedEvent?.Invoke();
+        SFXAudioSource.PlayOneShot(SFXDataList[(int)SFXType].AudioClip);
+
+        if(SFXType == ESFX.SFX_START)
+        {
+            EventManager.Instance.OnSFXPlayedEvent?.Invoke(SFXType);
+        }
     }
 
-    IEnumerator ReadyToStart()
+    private IEnumerator ReadyToStart_Internal()
     {
         float SFXAudioLength = 0f;
         foreach (SFXAudioData SFXAudioData in SFXDataList)

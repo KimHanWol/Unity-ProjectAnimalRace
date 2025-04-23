@@ -472,8 +472,6 @@ public class PlayerController : GameObjectController, FeverInterface
 
         MoveSpeedObject.AddForce(MoveForce);
         EventManager.Instance.OnPlayerAcceleratedEvent?.Invoke(MoveForce.x);
-
-        Debug.Log(MoveForce);
     }
 
     private void Update_CheckVelocity()
@@ -529,6 +527,8 @@ public class PlayerController : GameObjectController, FeverInterface
 
         // 플레이어 크기 확대
         MovementAnimationComponent.GrowCharacter(true, GrowDuration);
+        SoundManager SoundManager = SoundManager.Instance;
+        SoundManager.PlaySFX(SoundManager.ESFX.SFX_GROW);
         yield return new WaitForSeconds(GrowDuration + DelayAfterGrown);
 
         /// Fever Time 용 애니메이션 재생
@@ -565,6 +565,9 @@ public class PlayerController : GameObjectController, FeverInterface
 
         // 플레이어 크기 축소
         MovementAnimationComponent.GrowCharacter(false, ShrinkDuration);
+
+        SoundManager SoundManager = SoundManager.Instance;
+        SoundManager.PlaySFX(SoundManager.ESFX.SFX_SHRINK);
         yield return new WaitForSeconds(DelayAfterShrink);
 
         // 이모지

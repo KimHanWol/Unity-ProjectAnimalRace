@@ -43,7 +43,7 @@ public class UIManager : SingletonObject<UIManager>
     {
         base.Awake();
 
-        EventManager.Instance.OnPlaySFXPlayedEvent.AddListener(OnRunTitle);
+        EventManager.Instance.OnSFXPlayedEvent.AddListener(OnSFXPlayed);
         EventManager.Instance.OnNewAnimalUnlockStartEvent.AddListener(OnNewAnimalUnlocked);
         SaveSystem.Instance.OnSaveDataLoadedEvent.AddListener(OnSaveDataLoaded);
     }
@@ -201,11 +201,14 @@ public class UIManager : SingletonObject<UIManager>
         StartPlayUI.SetActive(false);
     }
 
-    public void OnRunTitle()
+    public void OnSFXPlayed(SoundManager.ESFX SFXType)
     {
-        StartingUI.SetActive(false);
-        StartPlayUI.SetActive(true);
-        StartCoroutine(WaitStartPlayUITimer(0.7f));
+        if(SFXType == SoundManager.ESFX.SFX_START)
+        {
+            StartingUI.SetActive(false);
+            StartPlayUI.SetActive(true);
+            StartCoroutine(WaitStartPlayUITimer(0.7f));
+        }
     }
 
     public void OnPlaying()
@@ -228,6 +231,8 @@ public class UIManager : SingletonObject<UIManager>
 
     private void OnNewAnimalUnlocked(AnimalType NewAnimalType)
     {
+        PlayButtonSound();
+
         AnimalData TargetAnimalData = AnimalDataManager.Instance.GetAnimalData(NewAnimalType);
 
         NewAnimalUI.SetActive(true);
@@ -263,6 +268,8 @@ public class UIManager : SingletonObject<UIManager>
 
     public void OnNewAnimalUIButtonClicked()
     {
+        PlayButtonSound();
+
         StopCoroutine(PlayNewAnimalAnimation());
 
         Animator Animator_Animal = NewAnimalUI.transform.Find("AnimalPanel").GetComponentInChildren<Animator>();
@@ -301,9 +308,11 @@ public class UIManager : SingletonObject<UIManager>
         }
     }
 
-    public void EnableSettingsPanel(bool Enabled)
+    public void EnableSettingsPanel()
     {
-        SettingUI.SetActive(Enabled);
+        SettingUI.SetActive(SettingUI.activeInHierarchy == false);
+
+        PlayButtonSound();
     }
 
     public void EnableKeyGuidePanel(bool Enabled)
@@ -311,14 +320,18 @@ public class UIManager : SingletonObject<UIManager>
         KeyGuideUI.SetActive(Enabled);
     }
 
-    public void EnableUnlockedAnimalPanel(bool Enabled)
+    public void EnableUnlockedAnimalPanel()
     {
-        if (Enabled == true)
+        bool UnlockedAnimalPanelEnabled = UnlockedAnimalUI.activeInHierarchy == false;
+
+        if (UnlockedAnimalPanelEnabled == true)
         {
             InitializeUnlockedAnimalPanel();
         }
 
-        UnlockedAnimalUI.SetActive(Enabled);
+        UnlockedAnimalUI.SetActive(UnlockedAnimalPanelEnabled);
+
+        PlayButtonSound();
     }
 
     private void InitializeUnlockedAnimalPanel()
@@ -407,9 +420,11 @@ public class UIManager : SingletonObject<UIManager>
         return false;
     }
 
-    public void EnableExitUI(bool Enabled)
+    public void EnableExitUI()
     {
-       ExitUI.SetActive(Enabled);
+        ExitUI.SetActive(ExitUI.activeInHierarchy == false);
+
+        PlayButtonSound();
     }
 
     public void EnableExitUIRunAnimation(bool Enabled)
@@ -422,5 +437,11 @@ public class UIManager : SingletonObject<UIManager>
     {
         Animator[] AnimatorArray = ExitUI.GetComponentsInChildren<Animator>();
         AnimatorArray[1].SetBool("IsMouseHovered", Enabled);
+    }
+
+    public void PlayButtonSound()
+    {
+        SoundManager SoundManager = SoundManager.Instance;
+        SoundManager.PlaySFX(SoundManager.ESFX.SFX_BUTTON);
     }
 }

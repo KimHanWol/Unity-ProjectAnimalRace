@@ -22,5 +22,5 @@ public class EventManager : SingletonObject<EventManager>
     public UnityEvent<float> OnPlayerAcceleratedEvent;
 
     //Sound
-    public UnityEvent OnPlaySFXPlayedEvent;
+    public UnityEvent<SoundManager.ESFX> OnSFXPlayedEvent;
 }

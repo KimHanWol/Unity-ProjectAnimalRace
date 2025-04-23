@@ -74,15 +74,21 @@ public class FeverSystem : MonoBehaviour
 
     private IEnumerator ReadyFever()
     {
+        // Play fever bgm
+        SoundManager SoundManager = SoundManager.Instance;
+        SoundManager.StopBGM(true);
+
         PlayerFeverInterface.FeverInitialize();
         HunterFeverInterface.FeverInitialize();
-        yield return new WaitForSeconds(FirstDelay);
 
         PlayerFeverInterface.FeverReadyForStart(FirstDelay, GrowDuration, DelayAfterGrown, TurnDuration, ReadyEmojiKey, EmojiDuration, LastDuration);
         HunterFeverInterface.FeverReadyForStart(FirstDelay, GrowDuration, DelayAfterGrown, TurnDuration, ReadyEmojiKey, EmojiDuration, LastDuration);
 
         float ReadyDuration = FirstDelay + GrowDuration + DelayAfterGrown + TurnDuration + EmojiDuration + LastDuration;
         yield return new WaitForSeconds(ReadyDuration);
+
+        // Play fever bgm
+        SoundManager.PlayBGM(SoundManager.EBGM.BGM_FEVER, true);
 
         // Fever Time
         IsInFeverTime = true;
@@ -95,6 +101,9 @@ public class FeverSystem : MonoBehaviour
         yield return new WaitForSeconds(FeverTimeDuration);
         // ~Fever Time
 
+        // Play normal bgm
+        SoundManager.StopBGM(true);
+
         IsInFeverTime = false;
         PlayerFeverInterface.FeverReadyForFinish(FinishFirstDelay, ShrinkDuration, DelayAfterShrink, FinishEmojiKey, FinishEmojiDuration, FinishLastDuration);
         HunterFeverInterface.FeverReadyForFinish(FinishFirstDelay, ShrinkDuration, DelayAfterShrink, FinishEmojiKey, FinishEmojiDuration, FinishLastDuration);
@@ -105,6 +114,8 @@ public class FeverSystem : MonoBehaviour
 
         PlayerFeverInterface.FeverFinished();
         HunterFeverInterface.FeverFinished();
+
+        SoundManager.PlayBGM(SoundManager.EBGM.BGM_PLAYING, true);
 
         EventManager.Instance.OnFeverStateChangedEvent?.Invoke(false);
     }

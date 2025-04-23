@@ -9420,7 +9420,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1981609022}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: EnableExitUI
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -11366,7 +11366,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 707298173}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -11376,7 +11376,7 @@ RectTransform:
   - {fileID: 2008886441}
   - {fileID: 49672196}
   - {fileID: 1087424374}
-  m_Father: {fileID: 1221974238}
+  m_Father: {fileID: 849292054}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -13029,6 +13029,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1221974238}
+  - {fileID: 707298174}
   - {fileID: 697850311}
   - {fileID: 1621851066}
   - {fileID: 154733402}
@@ -16120,6 +16121,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1981609022}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: PlayButtonSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1064354526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16432,7 +16445,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1981609022}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: EnableSettingsPanel
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -16527,7 +16540,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1981609022}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: EnableSettingsPanel
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -18690,7 +18703,6 @@ RectTransform:
   - {fileID: 1085913753}
   - {fileID: 2087748416}
   - {fileID: 593426100}
-  - {fileID: 707298174}
   m_Father: {fileID: 849292054}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -19513,7 +19525,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1981609022}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: EnableUnlockedAnimalPanel
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -20519,7 +20531,7 @@ MonoBehaviour:
   OnPlayerAcceleratedEvent:
     m_PersistentCalls:
       m_Calls: []
-  OnPlaySFXPlayedEvent:
+  OnSFXPlayedEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &1319170803
@@ -27157,9 +27169,21 @@ MonoBehaviour:
     AudioClip: {fileID: 8300000, guid: 31b3cb97e0e55ca4eb53d28d01946a30, type: 3}
   - BGMType: 2
     AudioClip: {fileID: 0}
+  - BGMType: 3
+    AudioClip: {fileID: 8300000, guid: 7642bfa0f1a455547b3a5eb4f4827905, type: 3}
   SFXDataList:
   - SFXType: 0
     AudioClip: {fileID: 8300000, guid: bc8e29b0263dd124d8f71f737154d35f, type: 3}
+  - SFXType: 1
+    AudioClip: {fileID: 8300000, guid: 74f3157d048d7d3488a6388012cef666, type: 3}
+  - SFXType: 2
+    AudioClip: {fileID: 8300000, guid: 1192afe63d9e13742b527c5654f46bc5, type: 3}
+  - SFXType: 3
+    AudioClip: {fileID: 8300000, guid: 6bb67d02baf74ad488cdfaeab7a1de68, type: 3}
+  - SFXType: 4
+    AudioClip: {fileID: 8300000, guid: 865e05dea5cb25447a2677c3a30d7e97, type: 3}
+  - SFXType: 5
+    AudioClip: {fileID: 8300000, guid: 8653defeeefa5a3489a52991f39263f8, type: 3}
   BGMAudioSource: {fileID: 2106088590}
   SFXAudioSource: {fileID: 1009771592}
   OnBGMChanged:
@@ -29547,7 +29571,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1981609022}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: EnableExitUI
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -32135,7 +32159,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1981609022}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: EnableUnlockedAnimalPanel
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

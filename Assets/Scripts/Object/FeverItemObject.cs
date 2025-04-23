@@ -24,6 +24,9 @@ public class FeverItemObject : SpawnableObject
             EventManager.Instance.OnNewAnimalFeverUnlockedEvent?.Invoke(CurrentAnimalType);
         }
 
+        SoundManager SoundManager = SoundManager.Instance;
+        SoundManager.PlaySFX(SoundManager.ESFX.SFX_EAT);
+
         SelfDestroy();
     }
     //~InteractableInterface

@@ -106,6 +106,7 @@ public class GameManager : SingletonObject<GameManager>
 
             GameState = EGameState.State_Starting;
             SoundManager.PlayBGM(SoundManager.EBGM.BGM_PLAYING, false);
+            SoundManager.ReadyToStart();
             UIManager.OnPlayStarting();
         }
     }
