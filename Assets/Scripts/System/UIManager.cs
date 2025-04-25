@@ -219,7 +219,7 @@ public class UIManager : SingletonObject<UIManager>
     public void OnGameOver(int NewScore, bool IsNewRecord)
     {
         ScoreBoardUI.SetActive(true);
-        Text[] ScoreboardUITexts = ScoreBoardUI.GetComponentsInChildren<Text>();
+        Text[] ScoreboardUITexts = ScoreBoardUI.GetComponentsInChildren<Text>(true);
         if (ScoreboardUITexts.Length > 1)
         {
             ScoreboardUITexts[1].text = NewScore.ToString() + "m";

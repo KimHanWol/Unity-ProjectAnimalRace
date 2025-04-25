@@ -12,6 +12,12 @@ public class DebugSystem : MonoBehaviour
 
     private void Awake()
     {
+        if (Application.isEditor == false && Debug.isDebugBuild == false)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
         EventManager.Instance.OnPlayGameEvent.AddListener(OnPlayGame);
         EventManager.Instance.OnGameOverEvent.AddListener(OnGameOver);
     }
