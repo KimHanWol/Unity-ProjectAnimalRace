@@ -15,6 +15,7 @@ public class DebugSystem : MonoBehaviour
         if (Application.isEditor == false && Debug.isDebugBuild == false)
         {
             gameObject.SetActive(false);
+            TitleDataResetButton.SetActive(false);
             return;
         }
 

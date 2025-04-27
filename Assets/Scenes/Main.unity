@@ -2149,7 +2149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultPosition: {x: 0, y: 0, z: 0}
-  CurrentAnimalType: 5
+  CurrentAnimalType: 7
   RunAnimationSpeedRate: 1
   RunAnimationMaxSpeedRate: 4
   RunAnimationMinSpeedRate: 1
@@ -27170,7 +27170,7 @@ MonoBehaviour:
   - BGMType: 2
     AudioClip: {fileID: 0}
   - BGMType: 3
-    AudioClip: {fileID: 8300000, guid: 7642bfa0f1a455547b3a5eb4f4827905, type: 3}
+    AudioClip: {fileID: 8300000, guid: 4ca55dc2b8fe4334a89e1c626663e21b, type: 3}
   SFXDataList:
   - SFXType: 0
     AudioClip: {fileID: 8300000, guid: bc8e29b0263dd124d8f71f737154d35f, type: 3}
